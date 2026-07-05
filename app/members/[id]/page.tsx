@@ -41,7 +41,6 @@ export default function MemberDetailPage() {
     [pointTransactions, memberId]
   );
 
-  // 推荐关系
   const referrer = useMemo(
     () => (member?.referrer_id ? members.find((m) => m.id === member.referrer_id) : null),
     [members, member]
@@ -68,7 +67,7 @@ export default function MemberDetailPage() {
         <p className="text-zinc-500">会员不存在</p>
         <button
           onClick={() => router.push('/members')}
-          className="mt-3 text-blue-600 hover:underline text-sm"
+          className="mt-3 text-blue-600 hover:underline text-sm min-h-[44px]"
         >
           返回会员列表
         </button>
@@ -101,13 +100,13 @@ export default function MemberDetailPage() {
     <div className="max-w-4xl mx-auto">
       <button
         onClick={() => router.push('/members')}
-        className="text-sm text-blue-600 hover:underline mb-4 inline-block"
+        className="text-sm text-blue-600 hover:underline mb-3 md:mb-4 inline-block min-h-[44px] flex items-center"
       >
         &larr; 返回会员列表
       </button>
 
       {isIntern && (
-        <div className="mb-4 px-3 py-2 bg-amber-50 text-amber-700 text-xs rounded border border-amber-200">
+        <div className="mb-3 md:mb-4 px-3 py-2 bg-amber-50 text-amber-700 text-xs rounded border border-amber-200">
           实习生 — 只读模式（编辑按钮已隐藏）
         </div>
       )}
@@ -123,14 +122,14 @@ export default function MemberDetailPage() {
       />
 
       {/* 推荐关系树 */}
-      <div className="bg-white border border-zinc-200 rounded-lg p-6 mt-6">
-        <h3 className="text-md font-semibold text-zinc-800 mb-4">推荐关系树</h3>
+      <div className="bg-white border border-zinc-200 rounded-lg p-4 md:p-6 mt-4 md:mt-6">
+        <h3 className="text-md font-semibold text-zinc-800 mb-3 md:mb-4">推荐关系树</h3>
         {referrer ? (
-          <div className="mb-4 p-3 bg-blue-50 rounded text-sm">
+          <div className="mb-3 md:mb-4 p-3 bg-blue-50 rounded text-sm">
             推荐人：{referrer.name} (ID: {referrer.member_no})
           </div>
         ) : (
-          <div className="mb-4 p-3 bg-zinc-50 rounded text-sm text-zinc-500">
+          <div className="mb-3 md:mb-4 p-3 bg-zinc-50 rounded text-sm text-zinc-500">
             无推荐人
           </div>
         )}
@@ -139,19 +138,19 @@ export default function MemberDetailPage() {
           下线列表 ({downlineList.length})
         </div>
         {downlineList.length > 0 ? (
-          <div className="space-y-2 mb-4">
+          <div className="space-y-2 mb-3 md:mb-4">
             {downlineList.map((item) => (
               <div
                 key={item.referral.id}
-                className="flex items-center justify-between p-3 border border-zinc-200 rounded text-sm"
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border border-zinc-200 rounded text-sm gap-2"
               >
-                <div>
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                   <span className="font-medium">{item.member?.name ?? item.referral.invitee_id}</span>
-                  <span className="text-zinc-400 ml-2">
+                  <span className="text-zinc-400 text-xs">
                     (ID: {item.referral.invitee_id})
                   </span>
                   <span
-                    className={`ml-2 px-1.5 py-0.5 text-xs rounded ${
+                    className={`px-1.5 py-0.5 text-xs rounded ${
                       item.hasOrder
                         ? 'bg-green-50 text-green-600'
                         : 'bg-zinc-100 text-zinc-400'
@@ -172,7 +171,7 @@ export default function MemberDetailPage() {
             ))}
           </div>
         ) : (
-          <div className="text-sm text-zinc-400 mb-4">暂无下线</div>
+          <div className="text-sm text-zinc-400 mb-3 md:mb-4">暂无下线</div>
         )}
 
         {/* 批量奖励状态 */}
@@ -195,10 +194,10 @@ export default function MemberDetailPage() {
       </div>
 
       {/* 积分流水 */}
-      <div id="tx-history" className="bg-white border border-zinc-200 rounded-lg p-6 mt-6">
-        <h3 className="text-md font-semibold text-zinc-800 mb-4">积分流水记录</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+      <div id="tx-history" className="bg-white border border-zinc-200 rounded-lg p-4 md:p-6 mt-4 md:mt-6">
+        <h3 className="text-md font-semibold text-zinc-800 mb-3 md:mb-4">积分流水记录</h3>
+        <div className="table-responsive">
+          <table className="w-full text-sm min-w-[700px]">
             <thead>
               <tr className="bg-zinc-50 border-b border-zinc-200">
                 <th className="text-left px-3 py-2 font-medium text-zinc-600">时间</th>
@@ -286,8 +285,8 @@ export default function MemberDetailPage() {
 
       {/* 兑换礼品模态框 */}
       {showRedeem && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
+        <div className="fixed inset-0 bg-black/40 flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
+          <div className="bg-white rounded-t-lg sm:rounded-lg p-5 md:p-6 w-full max-w-md shadow-xl max-h-[90vh] overflow-y-auto">
             <h3 className="text-lg font-semibold mb-4">兑换礼品</h3>
             <p className="text-sm text-zinc-500 mb-3">
               当前可用积分: <span className="font-bold text-green-600">{member.available_points.toLocaleString()}</span>
@@ -297,7 +296,7 @@ export default function MemberDetailPage() {
               <select
                 value={selectedGiftId}
                 onChange={(e) => setSelectedGiftId(e.target.value)}
-                className="w-full border border-zinc-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-zinc-300 rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px]"
               >
                 <option value="">-- 请选择礼品 --</option>
                 {gifts
@@ -335,14 +334,14 @@ export default function MemberDetailPage() {
                   setShowRedeem(false);
                   setSelectedGiftId('');
                 }}
-                className="px-4 py-2 text-sm border border-zinc-300 rounded hover:bg-zinc-50"
+                className="px-4 py-2.5 sm:py-2 text-sm border border-zinc-300 rounded hover:bg-zinc-50 min-h-[44px]"
               >
                 取消
               </button>
               <button
                 onClick={handleRedeem}
                 disabled={!selectedGiftId}
-                className="px-4 py-2 text-sm bg-purple-600 text-white rounded hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2.5 sm:py-2 text-sm bg-purple-600 text-white rounded hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px]"
               >
                 确认兑换
               </button>

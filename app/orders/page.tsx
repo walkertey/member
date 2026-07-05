@@ -21,7 +21,6 @@ export default function OrdersPage() {
     referralAmount?: number;
   } | null>(null);
 
-  // 筛选
   const [filterProduct, setFilterProduct] = useState('');
   const [filterOperator, setFilterOperator] = useState('');
 
@@ -67,12 +66,12 @@ export default function OrdersPage() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <h2 className="text-xl font-semibold text-zinc-800 mb-6">订单管理</h2>
+      <h2 className="text-lg md:text-xl font-semibold text-zinc-800 mb-4 md:mb-6">订单管理</h2>
 
       {/* 结果横幅 */}
       {resultBanner && (
-        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-          <div className="flex items-center justify-between">
+        <div className="mb-4 md:mb-6 p-3 md:p-4 bg-green-50 border border-green-200 rounded-lg">
+          <div className="flex items-start justify-between gap-2">
             <div>
               <p className="text-sm font-medium text-green-800">
                 已生成订单 {resultBanner.orderNo}，会员 {resultBanner.memberName} 积分 +{resultBanner.amount.toLocaleString()}
@@ -85,7 +84,7 @@ export default function OrdersPage() {
             </div>
             <button
               onClick={() => setResultBanner(null)}
-              className="text-green-600 hover:text-green-800 text-sm"
+              className="text-green-600 hover:text-green-800 text-sm shrink-0 min-h-[44px]"
             >
               关闭
             </button>
@@ -93,16 +92,16 @@ export default function OrdersPage() {
         </div>
       )}
 
-      {/* 录入订单表单 */}
-      <div className="bg-white border border-zinc-200 rounded-lg p-5 mb-6">
-        <h3 className="text-md font-semibold text-zinc-700 mb-4">录入订单</h3>
-        <div className="grid grid-cols-4 gap-4 items-end">
+      {/* 录入订单表单 — stack on mobile */}
+      <div className="bg-white border border-zinc-200 rounded-lg p-4 md:p-5 mb-4 md:mb-6">
+        <h3 className="text-md font-semibold text-zinc-700 mb-3 md:mb-4">录入订单</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 items-end">
           <div>
             <label className="block text-sm text-zinc-600 mb-1">选择会员</label>
             <select
               value={selectedMemberId}
               onChange={(e) => setSelectedMemberId(e.target.value)}
-              className="w-full border border-zinc-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-zinc-300 rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px]"
             >
               <option value="">-- 选择会员 --</option>
               {members
@@ -119,7 +118,7 @@ export default function OrdersPage() {
             <select
               value={selectedProductId}
               onChange={(e) => setSelectedProductId(e.target.value)}
-              className="w-full border border-zinc-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-zinc-300 rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px]"
             >
               <option value="">-- 选择配套 --</option>
               {products
@@ -133,7 +132,7 @@ export default function OrdersPage() {
           </div>
           <div>
             <div className="text-sm text-zinc-600 mb-1">价格</div>
-            <div className="px-3 py-2 text-sm font-medium text-zinc-800">
+            <div className="px-3 py-2.5 text-sm font-medium text-zinc-800">
               {selectedProduct ? `RM ${selectedProduct.price.toLocaleString()}` : '-'}
             </div>
           </div>
@@ -141,7 +140,7 @@ export default function OrdersPage() {
             <button
               onClick={handleSubmit}
               disabled={!selectedMemberId || !selectedProductId || submitting}
-              className="w-full px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="w-full px-4 py-2.5 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[44px]"
             >
               {submitting ? '处理中...' : '确认支付'}
             </button>
@@ -150,14 +149,14 @@ export default function OrdersPage() {
       </div>
 
       {/* 订单列表 */}
-      <div className="bg-white border border-zinc-200 rounded-lg p-5">
-        <div className="flex items-center justify-between mb-4">
+      <div className="bg-white border border-zinc-200 rounded-lg p-4 md:p-5">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
           <h3 className="text-md font-semibold text-zinc-700">订单列表</h3>
-          <div className="flex gap-3">
+          <div className="flex gap-2 sm:ml-auto">
             <select
               value={filterProduct}
               onChange={(e) => setFilterProduct(e.target.value)}
-              className="text-sm border border-zinc-300 rounded px-2 py-1.5"
+              className="text-sm border border-zinc-300 rounded px-2 py-2 min-h-[44px]"
             >
               <option value="">全部配套</option>
               {products.map((p) => (
@@ -169,7 +168,7 @@ export default function OrdersPage() {
             <select
               value={filterOperator}
               onChange={(e) => setFilterOperator(e.target.value)}
-              className="text-sm border border-zinc-300 rounded px-2 py-1.5"
+              className="text-sm border border-zinc-300 rounded px-2 py-2 min-h-[44px]"
             >
               <option value="">全部操作人</option>
               <option value="STAFF001">STAFF001</option>
@@ -178,57 +177,59 @@ export default function OrdersPage() {
           </div>
         </div>
 
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-zinc-50 border-b border-zinc-200">
-              <th className="text-left px-3 py-2 font-medium text-zinc-600">订单号</th>
-              <th className="text-left px-3 py-2 font-medium text-zinc-600">会员</th>
-              <th className="text-left px-3 py-2 font-medium text-zinc-600">配套</th>
-              <th className="text-right px-3 py-2 font-medium text-zinc-600">金额</th>
-              <th className="text-left px-3 py-2 font-medium text-zinc-600">支付时间</th>
-              <th className="text-center px-3 py-2 font-medium text-zinc-600">状态</th>
-              <th className="text-left px-3 py-2 font-medium text-zinc-600">操作人</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredOrders.map((o) => {
-              const member = members.find((m) => m.id === o.member_id);
-              const product = products.find((p) => p.id === o.product_id);
-              return (
-                <tr key={o.id} className="border-b border-zinc-100 hover:bg-zinc-50">
-                  <td className="px-3 py-2 font-mono text-xs">{o.order_no}</td>
-                  <td className="px-3 py-2">{member?.name ?? o.member_id}</td>
-                  <td className="px-3 py-2">{product?.name ?? o.product_id}</td>
-                  <td className="px-3 py-2 text-right font-medium">
-                    RM {o.amount.toLocaleString()}
-                  </td>
-                  <td className="px-3 py-2 text-xs text-zinc-500">
-                    {new Date(o.pay_time).toLocaleString('zh-CN')}
-                  </td>
-                  <td className="px-3 py-2 text-center">
-                    <span
-                      className={`px-1.5 py-0.5 text-xs rounded ${
-                        o.status === '已支付'
-                          ? 'bg-green-50 text-green-700'
-                          : 'bg-red-50 text-red-700'
-                      }`}
-                    >
-                      {o.status}
-                    </span>
-                  </td>
-                  <td className="px-3 py-2 text-xs text-zinc-500">{o.operator_id}</td>
-                </tr>
-              );
-            })}
-            {filteredOrders.length === 0 && (
-              <tr>
-                <td colSpan={7} className="px-3 py-6 text-center text-zinc-400">
-                  暂无订单记录
-                </td>
+        <div className="table-responsive">
+          <table className="w-full text-sm min-w-[650px]">
+            <thead>
+              <tr className="bg-zinc-50 border-b border-zinc-200">
+                <th className="text-left px-3 py-2 font-medium text-zinc-600">订单号</th>
+                <th className="text-left px-3 py-2 font-medium text-zinc-600">会员</th>
+                <th className="text-left px-3 py-2 font-medium text-zinc-600">配套</th>
+                <th className="text-right px-3 py-2 font-medium text-zinc-600">金额</th>
+                <th className="text-left px-3 py-2 font-medium text-zinc-600">支付时间</th>
+                <th className="text-center px-3 py-2 font-medium text-zinc-600">状态</th>
+                <th className="text-left px-3 py-2 font-medium text-zinc-600">操作人</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredOrders.map((o) => {
+                const member = members.find((m) => m.id === o.member_id);
+                const product = products.find((p) => p.id === o.product_id);
+                return (
+                  <tr key={o.id} className="border-b border-zinc-100 hover:bg-zinc-50">
+                    <td className="px-3 py-2 font-mono text-xs">{o.order_no}</td>
+                    <td className="px-3 py-2">{member?.name ?? o.member_id}</td>
+                    <td className="px-3 py-2">{product?.name ?? o.product_id}</td>
+                    <td className="px-3 py-2 text-right font-medium">
+                      RM {o.amount.toLocaleString()}
+                    </td>
+                    <td className="px-3 py-2 text-xs text-zinc-500">
+                      {new Date(o.pay_time).toLocaleString('zh-CN')}
+                    </td>
+                    <td className="px-3 py-2 text-center">
+                      <span
+                        className={`px-1.5 py-0.5 text-xs rounded ${
+                          o.status === '已支付'
+                            ? 'bg-green-50 text-green-700'
+                            : 'bg-red-50 text-red-700'
+                        }`}
+                      >
+                        {o.status}
+                      </span>
+                    </td>
+                    <td className="px-3 py-2 text-xs text-zinc-500">{o.operator_id}</td>
+                  </tr>
+                );
+              })}
+              {filteredOrders.length === 0 && (
+                <tr>
+                  <td colSpan={7} className="px-3 py-6 text-center text-zinc-400">
+                    暂无订单记录
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
