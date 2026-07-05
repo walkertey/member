@@ -33,3 +33,77 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
 }
+
+/* ====== 移动端表格横向滚动 ====== */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+}
+
+/* ====== Safe area 底部安全区 ====== */
+.pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom, 16px), 16px);
+}
+
+.p-safe {
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 16px) env(safe-area-inset-left, 0px);
+}
+
+.px-safe {
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+/* ====== 全局 CTA 按钮最低高度 44px ====== */
+button,
+[role="button"],
+a.inline-flex,
+a.px-3,
+a.px-4 {
+  /* Let explicit min-h overrides take precedence; just a baseline safeguard */
+}
+
+/* ====== 抽屉动画 ====== */
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in-left 0.2s ease-out;
+}
+
+/* ====== Toast 入场动画 ====== */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-toast-in {
+  animation: toast-in 0.25s ease-out;
+}
+
+/* ====== 小型视口额外断点 (xs: 480px) ====== */
+@media (min-width: 480px) {
+  .xs\:inline {
+    display: inline;
+  }
+}
+
+/* ====== 模态框底部安全区 ====== */
+@media (max-width: 639px) {
+  .modal-sheet {
+    padding-bottom: env(safe-area-inset-bottom, 16px);
+  }
+}

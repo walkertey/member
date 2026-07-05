@@ -4,7 +4,6 @@ import { usePointsStore } from '@/lib/store';
 import type { Role } from '@/lib/permissions';
 import { ALL_ROLES, MENU_VISIBILITY } from '@/lib/permissions';
 
-// 假员工数据
 const FAKE_STAFF = [
   { id: 'STAFF001', name: '管理员', role: '超级管理员' as Role, status: '激活' },
   { id: 'STAFF002', name: '运营经理', role: '运营主管' as Role, status: '激活' },
@@ -17,42 +16,44 @@ export default function PermissionsPage() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <h2 className="text-xl font-semibold text-zinc-800 mb-6">权限管理</h2>
+      <h2 className="text-lg md:text-xl font-semibold text-zinc-800 mb-4 md:mb-6">权限管理</h2>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* 员工列表 */}
-        <div className="bg-white border border-zinc-200 rounded-lg p-5">
-          <h3 className="text-md font-semibold text-zinc-700 mb-4">员工列表</h3>
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-zinc-50 border-b border-zinc-200">
-                <th className="text-left px-3 py-2 font-medium text-zinc-600">员工ID</th>
-                <th className="text-left px-3 py-2 font-medium text-zinc-600">姓名</th>
-                <th className="text-left px-3 py-2 font-medium text-zinc-600">角色</th>
-                <th className="text-center px-3 py-2 font-medium text-zinc-600">状态</th>
-              </tr>
-            </thead>
-            <tbody>
-              {FAKE_STAFF.map((s) => (
-                <tr key={s.id} className="border-b border-zinc-100">
-                  <td className="px-3 py-2 font-mono text-xs">{s.id}</td>
-                  <td className="px-3 py-2">{s.name}</td>
-                  <td className="px-3 py-2">{s.role}</td>
-                  <td className="px-3 py-2 text-center">
-                    <span className="px-1.5 py-0.5 text-xs bg-green-50 text-green-700 rounded">
-                      {s.status}
-                    </span>
-                  </td>
+        <div className="bg-white border border-zinc-200 rounded-lg p-4 md:p-5">
+          <h3 className="text-md font-semibold text-zinc-700 mb-3 md:mb-4">员工列表</h3>
+          <div className="table-responsive">
+            <table className="w-full text-sm min-w-[320px]">
+              <thead>
+                <tr className="bg-zinc-50 border-b border-zinc-200">
+                  <th className="text-left px-3 py-2 font-medium text-zinc-600">员工ID</th>
+                  <th className="text-left px-3 py-2 font-medium text-zinc-600">姓名</th>
+                  <th className="text-left px-3 py-2 font-medium text-zinc-600">角色</th>
+                  <th className="text-center px-3 py-2 font-medium text-zinc-600">状态</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {FAKE_STAFF.map((s) => (
+                  <tr key={s.id} className="border-b border-zinc-100">
+                    <td className="px-3 py-2 font-mono text-xs">{s.id}</td>
+                    <td className="px-3 py-2">{s.name}</td>
+                    <td className="px-3 py-2">{s.role}</td>
+                    <td className="px-3 py-2 text-center">
+                      <span className="px-1.5 py-0.5 text-xs bg-green-50 text-green-700 rounded">
+                        {s.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         {/* 角色列表 */}
-        <div className="bg-white border border-zinc-200 rounded-lg p-5">
-          <h3 className="text-md font-semibold text-zinc-700 mb-4">角色权限一览</h3>
-          <div className="space-y-3">
+        <div className="bg-white border border-zinc-200 rounded-lg p-4 md:p-5">
+          <h3 className="text-md font-semibold text-zinc-700 mb-3 md:mb-4">角色权限一览</h3>
+          <div className="space-y-2 md:space-y-3">
             {ALL_ROLES.map((role) => {
               const menus = MENU_VISIBILITY[role];
               return (
@@ -76,10 +77,10 @@ export default function PermissionsPage() {
       </div>
 
       {/* 操作日志 */}
-      <div className="bg-white border border-zinc-200 rounded-lg p-5 mt-6">
-        <h3 className="text-md font-semibold text-zinc-700 mb-4">操作日志</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+      <div className="bg-white border border-zinc-200 rounded-lg p-4 md:p-5 mt-4 md:mt-6">
+        <h3 className="text-md font-semibold text-zinc-700 mb-3 md:mb-4">操作日志</h3>
+        <div className="table-responsive">
+          <table className="w-full text-sm min-w-[450px]">
             <thead>
               <tr className="bg-zinc-50 border-b border-zinc-200">
                 <th className="text-left px-3 py-2 font-medium text-zinc-600">时间</th>
