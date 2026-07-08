@@ -66,7 +66,7 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
 
   if (!hasHydrated) {
     return (
-      <div className="flex h-screen bg-rm-bg-deep items-center justify-center">
+      <div className="flex h-dvh bg-rm-bg-deep items-center justify-center">
         <p className="text-rm-text-secondary text-sm">加载中...</p>
       </div>
     );
@@ -78,10 +78,13 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
       return pathname.startsWith(m.href);
     })?.label ?? '工作台';
 
+  const isHome = pathname === '/';
+
   return (
-    <div className="flex flex-col h-screen bg-rm-bg-deep">
-      {/* Top Header (mobile + desktop) */}
-      <header className="h-14 bg-rm-bg-deep border-b border-white/10 flex items-center shrink-0 px-3 md:px-6 gap-3">
+    <div className="flex flex-col h-dvh rm-bg-page">
+      {/* Top Header — hidden on mobile home (page.tsx provides its own brand bar) */}
+      {!isHome && (
+      <header className="h-14 bg-rm-bg-deep border-b border-white/10 flex items-center shrink-0 px-3 md:px-6 gap-3 safe-area-top">
         {/* Hamburger menu button — mobile only */}
         <button
           onClick={() => openDrawer()}
@@ -109,6 +112,7 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
         {/* Role Switcher */}
         <RoleSwitcher />
       </header>
+      )}
 
       {/* Desktop layout: sidebar + content */}
       <div className="flex-1 flex min-h-0">
@@ -149,14 +153,14 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
             >
               <span className="inline-flex items-center justify-center w-6 h-6">
                 {tab.key === 'home' && (
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                     <polyline points="9,22 9,12 15,12 15,22" />
                   </svg>
                 )}
                 {tab.key === 'points' && (
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
+                    <path d="M3 18l3-9 3 5 3-8 3 8 3-5 3 9v2a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                   </svg>
                 )}
                 {tab.key === 'discover' && (
@@ -167,10 +171,7 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
                 )}
                 {tab.key === 'manage' && (
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="3" width="7" height="7" rx="1" />
-                    <rect x="14" y="3" width="7" height="7" rx="1" />
-                    <rect x="3" y="14" width="7" height="7" rx="1" />
-                    <rect x="14" y="14" width="7" height="7" rx="1" />
+                    <path d="M12 2L3 6v5c0 5.5 4 9 9 11 5-2 9-5.5 9-11V6L12 2z" />
                   </svg>
                 )}
                 {tab.key === 'profile' && (

@@ -1,9 +1,68 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { usePointsStore } from '@/lib/store';
 import { getExpiringTransactions } from '@/lib/pointsEngine';
 import Link from 'next/link';
+
+function RaymondFlowerMark() {
+  const petals = Array.from({ length: 12 }, (_, index) => {
+    const angle = index * 30;
+    return (
+      <ellipse
+        key={angle}
+        cx="16"
+        cy="6"
+        rx="3.2"
+        ry="6"
+        transform={`rotate(${angle} 16 16)`}
+        fill="var(--rm-gold)"
+        opacity={index % 2 === 0 ? 1 : 0.78}
+      />
+    );
+  });
+  return (
+    <svg
+      viewBox="0 0 32 32"
+      className="h-8 w-8"
+      style={{ filter: 'drop-shadow(0 0 10px rgba(240,180,41,0.55))' }}
+      aria-hidden="true"
+    >
+      {petals}
+      <circle cx="16" cy="16" r="4" fill="var(--rm-gold-deep)" />
+    </svg>
+  );
+}
+
+function EyeIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4 text-white/80" aria-hidden="true">
+      <path
+        d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle cx="12" cy="12" r="3" fill="currentColor" />
+    </svg>
+  );
+}
+
+function usePlatformShell() {
+  const [platform] = useState<'ios' | 'android' | 'desktop'>(() => {
+    if (typeof window === 'undefined') return 'ios';
+    const ua = navigator.userAgent || '';
+    const width = window.innerWidth;
+
+    if (width >= 768) return 'desktop';
+    if (/iPhone|iPad|iPod/i.test(ua)) return 'ios';
+    return 'android';
+  });
+
+  return platform;
+}
 
 export default function DashboardPage() {
   const members = usePointsStore((s) => s.members);
@@ -13,6 +72,10 @@ export default function DashboardPage() {
   const settleExpiredPoints = usePointsStore((s) => s.settleExpiredPoints);
   const resetData = usePointsStore((s) => s.resetData);
   const addToast = usePointsStore((s) => s.addToast);
+
+  const platform = usePlatformShell();
+  const isIOS = platform === 'ios';
+  const isAndroid = platform === 'android';
 
   useEffect(() => {
     settleExpiredPoints();
@@ -73,180 +136,306 @@ export default function DashboardPage() {
     { label: '更多', href: '/settings', icon: 'more' },
   ];
 
+  const QuickIcon = ({ icon }: { icon: string }) => {
+    if (icon === 'grant') {
+      return (
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="rm-quick-icon-gold">
+          <path d="M6 2L2 6l4 4" stroke="currentColor" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          <path d="M2 6h10" stroke="currentColor" strokeWidth="4.5" strokeLinecap="round" />
+          <path d="M14 18l4-4-4-4" stroke="currentColor" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          <path d="M18 14H8" stroke="currentColor" strokeWidth="4.5" strokeLinecap="round" />
+        </svg>
+      );
+    }
+    if (icon === 'exchange') {
+      return (
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="rm-quick-icon-gold">
+          <rect x="1" y="2" width="18" height="16" rx="3" stroke="currentColor" strokeWidth="4" fill="none" />
+          <polyline points="3,16 7,10 11,12 15,5 19,7" stroke="currentColor" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        </svg>
+      );
+    }
+    if (icon === 'record') {
+      return (
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="rm-quick-icon-bluegold">
+          <rect x="1" y="4" width="18" height="12" rx="3" fill="#3b82f6" fillOpacity="0.3" stroke="#3b82f6" strokeWidth="4" />
+          <line x1="1" y1="8" x2="19" y2="8" stroke="#3b82f6" strokeWidth="3" />
+          <rect x="7" y="11" width="6" height="4" rx="1.5" fill="var(--rm-gold)" />
+        </svg>
+      );
+    }
+    return (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="rm-quick-icon-gold">
+        <polygon points="12,2 5,11 9,11 7,18 15,9 11,9 13,3" fill="currentColor" fillOpacity="0.35" stroke="currentColor" strokeWidth="4.5" strokeLinejoin="round" />
+      </svg>
+    );
+  };
+
+  const FeatureIcon = ({ icon }: { icon: string }) => {
+    if (icon === 'member') {
+      return (
+        <svg width="24" height="24" viewBox="0 0 28 28" fill="none" className="rm-feature-main-icon">
+          <circle cx="14" cy="8" r="5" fill="currentColor" />
+          <path d="M4 25c0-5.5 4.5-10 10-10s10 4.5 10 10" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+          <circle cx="23" cy="4" r="3.5" className="rm-feature-badge" fill="currentColor" />
+        </svg>
+      );
+    }
+    if (icon === 'shop') {
+      return (
+        <svg width="24" height="24" viewBox="0 0 28 28" fill="none" className="rm-feature-main-icon">
+          <path d="M4 5h20l-3 10H7L4 5z" fill="currentColor" opacity="0.9" />
+          <path d="M7 15v8a2 2 0 002 2h10a2 2 0 002-2v-8" stroke="currentColor" strokeWidth="2.2" strokeLinejoin="round" />
+        </svg>
+      );
+    }
+    if (icon === 'report') {
+      return (
+        <svg width="24" height="24" viewBox="0 0 28 28" fill="none" className="rm-feature-main-icon">
+          <rect x="2" y="17" width="5" height="8" rx="1.5" fill="currentColor" opacity="0.55" />
+          <rect x="9" y="11" width="5" height="14" rx="1.5" fill="currentColor" opacity="0.75" />
+          <rect x="16" y="5" width="5" height="20" rx="1.5" fill="currentColor" />
+        </svg>
+      );
+    }
+    if (icon === 'marketing') {
+      return (
+        <svg width="24" height="24" viewBox="0 0 28 28" fill="none" className="rm-feature-main-icon">
+          <path d="M2 12h12l-2 5h7l-4 8" fill="currentColor" opacity="0.9" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+          <path d="M2 12v5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+          <circle cx="24" cy="5" r="3.5" className="rm-feature-badge" fill="currentColor" />
+        </svg>
+      );
+    }
+    if (icon === 'rule') {
+      return (
+        <svg width="24" height="24" viewBox="0 0 28 28" fill="none" className="rm-feature-main-icon">
+          <path d="M14 2L5 6v5c0 5 3.5 8.5 9 11 5.5-2.5 9-6 9-11V6l-9-4z" fill="currentColor" opacity="0.85" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+          <circle cx="23" cy="4" r="3.5" className="rm-feature-badge" fill="currentColor" />
+        </svg>
+      );
+    }
+    if (icon === 'staff') {
+      return (
+        <svg width="24" height="24" viewBox="0 0 28 28" fill="none" className="rm-feature-main-icon">
+          <circle cx="9" cy="7" r="4" fill="currentColor" opacity="0.8" />
+          <circle cx="19" cy="7" r="3.5" fill="currentColor" />
+          <path d="M2 24c0-5 3.6-9 8-9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          <path d="M15 23c0-4 3.5-6.5 6-6.5s5.5 2.5 5.5 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          <circle cx="25" cy="5" r="3.5" className="rm-feature-badge" fill="currentColor" />
+        </svg>
+      );
+    }
+    if (icon === 'audit') {
+      return (
+        <svg width="24" height="24" viewBox="0 0 28 28" fill="none" className="rm-feature-main-icon">
+          <rect x="2" y="3" width="24" height="21" rx="3" fill="currentColor" opacity="0.12" stroke="currentColor" strokeWidth="2.2" />
+          <line x1="8" y1="10" x2="20" y2="10" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+          <line x1="8" y1="15" x2="17" y2="15" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+          <line x1="8" y1="20" x2="13" y2="20" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+          <circle cx="24" cy="5" r="3.5" className="rm-feature-badge" fill="currentColor" />
+        </svg>
+      );
+    }
+    return (
+      <svg width="24" height="24" viewBox="0 0 28 28" fill="none" className="rm-feature-main-icon">
+        <rect x="3" y="3" width="9" height="9" rx="2.5" fill="currentColor" opacity="0.4" />
+        <rect x="16" y="3" width="9" height="9" rx="2.5" fill="currentColor" opacity="0.6" />
+        <rect x="3" y="16" width="9" height="9" rx="2.5" fill="currentColor" opacity="0.75" />
+        <rect x="16" y="16" width="9" height="9" rx="2.5" fill="currentColor" />
+      </svg>
+    );
+  };
+
   return (
-    <div className="min-h-screen bg-rm-bg-deep -m-4 md:-m-6 p-4 md:p-6">
-      {/* 顶部品牌条 */}
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-white text-lg font-bold">
-          Raymond{' '}
-          <span className="text-sm font-normal text-rm-text-secondary ml-1">积分管理</span>
-        </h1>
-        <button
-          onClick={handleReset}
-          className="text-xs text-rm-text-secondary border border-white/15 rounded px-2 py-1.5 min-h-[36px] hover:bg-white/5 transition-colors"
-        >
-          重置 Demo 数据
-        </button>
-      </div>
-
-      {/* 金色描边余额卡 */}
-      <div className="rm-card-gold-border rounded-2xl p-6 mb-5 bg-rm-bg-card relative overflow-hidden">
-        <div className="flex items-center justify-between mb-1">
-          <div>
-            <h2 className="text-white text-xl font-serif font-bold">Raymond</h2>
-            <p className="text-rm-text-secondary text-xs mt-0.5">积 赏 管 理</p>
+    <>
+      {/* ======== MOBILE LAYOUT (Apple + Android) ======== */}
+      <div className={`rm-mobile-home -m-4 md:hidden ${isAndroid ? 'rm-android-home' : ''}`}>
+        {/* Apple iOS status bar — only on actual iOS devices */}
+        {isIOS ? (
+          <div className="rm-ios-statusbar relative" aria-label="iPhone status preview">
+            <span>9:41</span>
+            <span className="rm-dynamic-island" aria-hidden="true" />
+            <span>▮▮▮ WiFi 87</span>
           </div>
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" className="text-rm-gold" style={{ filter: 'drop-shadow(0 0 4px rgba(240,180,41,0.35))' }}>
-            <path d="M14 2l2.5 8.5h8.5l-7 5.5 2.5 8.5-6.5-5-6.5 5 2.5-8.5-7-5.5h8.5z" fill="currentColor" />
-          </svg>
-        </div>
-        <p className="text-rm-text-secondary text-xs mt-6 mb-1">当前可用积分</p>
-        <p className="text-white text-3xl font-bold tracking-tight">
-          {totalAvailablePoints.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-        </p>
-      </div>
+        ) : null}
 
-      {/* 4宫格快捷入口 */}
-      <div className="grid grid-cols-4 gap-3 mb-5">
-        {quickActions.map((item) => (
-          <Link
-            key={item.label}
-            href={item.href}
-            className="flex flex-col items-center gap-2"
-          >
-            <div className="w-14 h-14 rounded-xl bg-rm-bg-card flex items-center justify-center border border-white/10">
-              {item.icon === 'grant' && (
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-rm-gold" style={{ filter: 'drop-shadow(0 0 3px rgba(240,180,41,0.25))' }}>
-                  <rect x="3" y="8" width="18" height="13" rx="2" stroke="currentColor" strokeWidth="1.5" />
-                  <path d="M3 8l9-6 9 6" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-                  <line x1="12" y1="13" x2="12" y2="17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                  <circle cx="12" cy="11" r="1" fill="currentColor" />
-                </svg>
-              )}
-              {item.icon === 'exchange' && (
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-rm-gold" style={{ filter: 'drop-shadow(0 0 3px rgba(240,180,41,0.25))' }}>
-                  <polyline points="17,1 21,5 17,9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                  <path d="M3 11V9a4 4 0 014-4h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-                  <polyline points="7,23 3,19 7,15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                  <path d="M21 13v2a4 4 0 01-4 4H3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-                </svg>
-              )}
-              {item.icon === 'record' && (
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-rm-gold" style={{ filter: 'drop-shadow(0 0 3px rgba(240,180,41,0.25))' }}>
-                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-                  <polyline points="14,2 14,8 20,8" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-                  <line x1="8" y1="13" x2="16" y2="13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                  <line x1="8" y1="17" x2="16" y2="17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                </svg>
-              )}
-              {item.icon === 'permission' && (
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-rm-gold" style={{ filter: 'drop-shadow(0 0 3px rgba(240,180,41,0.25))' }}>
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-                  <polyline points="9,12 11,14 15,10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              )}
+        <div className="rm-mobile-shell">
+          {/* Top brand bar */}
+          <header className="rm-home-topbar">
+            <div className="rm-home-brand">
+              <span className="rm-home-brand-main">Raymond</span>
+              <span className="rm-home-brand-sub">积分管理</span>
             </div>
-            <span className="text-rm-text-secondary text-[11px]">{item.label}</span>
-          </Link>
-        ))}
-      </div>
+            <button onClick={handleReset} aria-label="通知" className="relative flex items-center justify-center w-8 h-8 rounded-full border border-white/15 hover:bg-white/5 transition-colors">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" opacity="0.7">
+                <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.73 21a2 2 0 01-3.46 0" />
+              </svg>
+              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-rm-gold" />
+            </button>
+          </header>
 
-      {/* 白色"核心功能"卡片区 */}
-      <div className="bg-rm-bg-light rounded-2xl p-5 mb-4">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-rm-text-dark font-semibold text-base">核心功能</h3>
-          <Link href="/settings" className="text-rm-text-dark-secondary text-xs">
-            全部 ›
-          </Link>
-        </div>
-        <div className="grid grid-cols-4 gap-y-5">
-          {coreFeatures.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className="flex flex-col items-center gap-2"
-            >
-              <div className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center border border-rm-border-light">
-                {item.icon === 'member' && (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-[#3b82f6]">
-                    <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.5" />
-                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                  </svg>
-                )}
-                {item.icon === 'shop' && (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-[#f59e0b]">
-                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-                    <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" strokeWidth="1.5" />
-                    <path d="M16 10a4 4 0 01-8 0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                  </svg>
-                )}
-                {item.icon === 'report' && (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-[#06b6d4]">
-                    <rect x="3" y="13" width="4" height="7" rx="1" fill="currentColor" opacity="0.3" />
-                    <rect x="10" y="9" width="4" height="11" rx="1" fill="currentColor" opacity="0.6" />
-                    <rect x="17" y="5" width="4" height="15" rx="1" fill="currentColor" />
-                  </svg>
-                )}
-                {item.icon === 'marketing' && (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-[#ef4444]">
-                    <path d="M18 8a3 3 0 000-6M18 8a3 3 0 010 6m-7 4v2m0 0v2m0-2h3m-3 0H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                    <rect x="4" y="3" width="14" height="7" rx="2" stroke="currentColor" strokeWidth="1.5" />
-                    <circle cx="11" cy="6.5" r="1.5" fill="currentColor" />
-                  </svg>
-                )}
-                {item.icon === 'rule' && (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-[#6366f1]">
-                    <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.5" />
-                    <path d="M12 1v2m0 18v2m-9.9-11h2m15.8 0h2M4.2 4.2l1.4 1.4m12.8 12.8l1.4 1.4M2 12h2m16 0h2M4.2 19.8l1.4-1.4m12.8-12.8l1.4-1.4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                  </svg>
-                )}
-                {item.icon === 'staff' && (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-[#06b6d4]">
-                    <circle cx="9" cy="7" r="3" stroke="currentColor" strokeWidth="1.5" />
-                    <circle cx="16" cy="7" r="2" stroke="currentColor" strokeWidth="1.5" />
-                    <path d="M3 20c0-3 2.7-5.5 6-5.5M13.5 19c0-2.5 2.5-4 4-4s4 1.5 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                  </svg>
-                )}
-                {item.icon === 'audit' && (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-[#3b82f6]">
-                    <rect x="3" y="4" width="14" height="16" rx="2" stroke="currentColor" strokeWidth="1.5" />
-                    <polyline points="7,9 10,12 7,15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                    <path d="M13 10h6m-6 4h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                  </svg>
-                )}
-                {item.icon === 'more' && (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-[#8b5cf6]">
-                    <circle cx="12" cy="5" r="1.5" fill="currentColor" />
-                    <circle cx="12" cy="12" r="1.5" fill="currentColor" />
-                    <circle cx="12" cy="19" r="1.5" fill="currentColor" />
-                    <circle cx="5" cy="12" r="1.5" fill="currentColor" />
-                    <circle cx="19" cy="12" r="1.5" fill="currentColor" />
-                  </svg>
-                )}
+          {/* Premium balance card */}
+          <section className="rm-premium-card">
+            <div className="rm-card-watermark">R</div>
+            <div className="rm-card-content">
+              <div className="flex items-start justify-between">
+                <div>
+                  <h2 className="text-white text-lg font-bold tracking-wide">Raymond</h2>
+                  <p className="text-rm-text-secondary text-[11px] mt-0.5">积 赏 管 理</p>
+                </div>
+                <RaymondFlowerMark />
               </div>
-              <span className="text-rm-text-dark text-[11px]">{item.label}</span>
-            </Link>
-          ))}
+              <div className="rm-balance-label">
+                <span>当前可用积分</span>
+                <EyeIcon />
+              </div>
+              <p className="rm-balance-number">
+                {totalAvailablePoints.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              </p>
+            </div>
+          </section>
+
+          {/* Quick actions */}
+          <nav className="rm-quick-grid">
+            {quickActions.map((item) => (
+              <Link key={item.label} href={item.href} className="rm-quick-link">
+                <div className="rm-quick-tile">
+                  <QuickIcon icon={item.icon} />
+                </div>
+                <span className="rm-quick-label">{item.label}</span>
+              </Link>
+            ))}
+          </nav>
+
+          {/* Core features + Banner */}
+          <section className="rm-core-panel">
+            <div className="rm-core-head">
+              <h3 className="rm-core-title">核心功能</h3>
+              <Link href="/settings" className="rm-core-more">全部 ›</Link>
+            </div>
+            <div className="rm-feature-grid">
+              {coreFeatures.map((item) => (
+                <Link key={item.label} href={item.href} className="rm-feature-link">
+                  <div className="rm-feature-tile">
+                    <FeatureIcon icon={item.icon} />
+                  </div>
+                  <span className="rm-feature-label">{item.label}</span>
+                </Link>
+              ))}
+            </div>
+
+            <div className="rm-raymond-banner">
+              <div className="rm-banner-content">
+                <span className="rm-banner-title">Raymond<span className="rm-banner-sub">| 智能积分运营专家</span></span>
+                <span className="rm-banner-cta">了解更多</span>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
 
-      {/* 统计卡片（保留原有数据逻辑，仅视觉改为深色系） */}
-      <div className="grid grid-cols-2 gap-3">
-        {[
-          { label: '今日新增会员', value: todayNewMembers },
-          { label: '今日订单数', value: todayOrders },
-          { label: '临期积分预警(30天)', value: expiringCount },
-          { label: '待审核兑换', value: pendingAuditCount },
-        ].map((card) => (
-          <div
-            key={card.label}
-            className="bg-rm-bg-card rounded-xl p-3 border border-white/10"
-          >
-            <p className="text-rm-text-secondary text-[11px] mb-1">{card.label}</p>
-            <p className="text-white text-lg font-bold">{card.value}</p>
+      {/* ======== DESKTOP LAYOUT ======== */}
+      <div className="hidden md:block rm-desktop-home -m-6 min-h-screen px-10 py-8">
+        <div className="rm-desktop-container">
+          {/* Desktop header */}
+          <div className="rm-desktop-header">
+            <div>
+              <h1 className="rm-desktop-title">Raymond 积分管理</h1>
+              <p className="rm-desktop-subtitle">智能积分运营专家 · Demo v1.0</p>
+            </div>
+            <button onClick={handleReset} className="rounded-lg bg-white/5 border border-white/10 px-4 py-2 text-sm text-rm-text-secondary hover:bg-white/10 transition-colors min-h-[44px]">
+              重置 Demo 数据
+            </button>
           </div>
-        ))}
+
+          {/* Hero row: balance card + stats sidebar */}
+          <div className="rm-desktop-grid">
+            <section className="rm-premium-card rm-desktop-card">
+              <div className="rm-card-watermark">R</div>
+              <div className="rm-card-content">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h2 className="text-white text-xl font-bold tracking-wide">Raymond</h2>
+                    <p className="text-rm-text-secondary text-xs mt-0.5">积 赏 管 理</p>
+                  </div>
+                  <RaymondFlowerMark />
+                </div>
+                <div className="rm-balance-label">
+                  <span>当前可用积分</span>
+                  <EyeIcon />
+                </div>
+                <p className="rm-balance-number">
+                  {totalAvailablePoints.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                </p>
+              </div>
+            </section>
+
+            <section className="rm-desktop-stats">
+              <h3 className="text-white/60 text-xs font-semibold uppercase tracking-wider mb-3">系统概览</h3>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { label: '新增会员', value: todayNewMembers },
+                  { label: '今日订单', value: todayOrders },
+                  { label: '临期预警', value: expiringCount },
+                  { label: '待审核', value: pendingAuditCount },
+                ].map((card) => (
+                  <div key={card.label} className="bg-rm-bg-card rounded-xl p-3 border border-white/8">
+                    <p className="text-rm-text-secondary text-[11px] mb-1">{card.label}</p>
+                    <p className="text-white text-xl font-bold">{card.value}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </div>
+
+          {/* Quick actions row */}
+          <nav className="rm-desktop-actions">
+            {quickActions.map((item) => (
+              <Link key={item.label} href={item.href} className="rm-desktop-action-card">
+                <div className="rm-quick-tile rm-desktop-quick-tile">
+                  <QuickIcon icon={item.icon} />
+                </div>
+                <div>
+                  <p className="text-white text-sm font-semibold">{item.label}</p>
+                  <p className="text-rm-text-secondary text-[11px] mt-0.5">前往管理</p>
+                </div>
+              </Link>
+            ))}
+          </nav>
+
+          {/* Core features panel */}
+          <section className="rm-desktop-panel">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-rm-text-dark text-lg font-bold">核心功能</h3>
+              <Link href="/settings" className="text-rm-text-dark-secondary text-sm hover:text-rm-text-dark transition-colors">
+                全部 ›
+              </Link>
+            </div>
+            <div className="grid grid-cols-4 gap-4">
+              {coreFeatures.map((item) => (
+                <Link key={item.label} href={item.href} className="rm-desktop-feature-link">
+                  <div className="rm-feature-tile rm-desktop-feature-tile">
+                    <FeatureIcon icon={item.icon} />
+                  </div>
+                  <span className="rm-feature-label">{item.label}</span>
+                </Link>
+              ))}
+            </div>
+          </section>
+
+          {/* Banner + stats row */}
+          <div className="rm-desktop-bottom-row">
+            <div className="rm-raymond-banner rm-desktop-banner">
+              <div className="rm-banner-content">
+                <span className="rm-banner-title">Raymond<span className="rm-banner-sub">| 智能积分运营专家</span></span>
+                <span className="rm-banner-cta">了解更多</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -49,11 +49,13 @@
 }
 
 body {
-  background: var(--rm-bg-deep);
+  background:
+    linear-gradient(180deg, var(--rm-bg-deep) 0%, #08122d 50%, #050918 100%);
   color: var(--rm-text-primary);
   font-family: var(--font-sans, Arial, Helvetica, sans-serif);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  min-height: 100dvh;
 }
 
 /* 滚动条样式 */
@@ -146,13 +148,675 @@ a.px-4 {
   }
 }
 
-/* ====== Raymond 金色描边卡片通用 class ====== */
+/* ====== Raymond 金色描边卡片通用 class（保留供其他页面复用） ====== */
 .rm-card-gold-border {
-  border: 1px solid var(--rm-border-gold);
+  border: 1.5px solid var(--rm-border-gold);
   box-shadow: var(--rm-glow-gold);
 }
 
 /* ====== 底部 Tab Bar 安全区适配（iOS 刘海屏 / Android 手势条通用） ====== */
 .rm-tabbar-safe {
   padding-bottom: max(env(safe-area-inset-bottom, 8px), 8px);
+}
+
+/* ====== iOS 顶部安全区（刘海/动态岛适配） ====== */
+.safe-area-top {
+  padding-top: max(env(safe-area-inset-top, 16px), 16px);
+}
+
+/* ====== 全局深色渐变背景（非首页页面/header/body fallback） ====== */
+.rm-bg-page {
+  background: linear-gradient(180deg, var(--rm-bg-deep) 0%, #08122d 50%, #050918 100%);
+}
+
+/* ===================================================================
+   Raymond Apple-first 移动端首页像素级视觉 class
+   主参考：.cursor-reference/raymond-uiux/主页.png
+   =================================================================== */
+
+/* --- 首页全屏背景 --- */
+.rm-mobile-home {
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(34, 86, 160, 0.32), transparent 30%),
+    radial-gradient(circle at 82% 18%, rgba(240, 180, 41, 0.08), transparent 20%),
+    linear-gradient(180deg, var(--rm-bg-deep) 0%, #07132f 48%, #040817 100%);
+  color: var(--rm-text-primary);
+  overflow-x: hidden;
+}
+
+/* --- iPhone 状态栏模拟 --- */
+.rm-ios-statusbar {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.rm-dynamic-island {
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  transform: translateX(-50%);
+  width: 86px;
+  height: 26px;
+  border-radius: 999px;
+  background: #000;
+  box-shadow: inset 8px 0 18px rgba(255, 255, 255, 0.04);
+}
+
+/* --- 手机壳式容器 --- */
+.rm-mobile-shell {
+  min-height: 100dvh;
+  padding: 0 24px 82px;
+}
+
+/* --- 首页顶部栏 --- */
+.rm-home-topbar {
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rm-home-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.rm-home-brand-main {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 19px;
+  line-height: 1;
+  font-weight: 800;
+  color: #fff;
+}
+
+.rm-home-brand-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* --- 余额卡 --- */
+.rm-premium-card {
+  position: relative;
+  height: 168px;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(246, 202, 104, 0.72);
+  background:
+    radial-gradient(circle at 82% 16%, rgba(246, 202, 104, 0.14), transparent 18%),
+    radial-gradient(ellipse at 70% 42%, rgba(255, 255, 255, 0.10), transparent 34%),
+    linear-gradient(135deg, #102149 0%, #0a1938 48%, #06112c 100%);
+  box-shadow:
+    0 16px 38px rgba(0, 0, 0, 0.32),
+    0 0 26px rgba(240, 180, 41, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.rm-premium-card::before {
+  content: "";
+  position: absolute;
+  inset: -18% -10%;
+  background:
+    repeating-radial-gradient(
+      ellipse at 72% 46%,
+      rgba(255, 255, 255, 0.08) 0 1px,
+      transparent 2px 9px
+    );
+  opacity: 0.42;
+  transform: rotate(-10deg) scale(1.08);
+}
+.rm-premium-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      118deg,
+      transparent 0%,
+      transparent 36%,
+      rgba(255, 255, 255, 0.07) 48%,
+      transparent 62%,
+      transparent 100%
+    );
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.rm-card-watermark {
+  position: absolute;
+  right: 30px;
+  bottom: 12px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 82px;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.065);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.rm-card-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  padding: 23px 28px;
+}
+
+.rm-balance-label {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.rm-balance-number {
+  margin-top: 8px;
+  color: #fff;
+  font-size: 39px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.045em;
+}
+
+/* --- 4 宫格快捷入口 --- */
+.rm-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+.rm-quick-link {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.rm-quick-tile {
+  width: 54px;
+  height: 54px;
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    linear-gradient(145deg, rgba(27, 43, 88, 0.96), rgba(12, 22, 52, 0.96));
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 8px 16px rgba(0, 0, 0, 0.22);
+}
+
+.rm-quick-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.78);
+  white-space: nowrap;
+}
+
+/* --- 快捷入口 icon 色彩/发光 --- */
+.rm-quick-icon-gold {
+  color: var(--rm-gold);
+  filter: drop-shadow(0 0 8px rgba(240, 180, 41, 0.48));
+}
+.rm-quick-icon-bluegold {
+  color: var(--rm-gold);
+  filter: drop-shadow(0 0 8px rgba(47, 122, 255, 0.35));
+}
+
+/* --- 白色核心功能面板 --- */
+.rm-core-panel {
+  border-radius: 22px;
+  background: linear-gradient(180deg, #fbfbfd 0%, #f3f4f7 100%);
+  padding: 15px 20px 14px;
+  color: var(--rm-text-dark);
+  box-shadow: 0 -2px 20px rgba(255, 255, 255, 0.08);
+}
+
+.rm-core-head {
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.rm-core-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #171a27;
+}
+
+.rm-core-more {
+  font-size: 11px;
+  color: #737684;
+  text-decoration: none;
+}
+
+.rm-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px 12px;
+}
+
+.rm-feature-link {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.rm-feature-tile {
+  width: 54px;
+  height: 50px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    linear-gradient(145deg, #ffffff 0%, #f5f6fa 100%);
+  box-shadow:
+    0 6px 14px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.94);
+}
+
+.rm-feature-label {
+  font-size: 11px;
+  line-height: 1.1;
+  color: #202536;
+  white-space: nowrap;
+}
+
+/* --- 核心功能 icon 色彩/立体感 --- */
+.rm-feature-main-icon {
+  color: #0b2454;
+  filter: drop-shadow(0 4px 6px rgba(15, 23, 42, 0.18));
+}
+.rm-feature-badge {
+  color: var(--rm-gold);
+  filter: drop-shadow(0 0 5px rgba(240, 180, 41, 0.42));
+}
+
+/* --- Raymond Banner --- */
+.rm-raymond-banner {
+  height: 70px;
+  margin-top: 14px;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  background:
+    radial-gradient(circle at 88% 18%, rgba(240, 180, 41, 0.12), transparent 18%),
+    linear-gradient(135deg, #0b1b42 0%, #07132f 55%, #041029 100%);
+  box-shadow: 0 10px 20px rgba(4, 8, 23, 0.18);
+}
+
+.rm-raymond-banner::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 46%;
+  height: 72%;
+  background:
+    linear-gradient(to top, rgba(255,255,255,0.16) 0 2px, transparent 2px 100%),
+    linear-gradient(90deg,
+      transparent 0 12%, rgba(255,255,255,0.22) 12% 16%,
+      transparent 16% 26%, rgba(255,255,255,0.16) 26% 32%,
+      transparent 32% 46%, rgba(255,255,255,0.24) 46% 50%,
+      transparent 50%
+    );
+  clip-path: polygon(0 100%, 0 70%, 8% 70%, 8% 50%, 18% 50%, 18% 30%, 30% 30%, 30% 55%, 42% 55%, 42% 18%, 54% 18%, 54% 62%, 68% 62%, 68% 34%, 82% 34%, 82% 100%);
+  opacity: 0.65;
+}
+
+.rm-banner-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.rm-banner-title {
+  color: #fff;
+  font-size: 16px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 800;
+}
+
+.rm-banner-sub {
+  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+.rm-banner-cta {
+  margin-top: 8px;
+  width: fit-content;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--rm-gold) 0%, var(--rm-gold-deep) 100%);
+  color: #10203e;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 5px 12px;
+}
+
+/* --- 小屏适配 (iPhone SE / Android compact <375px) --- */
+@media (max-width: 374px) {
+  .rm-mobile-shell {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .rm-home-topbar {
+    height: 34px;
+  }
+  .rm-home-brand-main {
+    font-size: 17px;
+  }
+  .rm-home-brand-sub {
+    font-size: 11px;
+  }
+  .rm-premium-card {
+    height: 146px;
+    border-radius: 22px;
+  }
+  .rm-card-content {
+    padding: 18px 22px;
+  }
+  .rm-card-watermark {
+    font-size: 68px;
+    right: 22px;
+    bottom: 6px;
+  }
+  .rm-balance-label {
+    margin-top: 18px;
+    font-size: 11px;
+  }
+  .rm-balance-number {
+    font-size: 31px;
+    margin-top: 6px;
+  }
+  .rm-quick-grid {
+    gap: 9px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+  }
+  .rm-quick-tile {
+    width: 48px;
+    height: 48px;
+  }
+  .rm-quick-label {
+    font-size: 10px;
+  }
+  .rm-core-panel {
+    padding: 13px 16px 12px;
+    border-radius: 20px;
+  }
+  .rm-core-head {
+    margin-bottom: 8px;
+  }
+  .rm-core-title {
+    font-size: 15px;
+  }
+  .rm-feature-grid {
+    gap: 8px 10px;
+  }
+  .rm-feature-tile {
+    width: 48px;
+    height: 44px;
+  }
+  .rm-feature-label {
+    font-size: 10px;
+  }
+  .rm-raymond-banner {
+    height: 62px;
+    margin-top: 12px;
+  }
+  .rm-banner-content {
+    padding: 12px 14px;
+  }
+  .rm-banner-title {
+    font-size: 14px;
+  }
+  .rm-banner-sub {
+    font-size: 11px;
+  }
+  .rm-banner-cta {
+    margin-top: 6px;
+    padding: 4px 10px;
+    font-size: 10px;
+  }
+}
+
+/* ===================================================================
+   Android-only density overrides
+   不影响 Apple iPhone 基础 class
+   =================================================================== */
+.rm-android-home .rm-mobile-shell {
+  padding-top: 18px;
+}
+
+.rm-android-home .rm-home-topbar {
+  height: 46px;
+}
+
+.rm-android-home .rm-premium-card {
+  height: 158px;
+  border-radius: 22px;
+}
+
+.rm-android-home .rm-card-content {
+  padding: 20px 26px;
+}
+
+.rm-android-home .rm-balance-label {
+  margin-top: 18px;
+}
+
+.rm-android-home .rm-balance-number {
+  font-size: 34px;
+}
+
+.rm-android-home .rm-quick-grid {
+  margin-top: 15px;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.rm-android-home .rm-quick-tile {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+}
+
+.rm-android-home .rm-core-panel {
+  padding: 16px 20px 14px;
+}
+
+.rm-android-home .rm-feature-tile {
+  width: 54px;
+  height: 50px;
+}
+
+.rm-android-home .rm-raymond-banner {
+  height: 70px;
+  margin-top: 14px;
+}
+
+@media (max-width: 374px) {
+  .rm-android-home .rm-mobile-shell {
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-bottom: 76px;
+  }
+
+  .rm-android-home .rm-home-brand-main {
+    font-size: 20px;
+  }
+
+  .rm-android-home .rm-home-brand-sub {
+    font-size: 12px;
+  }
+
+  .rm-android-home .rm-premium-card {
+    height: 150px;
+  }
+
+  .rm-android-home .rm-balance-number {
+    font-size: 31px;
+  }
+
+  .rm-android-home .rm-quick-tile {
+    width: 50px;
+    height: 50px;
+  }
+
+  .rm-android-home .rm-quick-label,
+  .rm-android-home .rm-feature-label {
+    font-size: 11px;
+  }
+
+  .rm-android-home .rm-feature-grid {
+    gap: 9px 10px;
+  }
+
+  .rm-android-home .rm-feature-tile {
+    width: 50px;
+    height: 46px;
+  }
+}
+
+/* ===================================================================
+   Desktop-only layout
+   =================================================================== */
+.rm-desktop-home {
+  background:
+    radial-gradient(circle at 70% 0%, rgba(34, 86, 160, 0.22), transparent 28%),
+    linear-gradient(180deg, var(--rm-bg-deep) 0%, #06102a 100%);
+  color: var(--rm-text-primary);
+}
+
+.rm-desktop-container {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.rm-desktop-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 26px;
+}
+
+.rm-desktop-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 30px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.rm-desktop-subtitle {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 14px;
+}
+
+.rm-desktop-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.55fr);
+  gap: 20px;
+  align-items: stretch;
+}
+
+.rm-desktop-card {
+  height: auto !important;
+  min-height: 200px;
+}
+
+.rm-desktop-card .rm-balance-number {
+  font-size: 44px;
+}
+
+.rm-desktop-stats {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 20px 24px;
+}
+
+.rm-desktop-actions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.rm-desktop-action-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 16px 18px;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.rm-desktop-action-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.rm-desktop-quick-tile {
+  width: 50px !important;
+  height: 50px !important;
+  flex-shrink: 0;
+}
+
+.rm-desktop-panel {
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--rm-text-dark);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.rm-desktop-feature-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.rm-desktop-feature-tile {
+  width: 64px !important;
+  height: 58px !important;
+}
+
+.rm-desktop-bottom-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.rm-desktop-banner {
+  height: 90px !important;
+  margin-top: 0 !important;
 }
