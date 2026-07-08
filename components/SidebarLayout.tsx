@@ -20,8 +20,8 @@ function NavLinks({ items, pathname }: { items: MenuItem[]; pathname: string }) 
             href={item.href}
             className={`block px-3 py-2.5 rounded text-sm transition-colors ${
               isActive
-                ? 'bg-blue-50 text-blue-700 font-medium'
-                : 'text-zinc-600 hover:bg-zinc-100'
+                ? 'bg-rm-gold-soft text-rm-gold font-medium'
+                : 'text-rm-text-secondary hover:bg-white/5'
             }`}
           >
             {item.label}
@@ -66,8 +66,8 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
 
   if (!hasHydrated) {
     return (
-      <div className="flex h-screen bg-zinc-50 items-center justify-center">
-        <p className="text-zinc-400 text-sm">加载中...</p>
+      <div className="flex h-screen bg-rm-bg-deep items-center justify-center">
+        <p className="text-rm-text-secondary text-sm">加载中...</p>
       </div>
     );
   }
@@ -79,13 +79,13 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
     })?.label ?? '工作台';
 
   return (
-    <div className="flex flex-col h-screen bg-zinc-50">
+    <div className="flex flex-col h-screen bg-rm-bg-deep">
       {/* Top Header (mobile + desktop) */}
-      <header className="h-14 bg-white border-b border-zinc-200 flex items-center shrink-0 px-3 md:px-6 gap-3">
+      <header className="h-14 bg-rm-bg-deep border-b border-white/10 flex items-center shrink-0 px-3 md:px-6 gap-3">
         {/* Hamburger menu button — mobile only */}
         <button
           onClick={() => openDrawer()}
-          className="md:hidden flex items-center justify-center min-w-[44px] min-h-[44px] -ml-1 rounded text-zinc-600 hover:bg-zinc-100 transition-colors"
+          className="md:hidden flex items-center justify-center min-w-[44px] min-h-[44px] -ml-1 rounded text-white/80 hover:bg-white/5 transition-colors"
           aria-label="打开菜单"
         >
           <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -97,12 +97,12 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
 
         {/* Brand / page title */}
         <div className="flex-1 min-w-0">
-          <h1 className="text-base md:text-lg font-bold text-zinc-800 truncate">
-            <span className="hidden md:inline">CGO 会员积分系统</span>
+          <h1 className="text-base md:text-lg font-bold text-white truncate">
+            <span className="hidden md:inline">Raymond 积分管理</span>
             <span className="md:hidden">{currentPageLabel}</span>
           </h1>
           {currentRole && (
-            <p className="text-xs text-zinc-400 hidden md:block">Demo v1.0</p>
+            <p className="text-xs text-rm-text-secondary hidden md:block">Demo v1.0</p>
           )}
         </div>
 
@@ -113,20 +113,78 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
       {/* Desktop layout: sidebar + content */}
       <div className="flex-1 flex min-h-0">
         {/* Desktop sidebar — hidden on mobile */}
-        <aside className="hidden md:flex w-56 bg-white border-r border-zinc-200 flex-col shrink-0">
+        <aside className="hidden md:flex w-56 bg-rm-bg-card border-r border-white/10 flex-col shrink-0">
           <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
             <NavLinks items={visibleMenu} pathname={pathname} />
           </nav>
-          <div className="px-3 py-3 border-t border-zinc-200 text-xs text-zinc-400">
+          <div className="px-3 py-3 border-t border-white/10 text-xs text-rm-text-secondary">
             当前角色: {currentRole}
           </div>
         </aside>
 
         {/* Main content */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 pb-safe">
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 pb-20 md:pb-6">
           {children}
         </main>
       </div>
+
+      {/* Mobile bottom Tab Bar — hidden on desktop */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-rm-bg-deep border-t border-white/10 flex items-center justify-around rm-tabbar-safe pt-2 z-30">
+        {[
+          { key: 'home', label: '首页', href: '/' },
+          { key: 'points', label: '积分', href: '/points' },
+          { key: 'discover', label: '发现', href: '/redemption' },
+          { key: 'manage', label: '管理', href: '/permissions' },
+          { key: 'profile', label: '我的', href: '/settings' },
+        ].map((tab) => {
+          const isActive =
+            tab.href === '/' ? pathname === '/' : pathname.startsWith(tab.href);
+          return (
+            <Link
+              key={tab.key}
+              href={tab.href}
+              className={`flex flex-col items-center gap-1 min-w-[44px] min-h-[44px] justify-center ${
+                isActive ? 'text-rm-gold' : 'text-white/50'
+              }`}
+            >
+              <span className="inline-flex items-center justify-center w-6 h-6">
+                {tab.key === 'home' && (
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                    <polyline points="9,22 9,12 15,12 15,22" />
+                  </svg>
+                )}
+                {tab.key === 'points' && (
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
+                  </svg>
+                )}
+                {tab.key === 'discover' && (
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88 16.24,7.76" />
+                  </svg>
+                )}
+                {tab.key === 'manage' && (
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="3" width="7" height="7" rx="1" />
+                    <rect x="14" y="3" width="7" height="7" rx="1" />
+                    <rect x="3" y="14" width="7" height="7" rx="1" />
+                    <rect x="14" y="14" width="7" height="7" rx="1" />
+                  </svg>
+                )}
+                {tab.key === 'profile' && (
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                )}
+              </span>
+              <span className="text-[10px]">{tab.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
 
       {/* Mobile drawer overlay */}
       {drawerOpen && (
@@ -139,15 +197,15 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
           />
 
           {/* Drawer panel */}
-          <div className="relative w-64 max-w-[80vw] bg-white h-full flex flex-col shadow-xl animate-slide-in">
-            <div className="px-5 py-4 border-b border-zinc-200 flex items-center justify-between">
+          <div className="relative w-64 max-w-[80vw] bg-rm-bg-card h-full flex flex-col shadow-xl animate-slide-in">
+            <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between">
               <div>
-                <h2 className="text-base font-bold text-zinc-800">CGO 会员积分系统</h2>
-                <p className="text-xs text-zinc-400">Demo v1.0</p>
+                <h2 className="text-base font-bold text-white">Raymond 积分管理</h2>
+                <p className="text-xs text-rm-text-secondary">Demo v1.0</p>
               </div>
               <button
                 onClick={() => closeDrawer()}
-                className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded text-zinc-500 hover:bg-zinc-100 transition-colors"
+                className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded text-white/60 hover:bg-white/5 transition-colors"
                 aria-label="关闭菜单"
               >
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -158,7 +216,7 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
             <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
               <NavLinks items={visibleMenu} pathname={pathname} />
             </nav>
-            <div className="px-3 py-3 border-t border-zinc-200 text-xs text-zinc-400">
+            <div className="px-3 py-3 border-t border-white/10 text-xs text-rm-text-secondary">
               当前角色: {currentRole}
             </div>
           </div>

@@ -3,6 +3,30 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Raymond 深色设计系统 token —— 全项目颜色唯一来源 */
+  /* 背景层级 */
+  --rm-bg-deep: #0a0e27;
+  --rm-bg-card: #131b3d;
+  --rm-bg-card-2: #1a234a;
+  --rm-bg-light: #f7f8fa;
+  --rm-bg-light-card: #ffffff;
+  /* 品牌金色 */
+  --rm-gold: #f0b429;
+  --rm-gold-deep: #d4a017;
+  --rm-gold-soft: rgba(240, 180, 41, 0.15);
+  /* 边框 */
+  --rm-border-gold: rgba(240, 180, 41, 0.35);
+  --rm-border-dark: rgba(255, 255, 255, 0.08);
+  --rm-border-light: #e5e7eb;
+  /* 文字 */
+  --rm-text-primary: #ffffff;
+  --rm-text-secondary: rgba(255, 255, 255, 0.6);
+  --rm-text-dark: #1a1d2e;
+  --rm-text-dark-secondary: #6b7280;
+  /* 阴影 / glow */
+  --rm-glow-gold: 0 0 20px rgba(240, 180, 41, 0.25);
+  --rm-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
 
 @theme inline {
@@ -10,12 +34,26 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  /* Raymond token → Tailwind v4 utility 映射 */
+  --color-rm-bg-deep: var(--rm-bg-deep);
+  --color-rm-bg-card: var(--rm-bg-card);
+  --color-rm-bg-card-2: var(--rm-bg-card-2);
+  --color-rm-bg-light: var(--rm-bg-light);
+  --color-rm-bg-light-card: var(--rm-bg-light-card);
+  --color-rm-gold: var(--rm-gold);
+  --color-rm-gold-deep: var(--rm-gold-deep);
+  --color-rm-text-primary: var(--rm-text-primary);
+  --color-rm-text-secondary: var(--rm-text-secondary);
+  --color-rm-text-dark: var(--rm-text-dark);
+  --color-rm-text-dark-secondary: var(--rm-text-dark-secondary);
 }
 
 body {
-  background: #fafafa;
-  color: var(--foreground);
+  background: var(--rm-bg-deep);
+  color: var(--rm-text-primary);
   font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 /* 滚动条样式 */
@@ -106,4 +144,15 @@ a.px-4 {
   .modal-sheet {
     padding-bottom: env(safe-area-inset-bottom, 16px);
   }
+}
+
+/* ====== Raymond 金色描边卡片通用 class ====== */
+.rm-card-gold-border {
+  border: 1px solid var(--rm-border-gold);
+  box-shadow: var(--rm-glow-gold);
+}
+
+/* ====== 底部 Tab Bar 安全区适配（iOS 刘海屏 / Android 手势条通用） ====== */
+.rm-tabbar-safe {
+  padding-bottom: max(env(safe-area-inset-bottom, 8px), 8px);
 }
