@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { usePointsStore } from '@/lib/store';
 import { getExpiringTransactions } from '@/lib/pointsEngine';
+import { getVisibleMenu } from '@/lib/permissions';
 import Link from 'next/link';
 
 function RaymondFlowerMark() {
@@ -72,6 +73,7 @@ export default function DashboardPage() {
   const settleExpiredPoints = usePointsStore((s) => s.settleExpiredPoints);
   const resetData = usePointsStore((s) => s.resetData);
   const addToast = usePointsStore((s) => s.addToast);
+  const currentRole = usePointsStore((s) => s.currentRole);
 
   const platform = usePlatformShell();
   const isIOS = platform === 'ios';
@@ -118,23 +120,34 @@ export default function DashboardPage() {
     [members]
   );
 
-  const quickActions = [
-    { label: '积分发放', href: '/points', icon: 'grant' },
-    { label: '积分兑换', href: '/redemption', icon: 'exchange' },
-    { label: '兑换记录', href: '/redemption', icon: 'record' },
-    { label: '权限管理', href: '/permissions', icon: 'permission' },
-  ];
+  const quickActions = useMemo(() => {
+    const visibleMenu = getVisibleMenu(currentRole);
+    const canSeePermissions = visibleMenu.some((m) => m.href === '/permissions');
+    return [
+      { label: '积分发放', href: '/points', icon: 'grant' as const },
+      { label: '积分兑换', href: '/redemption', icon: 'exchange' as const },
+      { label: '兑换记录', href: '/redemption', icon: 'record' as const },
+      canSeePermissions
+        ? { label: '权限管理', href: '/permissions', icon: 'permission' as const }
+        : { label: '会员管理', href: '/members', icon: 'grant' as const },
+    ];
+  }, [currentRole]);
 
-  const coreFeatures = [
-    { label: '会员管理', href: '/members', icon: 'member' },
-    { label: '积分商城', href: '/redemption', icon: 'shop' },
-    { label: '财务报表', href: '/reports', icon: 'report' },
-    { label: '营销工具', href: '/settings', icon: 'marketing' },
-    { label: '规则设置', href: '/settings', icon: 'rule' },
-    { label: '员工管理', href: '/permissions', icon: 'staff' },
-    { label: '审计日志', href: '/reports', icon: 'audit' },
-    { label: '更多', href: '/settings', icon: 'more' },
-  ];
+  const coreFeatures = useMemo(() => {
+    const visibleMenu = getVisibleMenu(currentRole);
+    const canSeePermissions = visibleMenu.some((m) => m.href === '/permissions');
+    const all = [
+      { label: '会员管理', href: '/members', icon: 'member' as const },
+      { label: '积分商城', href: '/redemption', icon: 'shop' as const },
+      { label: '财务报表', href: '/reports', icon: 'report' as const },
+      { label: '营销工具', href: '/settings', icon: 'marketing' as const },
+      { label: '规则设置', href: '/settings', icon: 'rule' as const },
+      { label: '员工管理', href: '/permissions', icon: 'staff' as const },
+      { label: '审计日志', href: '/reports', icon: 'audit' as const },
+      { label: '更多', href: '/settings', icon: 'more' as const },
+    ];
+    return all.filter((item) => item.href !== '/permissions' || canSeePermissions);
+  }, [currentRole]);
 
   const QuickIcon = ({ icon }: { icon: string }) => {
     if (icon === 'grant') {
@@ -158,8 +171,8 @@ export default function DashboardPage() {
     if (icon === 'record') {
       return (
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="rm-quick-icon-bluegold">
-          <rect x="1" y="4" width="18" height="12" rx="3" fill="#3b82f6" fillOpacity="0.3" stroke="#3b82f6" strokeWidth="4" />
-          <line x1="1" y1="8" x2="19" y2="8" stroke="#3b82f6" strokeWidth="3" />
+          <rect x="1" y="4" width="18" height="12" rx="3" fill="var(--rm-icon-blue)" fillOpacity="0.3" stroke="var(--rm-icon-blue)" strokeWidth="4" />
+          <line x1="1" y1="8" x2="19" y2="8" stroke="var(--rm-icon-blue)" strokeWidth="3" />
           <rect x="7" y="11" width="6" height="4" rx="1.5" fill="var(--rm-gold)" />
         </svg>
       );
@@ -267,8 +280,8 @@ export default function DashboardPage() {
               <span className="rm-home-brand-main">Raymond</span>
               <span className="rm-home-brand-sub">积分管理</span>
             </div>
-            <button onClick={handleReset} aria-label="通知" className="relative flex items-center justify-center w-8 h-8 rounded-full border border-white/15 hover:bg-white/5 transition-colors">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" opacity="0.7">
+            <button onClick={handleReset} aria-label="通知" className="relative flex items-center justify-center w-8 h-8 rounded-full border border-white/15 text-white/70 hover:bg-white/5 transition-colors">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
                 <path d="M13.73 21a2 2 0 01-3.46 0" />
               </svg>

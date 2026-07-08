@@ -79,9 +79,17 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
     })?.label ?? '工作台';
 
   const isHome = pathname === '/';
+  const isHomePage = isHome;
+
+  const shellClassName = isHomePage
+    ? 'flex flex-col h-dvh rm-bg-page'
+    : 'flex flex-col h-dvh bg-zinc-50';
+  const mainClassName = isHomePage
+    ? 'flex-1 overflow-y-auto p-4 md:p-6 pb-20 md:pb-6'
+    : 'flex-1 overflow-y-auto p-4 md:p-6 pb-20 md:pb-6 bg-zinc-50 text-zinc-900';
 
   return (
-    <div className="flex flex-col h-dvh rm-bg-page">
+    <div className={shellClassName}>
       {/* Top Header — hidden on mobile home (page.tsx provides its own brand bar) */}
       {!isHome && (
       <header className="h-14 bg-rm-bg-deep border-b border-white/10 flex items-center shrink-0 px-3 md:px-6 gap-3 safe-area-top">
@@ -127,7 +135,7 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
         </aside>
 
         {/* Main content */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 pb-20 md:pb-6">
+        <main className={mainClassName}>
           {children}
         </main>
       </div>

@@ -15,6 +15,12 @@
   --rm-gold: #f0b429;
   --rm-gold-deep: #d4a017;
   --rm-gold-soft: rgba(240, 180, 41, 0.15);
+  /* icon 色板 */
+  --rm-icon-navy: #0b2454;
+  --rm-icon-blue: #3b82f6;
+  --rm-icon-cyan: #50d5df;
+  --rm-icon-red: #ef4f5f;
+  --rm-icon-violet: #8b5cf6;
   /* 边框 */
   --rm-border-gold: rgba(240, 180, 41, 0.35);
   --rm-border-dark: rgba(255, 255, 255, 0.08);
@@ -42,10 +48,16 @@
   --color-rm-bg-light-card: var(--rm-bg-light-card);
   --color-rm-gold: var(--rm-gold);
   --color-rm-gold-deep: var(--rm-gold-deep);
+  --color-rm-gold-soft: var(--rm-gold-soft);
   --color-rm-text-primary: var(--rm-text-primary);
   --color-rm-text-secondary: var(--rm-text-secondary);
   --color-rm-text-dark: var(--rm-text-dark);
   --color-rm-text-dark-secondary: var(--rm-text-dark-secondary);
+  --color-rm-icon-navy: var(--rm-icon-navy);
+  --color-rm-icon-blue: var(--rm-icon-blue);
+  --color-rm-icon-cyan: var(--rm-icon-cyan);
+  --color-rm-icon-red: var(--rm-icon-red);
+  --color-rm-icon-violet: var(--rm-icon-violet);
 }
 
 body {
@@ -443,7 +455,7 @@ a.px-4 {
 
 /* --- 核心功能 icon 色彩/立体感 --- */
 .rm-feature-main-icon {
-  color: #0b2454;
+  color: var(--rm-icon-navy);
   filter: drop-shadow(0 4px 6px rgba(15, 23, 42, 0.18));
 }
 .rm-feature-badge {
