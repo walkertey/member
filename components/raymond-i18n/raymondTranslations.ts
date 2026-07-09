@@ -43,6 +43,19 @@ export const translations = {
     'home.goToManage': 'Go to Manage',
     'home.resetConfirm': 'Are you sure you want to reset all demo data? This cannot be undone.',
     'home.resetDone': 'Data has been reset to initial state',
+    'home.quickGrant': 'Grant Points',
+    'home.quickRedeem': 'Redeem Points',
+    'home.quickRecords': 'Records',
+    'home.quickPermissions': 'Permissions',
+    'home.quickMembers': 'Members',
+    'home.featMembers': 'Members',
+    'home.featMall': 'Points Mall',
+    'home.featReports': 'Reports',
+    'home.featMarketing': 'Marketing',
+    'home.featRules': 'Rules',
+    'home.featStaff': 'Staff',
+    'home.featAudit': 'Audit Log',
+    'home.featMore': 'More',
 
     // Members
     'members.title': 'Member Management',
@@ -260,6 +273,32 @@ export const translations = {
     'badge.listed': 'Listed',
     'badge.unlisted': 'Unlisted',
 
+    // Roles (display labels for internal role keys)
+    'role.superAdmin': 'Super Admin',
+    'role.opsManager': 'Operations Manager',
+    'role.csAgent': 'Customer Service',
+    'role.intern': 'Intern',
+    'role.staffDefault': 'Staff',
+
+    // Member / gift statuses (display labels for internal status keys)
+    'status.normal': 'Active',
+    'status.frozen': 'Frozen',
+    'status.listed': 'Listed',
+    'status.unlisted': 'Unlisted',
+    'status.paid': 'Paid',
+    'status.refunded': 'Refunded',
+    'status.pending': 'Pending',
+    'status.shipped': 'Shipped',
+    'status.completed': 'Completed',
+    'status.cancelled': 'Cancelled',
+
+    // Transaction / order types (display labels for internal type keys)
+    'type.buy': 'Purchase',
+    'type.referral': 'Referral 30%',
+    'type.batch': 'Batch Reward',
+    'type.redeem': 'Redemption Deduct',
+    'type.adjust': 'Manual Adjust',
+
     // Languages
     'lang.en': 'English',
     'lang.zh': '中文',
@@ -309,6 +348,19 @@ export const translations = {
     'home.goToManage': '前往管理',
     'home.resetConfirm': '确定要重置所有 Demo 数据吗？此操作不可恢复。',
     'home.resetDone': '数据已重置为初始状态',
+    'home.quickGrant': '积分发放',
+    'home.quickRedeem': '积分兑换',
+    'home.quickRecords': '兑换记录',
+    'home.quickPermissions': '权限管理',
+    'home.quickMembers': '会员管理',
+    'home.featMembers': '会员管理',
+    'home.featMall': '积分商城',
+    'home.featReports': '财务报表',
+    'home.featMarketing': '营销工具',
+    'home.featRules': '规则设置',
+    'home.featStaff': '员工管理',
+    'home.featAudit': '审计日志',
+    'home.featMore': '更多',
 
     'members.title': '会员管理',
     'members.total': '总会员',
@@ -516,6 +568,32 @@ export const translations = {
     'badge.listed': '上架',
     'badge.unlisted': '下架',
 
+    // Roles
+    'role.superAdmin': '超级管理员',
+    'role.opsManager': '运营主管',
+    'role.csAgent': '客服专员',
+    'role.intern': '实习生',
+    'role.staffDefault': '员工',
+
+    // Member / gift statuses
+    'status.normal': '正常',
+    'status.frozen': '冻结',
+    'status.listed': '上架',
+    'status.unlisted': '下架',
+    'status.paid': '已支付',
+    'status.refunded': '已退款',
+    'status.pending': '待审核',
+    'status.shipped': '已发货',
+    'status.completed': '已完成',
+    'status.cancelled': '已取消',
+
+    // Transaction types
+    'type.buy': '购买',
+    'type.referral': '推荐30%',
+    'type.batch': '批量奖励',
+    'type.redeem': '兑换扣除',
+    'type.adjust': '后台调整',
+
     'lang.en': 'English',
     'lang.zh': '中文',
     'lang.ms': 'Bahasa Melayu',
@@ -563,6 +641,19 @@ export const translations = {
     'home.goToManage': 'Pergi Urus',
     'home.resetConfirm': 'Adakah anda pasti untuk set semula semua data demo? Tindakan ini tidak boleh dibatalkan.',
     'home.resetDone': 'Data telah diset semula ke keadaan asal',
+    'home.quickGrant': 'Pemberian Mata',
+    'home.quickRedeem': 'Tebus Mata',
+    'home.quickRecords': 'Rekod',
+    'home.quickPermissions': 'Kebenaran',
+    'home.quickMembers': 'Ahli',
+    'home.featMembers': 'Ahli',
+    'home.featMall': 'Pusat Mata',
+    'home.featReports': 'Laporan',
+    'home.featMarketing': 'Pemasaran',
+    'home.featRules': 'Peraturan',
+    'home.featStaff': 'Kakitangan',
+    'home.featAudit': 'Log Audit',
+    'home.featMore': 'Lagi',
 
     'members.title': 'Pengurusan Ahli',
     'members.total': 'Jumlah Ahli',
@@ -770,6 +861,32 @@ export const translations = {
     'badge.listed': 'Tersenarai',
     'badge.unlisted': 'Tidak Tersenarai',
 
+    // Roles
+    'role.superAdmin': 'Super Admin',
+    'role.opsManager': 'Pengurus Operasi',
+    'role.csAgent': 'Khidmat Pelanggan',
+    'role.intern': 'Pelatih',
+    'role.staffDefault': 'Kakitangan',
+
+    // Member / gift statuses
+    'status.normal': 'Aktif',
+    'status.frozen': 'Dibekukan',
+    'status.listed': 'Tersenarai',
+    'status.unlisted': 'Tidak Tersenarai',
+    'status.paid': 'Dibayar',
+    'status.refunded': 'Dikembalikan',
+    'status.pending': 'Menunggu',
+    'status.shipped': 'Dihantar',
+    'status.completed': 'Selesai',
+    'status.cancelled': 'Dibatalkan',
+
+    // Transaction types
+    'type.buy': 'Pembelian',
+    'type.referral': 'Rujukan 30%',
+    'type.batch': 'Ganjaran Pukal',
+    'type.redeem': 'Potongan Tebusan',
+    'type.adjust': 'Pelarasan Manual',
+
     'lang.en': 'English',
     'lang.zh': '中文',
     'lang.ms': 'Bahasa Melayu',
@@ -799,5 +916,64 @@ export const LANG_LABELS: Record<SupportedLang, string> = {
   zh: '中文',
   ms: 'Bahasa Melayu',
 };
+
+// Role key → i18n key mapping
+const ROLE_TO_I18N: Record<string, TranslationKey> = {
+  '超级管理员': 'role.superAdmin',
+  '运营主管': 'role.opsManager',
+  '客服专员': 'role.csAgent',
+  '实习生': 'role.intern',
+};
+
+// Internal status value → i18n key mapping
+const STATUS_TO_I18N: Record<string, TranslationKey> = {
+  '正常': 'status.normal',
+  '冻结': 'status.frozen',
+  '上架': 'status.listed',
+  '下架': 'status.unlisted',
+  '已支付': 'status.paid',
+  '已退款': 'status.refunded',
+  '待审核': 'status.pending',
+  '已发货': 'status.shipped',
+  '已完成': 'status.completed',
+  '已取消': 'status.cancelled',
+};
+
+// Internal transaction type → i18n key mapping
+const TYPE_TO_I18N: Record<string, TranslationKey> = {
+  '购买': 'type.buy',
+  '推荐30%': 'type.referral',
+  '批量奖励': 'type.batch',
+  '兑换扣除': 'type.redeem',
+  '后台调整': 'type.adjust',
+};
+
+/** Translate an internal role key to the current language */
+export function transRole(role: string, lang: SupportedLang): string {
+  const key = ROLE_TO_I18N[role];
+  return key ? t(key, lang) : role;
+}
+
+/** Translate an internal status value to the current language */
+export function transStatus(status: string, lang: SupportedLang): string {
+  const key = STATUS_TO_I18N[status];
+  return key ? t(key, lang) : status;
+}
+
+/** Translate an internal transaction type to the current language */
+export function transType(type: string, lang: SupportedLang): string {
+  const key = TYPE_TO_I18N[type];
+  return key ? t(key, lang) : type;
+}
+
+/** Get locale string for date formatting based on language */
+export function getLangLocale(lang: SupportedLang): string {
+  const map: Record<SupportedLang, string> = {
+    en: 'en-US',
+    zh: 'zh-CN',
+    ms: 'ms-MY',
+  };
+  return map[lang] ?? 'en-US';
+}
 
 export const STORAGE_KEY = 'raymond-lang';

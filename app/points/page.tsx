@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { usePointsStore } from '@/lib/store';
 import { getExpiringTransactions } from '@/lib/pointsEngine';
 import { useI18n } from '@/components/raymond-i18n/RaymondI18nProvider';
-import { t } from '@/components/raymond-i18n/raymondTranslations';
+import { t, transType, transStatus, getLangLocale } from '@/components/raymond-i18n/raymondTranslations';
 
 const WARN_SVG = (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -114,7 +114,7 @@ export default function PointsPage() {
             <select value={filterType} onChange={(e) => setFilterType(e.target.value)} className="rm-demo-filter">
               <option value="">{t('points.allTypes', lang)}</option>
               {transTypes.map((ty) => (
-                <option key={ty} value={ty}>{ty}</option>
+                <option key={ty} value={ty}>{transType(ty, lang)}</option>
               ))}
             </select>
             <input type="date" value={filterDateFrom} onChange={(e) => setFilterDateFrom(e.target.value)} className="rm-demo-filter" placeholder={t('points.startDate', lang)} />
@@ -149,9 +149,9 @@ export default function PointsPage() {
                   const isExpired = tx.expiry_status === '已到期';
                   return (
                     <tr key={tx.id} className={isExpired ? 'bg-red-50/50' : ''}>
-                      <td className="text-xs">{new Date(tx.create_time).toLocaleString('zh-CN')}</td>
+                      <td className="text-xs">{new Date(tx.create_time).toLocaleString(getLangLocale(lang))}</td>
                       <td>{member?.name ?? tx.member_id}</td>
-                      <td><span className={`rm-badge ${transTypeBadge(tx.trans_type)}`}>{tx.trans_type}</span></td>
+                      <td><span className={`rm-badge ${transTypeBadge(tx.trans_type)}`}>{transType(tx.trans_type, lang)}</span></td>
                       <td className={`text-right font-bold ${tx.amount > 0 ? 'text-emerald-700' : 'text-red-600'}`}>
                         {tx.amount > 0 ? '+' : ''}{tx.amount.toLocaleString()}
                         {isExpired && <span className="ml-1">{WARN_SVG}</span>}
@@ -159,7 +159,7 @@ export default function PointsPage() {
                       <td className="text-right text-rm-text-dark-secondary">{tx.balance_before.toLocaleString()}</td>
                       <td className="text-right">{tx.balance_after.toLocaleString()}</td>
                       <td className="text-xs text-rm-text-dark-secondary">
-                        {tx.expiry_date ? new Date(tx.expiry_date).toLocaleDateString('zh-CN') : '-'}
+                        {tx.expiry_date ? new Date(tx.expiry_date).toLocaleDateString(getLangLocale(lang)) : '-'}
                       </td>
                       <td className="text-xs text-rm-text-dark-secondary max-w-[150px] truncate">{tx.remark}</td>
                     </tr>
@@ -185,7 +185,7 @@ export default function PointsPage() {
                 <tr>
                   <th>{t('points.member', lang)}</th>
                   <th>{t('points.type', lang)}</th>
-                  <th className="text-right">积分数</th>
+                  <th className="text-right">{t('points.change', lang)}</th>
                   <th>{t('points.expiryDate', lang)}</th>
                   <th className="text-right">{t('points.daysLeft', lang)}</th>
                   <th>{t('points.remark', lang)}</th>
@@ -197,9 +197,9 @@ export default function PointsPage() {
                   return (
                     <tr key={tx.id} className={urgent ? 'bg-red-50/50' : ''}>
                       <td>{tx.member_name}</td>
-                      <td><span className="rm-badge rm-badge-info">{tx.trans_type}</span></td>
+                      <td><span className="rm-badge rm-badge-info">{transType(tx.trans_type, lang)}</span></td>
                       <td className="text-right font-bold text-emerald-700">+{tx.amount.toLocaleString()}</td>
-                      <td className="text-xs">{new Date(tx.expiry_date!).toLocaleDateString('zh-CN')}</td>
+                      <td className="text-xs">{new Date(tx.expiry_date!).toLocaleDateString(getLangLocale(lang))}</td>
                       <td className={`text-right font-bold ${urgent ? 'text-red-600' : 'text-amber-700'}`}>
                         {tx.days_left} {t('points.daysUnit', lang)}
                       </td>

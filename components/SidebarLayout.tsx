@@ -9,14 +9,29 @@ import RoleSwitcher from '@/components/RoleSwitcher';
 import ToastContainer from '@/components/Toast';
 import LanguageSwitcher from '@/components/raymond-i18n/LanguageSwitcher';
 import { useI18n } from '@/components/raymond-i18n/RaymondI18nProvider';
-import { t } from '@/components/raymond-i18n/raymondTranslations';
+import { t, transRole } from '@/components/raymond-i18n/raymondTranslations';
+import type { TranslationKey, SupportedLang } from '@/components/raymond-i18n/raymondTranslations';
 
-function NavLinks({ items, pathname }: { items: MenuItem[]; pathname: string }) {
+// Map menu item keys to i18n navigation keys
+const MENU_LABEL_MAP: Record<string, string> = {
+  dashboard: 'nav.home',
+  members: 'nav.members',
+  orders: 'nav.orders',
+  points: 'nav.points',
+  redemption: 'nav.redemption',
+  reports: 'nav.reports',
+  settings: 'nav.settings',
+  permissions: 'nav.permissions',
+};
+
+function NavLinks({ items, pathname, lang }: { items: MenuItem[]; pathname: string; lang: string }) {
   return (
     <>
       {items.map((item) => {
         const isActive =
           item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+        const labelKey = MENU_LABEL_MAP[item.key];
+        const displayLabel = labelKey ? t(labelKey as TranslationKey, lang as SupportedLang) : item.label;
         return (
           <Link
             key={item.key}
@@ -27,7 +42,7 @@ function NavLinks({ items, pathname }: { items: MenuItem[]; pathname: string }) 
                 : 'text-rm-text-secondary hover:bg-white/5'
             }`}
           >
-            {item.label}
+            {displayLabel}
           </Link>
         );
       })}
@@ -73,21 +88,23 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
     );
   }
 
-  const currentPageLabel =
-    visibleMenu.find((m) => {
-      if (m.href === '/') return pathname === '/';
-      return pathname.startsWith(m.href);
-    })?.label ?? t('nav.home', lang);
+  const currentPageItem = visibleMenu.find((m) => {
+    if (m.href === '/') return pathname === '/';
+    return pathname.startsWith(m.href);
+  });
+  const currentPageLabel = currentPageItem
+    ? (MENU_LABEL_MAP[currentPageItem.key] ? t(MENU_LABEL_MAP[currentPageItem.key] as TranslationKey, lang) : currentPageItem.label)
+    : t('nav.home', lang);
 
   const isHome = pathname === '/';
   const isHomePage = isHome;
 
   const shellClassName = isHomePage
     ? 'flex flex-col h-dvh rm-bg-page'
-    : 'flex flex-col h-dvh bg-zinc-50';
+    : 'flex flex-col h-dvh rm-subpage-bg';
   const mainClassName = isHomePage
     ? 'flex-1 overflow-y-auto p-4 md:p-6 pb-20 md:pb-6'
-    : 'flex-1 overflow-y-auto p-4 md:p-6 pb-20 md:pb-6 bg-zinc-50 text-zinc-900';
+    : 'flex-1 overflow-y-auto p-4 md:p-6 pb-20 md:pb-6 rm-subpage-bg text-zinc-900';
 
   return (
     <div className={shellClassName}>
@@ -123,10 +140,10 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
       <div className="flex-1 flex min-h-0">
         <aside className="hidden md:flex w-56 bg-rm-bg-card border-r border-white/10 flex-col shrink-0">
           <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-            <NavLinks items={visibleMenu} pathname={pathname} />
+            <NavLinks items={visibleMenu} pathname={pathname} lang={lang} />
           </nav>
           <div className="px-3 py-3 border-t border-white/10 text-xs text-rm-text-secondary">
-            {t('layout.currentRole', lang)}: {currentRole}
+            {t('layout.currentRole', lang)}: {transRole(currentRole, lang)}
           </div>
         </aside>
 
@@ -214,10 +231,10 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
               </button>
             </div>
             <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-              <NavLinks items={visibleMenu} pathname={pathname} />
+              <NavLinks items={visibleMenu} pathname={pathname} lang={lang} />
             </nav>
             <div className="px-3 py-3 border-t border-white/10 text-xs text-rm-text-secondary">
-              {t('layout.currentRole', lang)}: {currentRole}
+              {t('layout.currentRole', lang)}: {transRole(currentRole, lang)}
             </div>
           </div>
         </div>

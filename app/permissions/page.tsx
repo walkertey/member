@@ -2,7 +2,8 @@
 
 import { usePointsStore } from '@/lib/store';
 import { useI18n } from '@/components/raymond-i18n/RaymondI18nProvider';
-import { t, type TranslationKey } from '@/components/raymond-i18n/raymondTranslations';
+import { t, transRole, transStatus, getLangLocale } from '@/components/raymond-i18n/raymondTranslations';
+import type { TranslationKey } from '@/components/raymond-i18n/raymondTranslations';
 import type { Role } from '@/lib/permissions';
 import { ALL_ROLES, MENU_VISIBILITY } from '@/lib/permissions';
 
@@ -68,7 +69,7 @@ export default function PermissionsPage() {
                     <td className="font-mono text-xs">{s.id}</td>
                     <td>{s.name}</td>
                     <td>
-                      <span className="rm-badge rm-badge-gold">{s.role}</span>
+                      <span className="rm-badge rm-badge-gold">{transRole(s.role, lang)}</span>
                     </td>
                     <td className="text-center">
                       <span className="rm-badge rm-badge-success">{t('badge.active', lang)}</span>
@@ -125,7 +126,7 @@ export default function PermissionsPage() {
             <tbody>
               {[...operationLogs].reverse().map((log) => (
                 <tr key={log.id}>
-                  <td className="text-xs text-rm-text-dark-secondary">{new Date(log.time).toLocaleString('zh-CN')}</td>
+                  <td className="text-xs text-rm-text-dark-secondary">{new Date(log.time).toLocaleString(getLangLocale(lang))}</td>
                   <td className="text-xs">{log.operator_id}</td>
                   <td>{log.action}</td>
                   <td className="text-xs text-rm-text-dark-secondary">{log.detail}</td>

@@ -880,6 +880,14 @@ a.px-4 {
   font-size: 13px;
 }
 
+/* Override: dark hero sections need white text */
+.rm-section-hero .rm-demo-title {
+  color: #fff;
+}
+.rm-section-hero .rm-demo-subtitle {
+  color: var(--rm-text-secondary);
+}
+
 /* --- 卡片 --- */
 .rm-demo-card {
   border-radius: 20px;
@@ -1121,11 +1129,29 @@ a.px-4 {
 .rm-liquid-card {
   position: relative;
   border-radius: 20px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.94) 0%, rgba(248,250,252,0.94) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: linear-gradient(135deg, rgba(255,255,255,0.78) 0%, rgba(248,250,252,0.82) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.65);
   box-shadow:
-    0 8px 32px rgba(15, 23, 42, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    0 8px 32px rgba(15, 23, 42, 0.06),
+    0 2px 8px rgba(15, 23, 42, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+.rm-liquid-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    transparent 35%,
+    rgba(255, 255, 255, 0.25) 48%,
+    transparent 62%,
+    transparent 100%
+  );
+  pointer-events: none;
 }
 
 /* --- 深度立体卡片 --- */
@@ -1166,6 +1192,14 @@ a.px-4 {
     radial-gradient(circle at 82% 18%, rgba(240, 180, 41, 0.06), transparent 22%),
     linear-gradient(180deg, var(--rm-bg-deep) 0%, #07132f 48%, #040817 100%);
   color: var(--rm-text-primary);
+}
+
+/* Premium light sub-page background (replaces flat bg-zinc-50) */
+.rm-subpage-bg {
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(34, 86, 160, 0.06), transparent 40%),
+    radial-gradient(ellipse at 80% 100%, rgba(240, 180, 41, 0.03), transparent 35%),
+    linear-gradient(180deg, #f7f8fc 0%, #eff1f7 40%, #f4f5fb 100%);
 }
 
 /* --- Section hero（页面顶部标题区） --- */

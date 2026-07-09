@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { usePointsStore } from '@/lib/store';
 import PointsPanel, { AdjustModal } from '@/components/PointsPanel';
 import { useI18n } from '@/components/raymond-i18n/RaymondI18nProvider';
-import { t } from '@/components/raymond-i18n/raymondTranslations';
+import { t, transType, transStatus, getLangLocale } from '@/components/raymond-i18n/raymondTranslations';
 
 const WARN_SVG = (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -115,7 +115,7 @@ export default function MemberDetailPage() {
   const handleAdjust = (delta: number, remark: string) => {
     try {
       adjustPoints(memberId, delta, remark);
-      addToast('success', `积分调整成功：${delta > 0 ? '+' : ''}${delta} 分`);
+      addToast('success', `Points adjusted: ${delta > 0 ? '+' : ''}${delta} pts`);
     } catch (e) {
       addToast('error', (e as Error).message);
     }
@@ -189,10 +189,10 @@ export default function MemberDetailPage() {
                   </span>
                 </div>
                 <div className="text-rm-text-dark-secondary text-xs">
-                  {t('member.referralReward', lang)}: {item.referral.reward_point} 分
+                  {t('member.referralReward', lang)}: {item.referral.reward_point} pts
                   {item.referral.batch_reward_point && (
                     <span className="ml-2">
-                      | {t('member.batchStatus', lang)}: {item.referral.batch_reward_point} 分 ({item.referral.batch_status === '已发放' ? t('member.issued', lang) : t('member.pending', lang)})
+                      | {t('member.batchStatus', lang)}: {item.referral.batch_reward_point} pts ({item.referral.batch_status === '已发放' ? t('member.issued', lang) : t('member.pending', lang)})
                     </span>
                   )}
                 </div>
@@ -210,11 +210,11 @@ export default function MemberDetailPage() {
               {t('member.batchStatus', lang)}:
               {r.batch_status === '已发放' ? (
                 <span className="text-emerald-700 font-bold">
-                  {' '}{CHECK_SVG} {t('member.issued', lang)} (X+Y={r.batch_reward_point}分)
+                  {' '}{CHECK_SVG} {t('member.issued', lang)} (X+Y={r.batch_reward_point}pts)
                 </span>
               ) : (
                 <span className="text-amber-700 font-bold">
-                  {' '}{HOURGLASS_SVG} {t('member.pending', lang)} (X+Y={r.batch_reward_point}分)
+                  {' '}{HOURGLASS_SVG} {t('member.pending', lang)} (X+Y={r.batch_reward_point}pts)
                 </span>
               )}
             </div>
@@ -241,8 +241,8 @@ export default function MemberDetailPage() {
                 const isExpired = tx.expiry_status === '已到期';
                 return (
                   <tr key={tx.id} className={isExpired ? 'bg-red-50/50' : ''}>
-                    <td className="text-xs">{new Date(tx.create_time).toLocaleString('zh-CN')}</td>
-                    <td><span className={`rm-badge ${txTypeBadge(tx.trans_type)}`}>{tx.trans_type}</span></td>
+                    <td className="text-xs">{new Date(tx.create_time).toLocaleString(getLangLocale(lang))}</td>
+                    <td><span className={`rm-badge ${txTypeBadge(tx.trans_type)}`}>{transType(tx.trans_type, lang)}</span></td>
                     <td className={`text-right font-bold ${tx.amount > 0 ? 'text-emerald-700' : 'text-red-600'}`}>
                       {tx.amount > 0 ? '+' : ''}{tx.amount.toLocaleString()}
                       {isExpired && <span className="ml-1">{WARN_SVG}</span>}
@@ -250,7 +250,7 @@ export default function MemberDetailPage() {
                     <td className="text-right text-rm-text-dark-secondary">{tx.balance_before.toLocaleString()}</td>
                     <td className="text-right">{tx.balance_after.toLocaleString()}</td>
                     <td className="text-xs text-rm-text-dark-secondary">
-                      {tx.expiry_date ? new Date(tx.expiry_date).toLocaleDateString('zh-CN') : '-'}
+                      {tx.expiry_date ? new Date(tx.expiry_date).toLocaleDateString(getLangLocale(lang)) : '-'}
                     </td>
                     <td className="text-xs text-rm-text-dark-secondary max-w-[200px] truncate">{tx.remark}</td>
                   </tr>
@@ -289,7 +289,7 @@ export default function MemberDetailPage() {
                   .filter((g) => g.status === '上架')
                   .map((g) => (
                     <option key={g.id} value={g.id}>
-                      {g.name} — {g.point_cost.toLocaleString()} 分 (库存: {g.stock})
+                      {g.name} — {g.point_cost.toLocaleString()} pts (stock: {g.stock})
                     </option>
                   ))}
               </select>

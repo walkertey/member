@@ -4,7 +4,7 @@ import { useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { usePointsStore } from '@/lib/store';
 import { useI18n } from '@/components/raymond-i18n/RaymondI18nProvider';
-import { t } from '@/components/raymond-i18n/raymondTranslations';
+import { t, transStatus } from '@/components/raymond-i18n/raymondTranslations';
 
 const WARN_SVG = (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -107,7 +107,7 @@ export default function MembersPage() {
                 </td>
                 <td className="text-center">
                   <span className={`rm-badge ${m.status === '正常' ? 'rm-badge-success' : 'rm-badge-danger'}`}>
-                    {m.status}
+                    {transStatus(m.status, lang)}
                   </span>
                 </td>
                 <td className="text-center">

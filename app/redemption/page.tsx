@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { usePointsStore } from '@/lib/store';
 import { useI18n } from '@/components/raymond-i18n/RaymondI18nProvider';
-import { t } from '@/components/raymond-i18n/raymondTranslations';
+import { t, transRole, transStatus, getLangLocale } from '@/components/raymond-i18n/raymondTranslations';
 import { MENU_VISIBILITY } from '@/lib/permissions';
 import type { Role } from '@/lib/permissions';
 
@@ -74,7 +74,7 @@ export default function RedemptionPage() {
           <p className="rm-demo-subtitle">{t('redemption.subtitle', lang)}</p>
         </div>
         {currentRole !== '超级管理员' && (
-          <span className="rm-badge rm-badge-neutral">{currentRole}</span>
+          <span className="rm-badge rm-badge-neutral">{transRole(currentRole, lang)}</span>
         )}
       </div>
 
@@ -99,7 +99,7 @@ export default function RedemptionPage() {
               <div className="mt-2 text-xs text-rm-text-dark-secondary">
                 {t('redemption.stock', lang)}: {gift.stock}
                 {gift.status === '下架' && (
-                  <span className="ml-1 rm-badge rm-badge-danger">{t('redemption.offShelf', lang)}</span>
+                  <span className="ml-1 rm-badge rm-badge-danger">{transStatus(gift.status, lang)}</span>
                 )}
               </div>
             </div>
@@ -140,7 +140,7 @@ export default function RedemptionPage() {
                         <td>{r.gift_name}</td>
                         <td className="text-right font-bold text-red-600">-{r.point_cost.toLocaleString()}</td>
                         <td className="text-right text-rm-text-dark-secondary">{r.balance_at_apply.toLocaleString()}</td>
-                        <td className="text-xs text-rm-text-dark-secondary">{new Date(r.apply_time).toLocaleString('zh-CN')}</td>
+                        <td className="text-xs text-rm-text-dark-secondary">{new Date(r.apply_time).toLocaleString(getLangLocale(lang))}</td>
                         <td className="text-center">
                           <div className="flex justify-center gap-2">
                             <button onClick={() => handleAudit(r.id, true)} className="rm-demo-primary-button px-3 py-1.5 text-xs min-h-[36px] !rounded-lg">
@@ -206,7 +206,7 @@ export default function RedemptionPage() {
                     <td>{member?.name ?? r.member_id}</td>
                     <td>{r.gift_name}</td>
                     <td className="text-right font-bold text-red-600">-{r.point_cost.toLocaleString()}</td>
-                    <td className="text-xs text-rm-text-dark-secondary">{new Date(r.apply_time).toLocaleString('zh-CN')}</td>
+                    <td className="text-xs text-rm-text-dark-secondary">{new Date(r.apply_time).toLocaleString(getLangLocale(lang))}</td>
                     <td className="text-center">
                       <span className={`rm-badge ${statusBadge(r.status)}`}>{statusLabel(r.status)}</span>
                     </td>

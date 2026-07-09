@@ -4,7 +4,7 @@ import { usePointsStore } from '@/lib/store';
 import type { Role } from '@/lib/permissions';
 import { ALL_ROLES } from '@/lib/permissions';
 import { useI18n } from '@/components/raymond-i18n/RaymondI18nProvider';
-import { t } from '@/components/raymond-i18n/raymondTranslations';
+import { t, transRole } from '@/components/raymond-i18n/raymondTranslations';
 
 export default function RoleSwitcher() {
   const currentRole = usePointsStore((s) => s.currentRole);
@@ -27,7 +27,7 @@ export default function RoleSwitcher() {
       >
         {ALL_ROLES.map((r) => (
           <option key={r} value={r}>
-            {r}
+            {transRole(r, lang)}
           </option>
         ))}
       </select>

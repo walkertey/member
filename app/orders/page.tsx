@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { usePointsStore } from '@/lib/store';
 import { useI18n } from '@/components/raymond-i18n/RaymondI18nProvider';
-import { t } from '@/components/raymond-i18n/raymondTranslations';
+import { t, transStatus, getLangLocale } from '@/components/raymond-i18n/raymondTranslations';
 
 export default function OrdersPage() {
   const { lang } = useI18n();
@@ -190,10 +190,10 @@ export default function OrdersPage() {
                     <td>{member?.name ?? o.member_id}</td>
                     <td>{product?.name ?? o.product_id}</td>
                     <td className="text-right font-bold">RM {o.amount.toLocaleString()}</td>
-                    <td className="text-xs text-rm-text-dark-secondary">{new Date(o.pay_time).toLocaleString('zh-CN')}</td>
+                    <td className="text-xs text-rm-text-dark-secondary">{new Date(o.pay_time).toLocaleString(getLangLocale(lang))}</td>
                     <td className="text-center">
                       <span className={`rm-badge ${o.status === '已支付' ? 'rm-badge-success' : 'rm-badge-danger'}`}>
-                        {o.status === '已支付' ? t('badge.paid', lang) : t('badge.refunded', lang)}
+                        {transStatus(o.status, lang)}
                       </span>
                     </td>
                     <td className="text-xs text-rm-text-dark-secondary">{o.operator_id}</td>
