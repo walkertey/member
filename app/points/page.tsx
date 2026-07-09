@@ -41,40 +41,51 @@ export default function PointsPage() {
 
   const transTypes = ['购买', '推荐30%', '批量奖励', '兑换扣除', '后台调整'];
 
+  const transTypeBadge = (type: string) => {
+    const map: Record<string, string> = {
+      '购买': 'rm-badge-info',
+      '推荐30%': 'rm-badge-success',
+      '批量奖励': 'rm-badge-gold',
+      '兑换扣除': 'rm-badge-warning',
+    };
+    return map[type] ?? 'rm-badge-neutral';
+  };
+
   return (
-    <div className="max-w-6xl mx-auto">
-      <div className="flex items-center justify-between mb-4 md:mb-6">
-        <h2 className="text-lg md:text-xl font-semibold text-zinc-800">积分中心</h2>
+    <div className="max-w-6xl mx-auto rm-demo-page">
+      <div className="rm-demo-page-header">
+        <div>
+          <h2 className="rm-demo-title">积分中心</h2>
+          <p className="rm-demo-subtitle">积分流水总览 · 到期预警</p>
+        </div>
         {isIntern && (
-          <span className="text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded">
-            实习生 — 只读模式
-          </span>
+          <span className="rm-badge rm-badge-warning">实习生 · 只读</span>
         )}
       </div>
 
-      {/* Tab 切换 — scrollable on mobile */}
-      <div className="flex border-b border-zinc-200 mb-4 md:mb-6 overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
+      {/* Tab switch */}
+      <div className="flex border-b border-[var(--rm-border-light)] mb-5 overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
         <button
           onClick={() => setActiveTab('all')}
-          className={`px-3 md:px-4 py-2.5 md:py-2 text-sm font-medium transition-colors border-b-2 -mb-px whitespace-nowrap min-h-[44px] ${
+          className={`px-4 py-2.5 text-sm font-bold transition-colors border-b-2 -mb-px whitespace-nowrap min-h-[44px] ${
             activeTab === 'all'
-              ? 'border-blue-600 text-blue-600'
-              : 'border-transparent text-zinc-500 hover:text-zinc-700'
+              ? 'border-[var(--rm-gold)] text-[var(--rm-gold-deep)]'
+              : 'border-transparent text-rm-text-dark-secondary hover:text-rm-text-dark'
           }`}
         >
           流水总表
         </button>
         <button
           onClick={() => setActiveTab('expiring')}
-          className={`px-3 md:px-4 py-2.5 md:py-2 text-sm font-medium transition-colors border-b-2 -mb-px whitespace-nowrap min-h-[44px] ${
+          className={`px-4 py-2.5 text-sm font-bold transition-colors border-b-2 -mb-px whitespace-nowrap min-h-[44px] ${
             activeTab === 'expiring'
-              ? 'border-blue-600 text-blue-600'
-              : 'border-transparent text-zinc-500 hover:text-zinc-700'
+              ? 'border-[var(--rm-gold)] text-[var(--rm-gold-deep)]'
+              : 'border-transparent text-rm-text-dark-secondary hover:text-rm-text-dark'
           }`}
         >
           到期预警
           {expiringTransactions.length > 0 && (
-            <span className="ml-1.5 px-1.5 py-0.5 text-xs bg-red-100 text-red-600 rounded-full">
+            <span className="ml-1.5 rm-badge rm-badge-danger">
               {expiringTransactions.length}
             </span>
           )}
@@ -83,213 +94,116 @@ export default function PointsPage() {
 
       {activeTab === 'all' && (
         <div>
-          {/* 筛选栏 — wrap on mobile */}
+          {/* Filters */}
           <div className="flex gap-2 md:gap-3 mb-4 flex-wrap">
-            <select
-              value={filterMember}
-              onChange={(e) => setFilterMember(e.target.value)}
-              className="text-sm border border-zinc-300 rounded px-2 py-2 min-h-[44px]"
-            >
+            <select value={filterMember} onChange={(e) => setFilterMember(e.target.value)} className="rm-demo-filter">
               <option value="">全部会员</option>
               {members.map((m) => (
-                <option key={m.id} value={m.id}>
-                  {m.name}
-                </option>
+                <option key={m.id} value={m.id}>{m.name}</option>
               ))}
             </select>
-            <select
-              value={filterType}
-              onChange={(e) => setFilterType(e.target.value)}
-              className="text-sm border border-zinc-300 rounded px-2 py-2 min-h-[44px]"
-            >
+            <select value={filterType} onChange={(e) => setFilterType(e.target.value)} className="rm-demo-filter">
               <option value="">全部类型</option>
               {transTypes.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
+                <option key={t} value={t}>{t}</option>
               ))}
             </select>
-            <input
-              type="date"
-              value={filterDateFrom}
-              onChange={(e) => setFilterDateFrom(e.target.value)}
-              className="text-sm border border-zinc-300 rounded px-2 py-2 min-h-[44px]"
-              placeholder="开始日期"
-            />
-            <input
-              type="date"
-              value={filterDateTo}
-              onChange={(e) => setFilterDateTo(e.target.value)}
-              className="text-sm border border-zinc-300 rounded px-2 py-2 min-h-[44px]"
-              placeholder="结束日期"
-            />
+            <input type="date" value={filterDateFrom} onChange={(e) => setFilterDateFrom(e.target.value)} className="rm-demo-filter" placeholder="开始日期" />
+            <input type="date" value={filterDateTo} onChange={(e) => setFilterDateTo(e.target.value)} className="rm-demo-filter" placeholder="结束日期" />
             {(filterMember || filterType || filterDateFrom || filterDateTo) && (
               <button
-                onClick={() => {
-                  setFilterMember('');
-                  setFilterType('');
-                  setFilterDateFrom('');
-                  setFilterDateTo('');
-                }}
-                className="text-sm text-blue-600 hover:underline min-h-[44px] px-2"
+                onClick={() => { setFilterMember(''); setFilterType(''); setFilterDateFrom(''); setFilterDateTo(''); }}
+                className="rm-demo-link text-sm min-h-[44px] px-3"
               >
                 清除筛选
               </button>
             )}
           </div>
 
-          {/* 流水表 */}
-          <div className="bg-white border border-zinc-200 rounded-lg overflow-hidden">
-            <div className="table-responsive">
-              <table className="w-full text-sm min-w-[750px]">
-                <thead>
-                  <tr className="bg-zinc-50 border-b border-zinc-200">
-                    <th className="text-left px-3 py-2 font-medium text-zinc-600">时间</th>
-                    <th className="text-left px-3 py-2 font-medium text-zinc-600">会员</th>
-                    <th className="text-left px-3 py-2 font-medium text-zinc-600">类型</th>
-                    <th className="text-right px-3 py-2 font-medium text-zinc-600">变动</th>
-                    <th className="text-right px-3 py-2 font-medium text-zinc-600">变动前</th>
-                    <th className="text-right px-3 py-2 font-medium text-zinc-600">变动后</th>
-                    <th className="text-left px-3 py-2 font-medium text-zinc-600">到期日</th>
-                    <th className="text-left px-3 py-2 font-medium text-zinc-600">备注</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredTransactions.map((tx) => {
-                    const member = members.find((m) => m.id === tx.member_id);
-                    return (
-                      <tr
-                        key={tx.id}
-                        className={`border-b border-zinc-100 hover:bg-zinc-50 ${
-                          tx.expiry_status === '已到期' ? 'bg-red-50' : ''
-                        }`}
-                      >
-                        <td className="px-3 py-2 text-xs">
-                          {new Date(tx.create_time).toLocaleString('zh-CN')}
-                        </td>
-                        <td className="px-3 py-2">{member?.name ?? tx.member_id}</td>
-                        <td className="px-3 py-2">
-                          <span
-                            className={`px-1.5 py-0.5 text-xs rounded ${
-                              tx.trans_type === '购买'
-                                ? 'bg-blue-50 text-blue-700'
-                                : tx.trans_type === '推荐30%'
-                                ? 'bg-green-50 text-green-700'
-                                : tx.trans_type === '批量奖励'
-                                ? 'bg-purple-50 text-purple-700'
-                                : tx.trans_type === '兑换扣除'
-                                ? 'bg-orange-50 text-orange-700'
-                                : 'bg-zinc-100 text-zinc-600'
-                            }`}
-                          >
-                            {tx.trans_type}
-                          </span>
-                        </td>
-                        <td
-                          className={`px-3 py-2 text-right font-medium ${
-                            tx.amount > 0 ? 'text-green-600' : 'text-red-600'
-                          }`}
-                        >
-                          {tx.amount > 0 ? '+' : ''}
-                          {tx.amount.toLocaleString()}
-                          {tx.expiry_status === '已到期' && (
-                            <span className="ml-1">⚠️</span>
-                          )}
-                        </td>
-                        <td className="px-3 py-2 text-right text-zinc-500">
-                          {tx.balance_before.toLocaleString()}
-                        </td>
-                        <td className="px-3 py-2 text-right">
-                          {tx.balance_after.toLocaleString()}
-                        </td>
-                        <td className="px-3 py-2 text-xs text-zinc-500">
-                          {tx.expiry_date
-                            ? new Date(tx.expiry_date).toLocaleDateString('zh-CN')
-                            : '-'}
-                        </td>
-                        <td className="px-3 py-2 text-xs text-zinc-500 max-w-[150px] truncate">
-                          {tx.remark}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                  {filteredTransactions.length === 0 && (
-                    <tr>
-                      <td colSpan={8} className="px-3 py-6 text-center text-zinc-400">
-                        暂无记录
+          {/* Transactions table */}
+          <div className="rm-demo-table-wrap">
+            <table className="rm-demo-table min-w-[750px]">
+              <thead>
+                <tr>
+                  <th>时间</th>
+                  <th>会员</th>
+                  <th>类型</th>
+                  <th className="text-right">变动</th>
+                  <th className="text-right">变动前</th>
+                  <th className="text-right">变动后</th>
+                  <th>到期日</th>
+                  <th>备注</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredTransactions.map((tx) => {
+                  const member = members.find((m) => m.id === tx.member_id);
+                  const isExpired = tx.expiry_status === '已到期';
+                  return (
+                    <tr key={tx.id} className={isExpired ? 'bg-red-50/50' : ''}>
+                      <td className="text-xs">{new Date(tx.create_time).toLocaleString('zh-CN')}</td>
+                      <td>{member?.name ?? tx.member_id}</td>
+                      <td><span className={`rm-badge ${transTypeBadge(tx.trans_type)}`}>{tx.trans_type}</span></td>
+                      <td className={`text-right font-bold ${tx.amount > 0 ? 'text-emerald-700' : 'text-red-600'}`}>
+                        {tx.amount > 0 ? '+' : ''}{tx.amount.toLocaleString()}
+                        {isExpired && <span className="ml-1">⚠️</span>}
                       </td>
+                      <td className="text-right text-rm-text-dark-secondary">{tx.balance_before.toLocaleString()}</td>
+                      <td className="text-right">{tx.balance_after.toLocaleString()}</td>
+                      <td className="text-xs text-rm-text-dark-secondary">
+                        {tx.expiry_date ? new Date(tx.expiry_date).toLocaleDateString('zh-CN') : '-'}
+                      </td>
+                      <td className="text-xs text-rm-text-dark-secondary max-w-[150px] truncate">{tx.remark}</td>
                     </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+                  );
+                })}
+                {filteredTransactions.length === 0 && (
+                  <tr><td colSpan={8} className="text-center text-rm-text-dark-secondary py-6">暂无记录</td></tr>
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       )}
 
       {activeTab === 'expiring' && (
         <div>
-          <p className="text-sm text-zinc-500 mb-4">
+          <p className="text-sm text-rm-text-dark-secondary mb-4">
             以下为未来 30 天内即将到期的积分流水（按剩余天数升序排列）
           </p>
-          <div className="bg-white border border-zinc-200 rounded-lg overflow-hidden">
-            <div className="table-responsive">
-              <table className="w-full text-sm min-w-[550px]">
-                <thead>
-                  <tr className="bg-zinc-50 border-b border-zinc-200">
-                    <th className="text-left px-3 py-2 font-medium text-zinc-600">会员</th>
-                    <th className="text-left px-3 py-2 font-medium text-zinc-600">类型</th>
-                    <th className="text-right px-3 py-2 font-medium text-zinc-600">积分数</th>
-                    <th className="text-left px-3 py-2 font-medium text-zinc-600">到期日</th>
-                    <th className="text-right px-3 py-2 font-medium text-zinc-600">剩余天数</th>
-                    <th className="text-left px-3 py-2 font-medium text-zinc-600">备注</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {expiringTransactions.map((tx) => {
-                    const urgent = tx.days_left <= 7;
-                    return (
-                      <tr
-                        key={tx.id}
-                        className={`border-b border-zinc-100 hover:bg-zinc-50 ${
-                          urgent ? 'bg-red-50' : ''
-                        }`}
-                      >
-                        <td className="px-3 py-2">{tx.member_name}</td>
-                        <td className="px-3 py-2">
-                          <span className="px-1.5 py-0.5 text-xs bg-blue-50 text-blue-700 rounded">
-                            {tx.trans_type}
-                          </span>
-                        </td>
-                        <td className="px-3 py-2 text-right font-medium text-green-600">
-                          +{tx.amount.toLocaleString()}
-                        </td>
-                        <td className="px-3 py-2 text-xs">
-                          {new Date(tx.expiry_date!).toLocaleDateString('zh-CN')}
-                        </td>
-                        <td className="px-3 py-2 text-right">
-                          <span
-                            className={`font-medium ${
-                              urgent ? 'text-red-600' : 'text-amber-600'
-                            }`}
-                          >
-                            {tx.days_left} 天
-                          </span>
-                        </td>
-                        <td className="px-3 py-2 text-xs text-zinc-500">{tx.remark}</td>
-                      </tr>
-                    );
-                  })}
-                  {expiringTransactions.length === 0 && (
-                    <tr>
-                      <td colSpan={6} className="px-3 py-6 text-center text-zinc-400">
-                        暂无即将到期的积分
+          <div className="rm-demo-table-wrap">
+            <table className="rm-demo-table min-w-[550px]">
+              <thead>
+                <tr>
+                  <th>会员</th>
+                  <th>类型</th>
+                  <th className="text-right">积分数</th>
+                  <th>到期日</th>
+                  <th className="text-right">剩余天数</th>
+                  <th>备注</th>
+                </tr>
+              </thead>
+              <tbody>
+                {expiringTransactions.map((tx) => {
+                  const urgent = tx.days_left <= 7;
+                  return (
+                    <tr key={tx.id} className={urgent ? 'bg-red-50/50' : ''}>
+                      <td>{tx.member_name}</td>
+                      <td><span className="rm-badge rm-badge-info">{tx.trans_type}</span></td>
+                      <td className="text-right font-bold text-emerald-700">+{tx.amount.toLocaleString()}</td>
+                      <td className="text-xs">{new Date(tx.expiry_date!).toLocaleDateString('zh-CN')}</td>
+                      <td className={`text-right font-bold ${urgent ? 'text-red-600' : 'text-amber-700'}`}>
+                        {tx.days_left} 天
                       </td>
+                      <td className="text-xs text-rm-text-dark-secondary">{tx.remark}</td>
                     </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+                  );
+                })}
+                {expiringTransactions.length === 0 && (
+                  <tr><td colSpan={6} className="text-center text-rm-text-dark-secondary py-6">暂无即将到期的积分</td></tr>
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       )}
