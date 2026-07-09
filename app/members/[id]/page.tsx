@@ -61,13 +61,23 @@ export default function MemberDetailPage() {
     });
   }, [referrals, members, orders]);
 
+  const txTypeBadge = (type: string) => {
+    const map: Record<string, string> = {
+      '购买': 'rm-badge-info',
+      '推荐30%': 'rm-badge-success',
+      '批量奖励': 'rm-badge-gold',
+      '兑换扣除': 'rm-badge-warning',
+    };
+    return map[type] ?? 'rm-badge-neutral';
+  };
+
   if (!member) {
     return (
-      <div className="max-w-4xl mx-auto text-center py-12">
-        <p className="text-zinc-500">会员不存在</p>
+      <div className="max-w-4xl mx-auto text-center py-12 rm-demo-page">
+        <p className="text-rm-text-dark-secondary">会员不存在</p>
         <button
           onClick={() => router.push('/members')}
-          className="mt-3 text-blue-600 hover:underline text-sm min-h-[44px]"
+          className="rm-demo-link mt-3 inline-block text-sm min-h-[44px]"
         >
           返回会员列表
         </button>
@@ -97,21 +107,21 @@ export default function MemberDetailPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto rm-demo-page">
       <button
         onClick={() => router.push('/members')}
-        className="text-sm text-blue-600 hover:underline mb-3 md:mb-4 inline-block min-h-[44px] flex items-center"
+        className="rm-demo-link text-sm mb-4 inline-flex items-center gap-1 min-h-[44px]"
       >
         &larr; 返回会员列表
       </button>
 
       {isIntern && (
-        <div className="mb-3 md:mb-4 px-3 py-2 bg-amber-50 text-amber-700 text-xs rounded border border-amber-200">
-          实习生 — 只读模式（编辑按钮已隐藏）
+        <div className="mb-4 px-4 py-2 rm-badge rm-badge-warning text-xs inline-flex">
+          实习生 · 只读模式（编辑按钮已隐藏）
         </div>
       )}
 
-      {/* 积分面板 */}
+      {/* Points panel */}
       <PointsPanel
         member={member}
         onAdjust={isIntern ? () => {} : () => setShowAdjust(true)}
@@ -121,49 +131,43 @@ export default function MemberDetailPage() {
         }}
       />
 
-      {/* 推荐关系树 */}
-      <div className="bg-white border border-zinc-200 rounded-lg p-4 md:p-6 mt-4 md:mt-6">
-        <h3 className="text-md font-semibold text-zinc-800 mb-3 md:mb-4">推荐关系树</h3>
+      {/* Referral tree */}
+      <div className="rm-demo-card p-4 md:p-6 mt-5">
+        <h3 className="text-md font-bold text-rm-text-dark mb-4">推荐关系树</h3>
         {referrer ? (
-          <div className="mb-3 md:mb-4 p-3 bg-blue-50 rounded text-sm">
+          <div className="mb-4 p-3 rm-stat-card border-blue-200 bg-blue-50/50 text-sm">
             推荐人：{referrer.name} (ID: {referrer.member_no})
           </div>
         ) : (
-          <div className="mb-3 md:mb-4 p-3 bg-zinc-50 rounded text-sm text-zinc-500">
+          <div className="mb-4 p-3 bg-zinc-50 rounded-xl text-sm text-rm-text-dark-secondary">
             无推荐人
           </div>
         )}
 
-        <div className="mb-2 text-sm font-medium text-zinc-700">
+        <p className="mb-2 text-sm font-bold text-rm-text-dark">
           下线列表 ({downlineList.length})
-        </div>
+        </p>
         {downlineList.length > 0 ? (
-          <div className="space-y-2 mb-3 md:mb-4">
+          <div className="space-y-2 mb-4">
             {downlineList.map((item) => (
               <div
                 key={item.referral.id}
-                className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border border-zinc-200 rounded text-sm gap-2"
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border border-[var(--rm-border-light)] rounded-xl text-sm gap-2"
               >
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                  <span className="font-medium">{item.member?.name ?? item.referral.invitee_id}</span>
-                  <span className="text-zinc-400 text-xs">
+                  <span className="font-bold">{item.member?.name ?? item.referral.invitee_id}</span>
+                  <span className="text-rm-text-dark-secondary text-xs">
                     (ID: {item.referral.invitee_id})
                   </span>
-                  <span
-                    className={`px-1.5 py-0.5 text-xs rounded ${
-                      item.hasOrder
-                        ? 'bg-green-50 text-green-600'
-                        : 'bg-zinc-100 text-zinc-400'
-                    }`}
-                  >
+                  <span className={`rm-badge ${item.hasOrder ? 'rm-badge-success' : 'rm-badge-neutral'}`}>
                     {item.hasOrder ? '已购' : '未购'}
                   </span>
                 </div>
-                <div className="text-zinc-500 text-xs">
+                <div className="text-rm-text-dark-secondary text-xs">
                   推荐奖励: {item.referral.reward_point} 分
                   {item.referral.batch_reward_point && (
                     <span className="ml-2">
-                      | 批量: {item.referral.batch_reward_point} 分 ({item.referral.batch_status === '已发放' ? '✅ 已发放' : '⏳ 待发放'})
+                      | 批量: {item.referral.batch_reward_point} 分 ({item.referral.batch_status === '已发放' ? '已发放' : '待发放'})
                     </span>
                   )}
                 </div>
@@ -171,21 +175,21 @@ export default function MemberDetailPage() {
             ))}
           </div>
         ) : (
-          <div className="text-sm text-zinc-400 mb-3 md:mb-4">暂无下线</div>
+          <p className="text-sm text-rm-text-dark-secondary mb-4">暂无下线</p>
         )}
 
-        {/* 批量奖励状态 */}
+        {/* Batch reward status */}
         {referralLogs
           .filter((r) => r.invitee_id === memberId && r.batch_reward_point)
           .map((r) => (
-            <div key={r.id} className="p-3 bg-amber-50 rounded text-sm">
+            <div key={r.id} className="p-3 rm-stat-card border-amber-200 bg-amber-50/50 text-sm">
               批量奖励状态：
               {r.batch_status === '已发放' ? (
-                <span className="text-green-600 font-medium">
+                <span className="text-emerald-700 font-bold">
                   ✅ 已发放 (X+Y={r.batch_reward_point}分)
                 </span>
               ) : (
-                <span className="text-amber-600 font-medium">
+                <span className="text-amber-700 font-bold">
                   ⏳ 待发放 (X+Y={r.batch_reward_point}分)
                 </span>
               )}
@@ -193,110 +197,71 @@ export default function MemberDetailPage() {
           ))}
       </div>
 
-      {/* 积分流水 */}
-      <div id="tx-history" className="bg-white border border-zinc-200 rounded-lg p-4 md:p-6 mt-4 md:mt-6">
-        <h3 className="text-md font-semibold text-zinc-800 mb-3 md:mb-4">积分流水记录</h3>
-        <div className="table-responsive">
-          <table className="w-full text-sm min-w-[700px]">
+      {/* Transaction history */}
+      <div id="tx-history" className="rm-demo-card p-4 md:p-6 mt-5">
+        <h3 className="text-md font-bold text-rm-text-dark mb-4">积分流水记录</h3>
+        <div className="rm-demo-table-wrap">
+          <table className="rm-demo-table min-w-[700px]">
             <thead>
-              <tr className="bg-zinc-50 border-b border-zinc-200">
-                <th className="text-left px-3 py-2 font-medium text-zinc-600">时间</th>
-                <th className="text-left px-3 py-2 font-medium text-zinc-600">类型</th>
-                <th className="text-right px-3 py-2 font-medium text-zinc-600">变动</th>
-                <th className="text-right px-3 py-2 font-medium text-zinc-600">变动前</th>
-                <th className="text-right px-3 py-2 font-medium text-zinc-600">变动后</th>
-                <th className="text-left px-3 py-2 font-medium text-zinc-600">到期日</th>
-                <th className="text-left px-3 py-2 font-medium text-zinc-600">备注</th>
+              <tr>
+                <th>时间</th>
+                <th>类型</th>
+                <th className="text-right">变动</th>
+                <th className="text-right">变动前</th>
+                <th className="text-right">变动后</th>
+                <th>到期日</th>
+                <th>备注</th>
               </tr>
             </thead>
             <tbody>
-              {memberTxs.map((tx) => (
-                <tr
-                  key={tx.id}
-                  className={`border-b border-zinc-100 ${
-                    tx.expiry_status === '已到期' ? 'bg-red-50' : ''
-                  }`}
-                >
-                  <td className="px-3 py-2 text-xs">
-                    {new Date(tx.create_time).toLocaleString('zh-CN')}
-                  </td>
-                  <td className="px-3 py-2">
-                    <span
-                      className={`px-1.5 py-0.5 text-xs rounded ${
-                        tx.trans_type === '购买'
-                          ? 'bg-blue-50 text-blue-700'
-                          : tx.trans_type === '推荐30%'
-                          ? 'bg-green-50 text-green-700'
-                          : tx.trans_type === '批量奖励'
-                          ? 'bg-purple-50 text-purple-700'
-                          : tx.trans_type === '兑换扣除'
-                          ? 'bg-orange-50 text-orange-700'
-                          : 'bg-zinc-100 text-zinc-600'
-                      }`}
-                    >
-                      {tx.trans_type}
-                    </span>
-                  </td>
-                  <td
-                    className={`px-3 py-2 text-right font-medium ${
-                      tx.amount > 0 ? 'text-green-600' : 'text-red-600'
-                    }`}
-                  >
-                    {tx.amount > 0 ? '+' : ''}
-                    {tx.amount.toLocaleString()}
-                    {tx.expiry_status === '已到期' && (
-                      <span className="ml-1 text-xs">⚠️</span>
-                    )}
-                  </td>
-                  <td className="px-3 py-2 text-right text-zinc-500">
-                    {tx.balance_before.toLocaleString()}
-                  </td>
-                  <td className="px-3 py-2 text-right">
-                    {tx.balance_after.toLocaleString()}
-                  </td>
-                  <td className="px-3 py-2 text-xs text-zinc-500">
-                    {tx.expiry_date
-                      ? new Date(tx.expiry_date).toLocaleDateString('zh-CN')
-                      : '-'}
-                  </td>
-                  <td className="px-3 py-2 text-xs text-zinc-500 max-w-[200px] truncate">
-                    {tx.remark}
-                  </td>
-                </tr>
-              ))}
+              {memberTxs.map((tx) => {
+                const isExpired = tx.expiry_status === '已到期';
+                return (
+                  <tr key={tx.id} className={isExpired ? 'bg-red-50/50' : ''}>
+                    <td className="text-xs">{new Date(tx.create_time).toLocaleString('zh-CN')}</td>
+                    <td><span className={`rm-badge ${txTypeBadge(tx.trans_type)}`}>{tx.trans_type}</span></td>
+                    <td className={`text-right font-bold ${tx.amount > 0 ? 'text-emerald-700' : 'text-red-600'}`}>
+                      {tx.amount > 0 ? '+' : ''}{tx.amount.toLocaleString()}
+                      {isExpired && <span className="ml-1 text-xs">⚠️</span>}
+                    </td>
+                    <td className="text-right text-rm-text-dark-secondary">{tx.balance_before.toLocaleString()}</td>
+                    <td className="text-right">{tx.balance_after.toLocaleString()}</td>
+                    <td className="text-xs text-rm-text-dark-secondary">
+                      {tx.expiry_date ? new Date(tx.expiry_date).toLocaleDateString('zh-CN') : '-'}
+                    </td>
+                    <td className="text-xs text-rm-text-dark-secondary max-w-[200px] truncate">{tx.remark}</td>
+                  </tr>
+                );
+              })}
               {memberTxs.length === 0 && (
-                <tr>
-                  <td colSpan={7} className="px-3 py-6 text-center text-zinc-400">
-                    暂无流水记录
-                  </td>
-                </tr>
+                <tr><td colSpan={7} className="text-center text-rm-text-dark-secondary py-6">暂无流水记录</td></tr>
               )}
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* 调整积分模态框 */}
+      {/* Adjust modal */}
       <AdjustModal
         open={showAdjust}
         onClose={() => setShowAdjust(false)}
         onSubmit={handleAdjust}
       />
 
-      {/* 兑换礼品模态框 */}
+      {/* Redeem modal */}
       {showRedeem && (
         <div className="fixed inset-0 bg-black/40 flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
-          <div className="bg-white rounded-t-lg sm:rounded-lg p-5 md:p-6 w-full max-w-md shadow-xl max-h-[90vh] overflow-y-auto">
-            <h3 className="text-lg font-semibold mb-4">兑换礼品</h3>
-            <p className="text-sm text-zinc-500 mb-3">
-              当前可用积分: <span className="font-bold text-green-600">{member.available_points.toLocaleString()}</span>
+          <div className="bg-white rounded-t-2xl sm:rounded-2xl p-5 md:p-6 w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto border border-[var(--rm-border-light)]">
+            <h3 className="text-lg font-black text-rm-text-dark mb-4">兑换礼品</h3>
+            <p className="text-sm text-rm-text-dark-secondary mb-4">
+              当前可用积分: <span className="font-black text-emerald-700">{member.available_points.toLocaleString()}</span>
             </p>
             <div className="mb-4">
-              <label className="block text-sm text-zinc-600 mb-1">选择礼品</label>
+              <label className="block text-sm text-rm-text-dark-secondary mb-1 font-medium">选择礼品</label>
               <select
                 value={selectedGiftId}
                 onChange={(e) => setSelectedGiftId(e.target.value)}
-                className="w-full border border-zinc-300 rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px]"
+                className="rm-demo-filter w-full"
               >
                 <option value="">-- 请选择礼品 --</option>
                 {gifts
@@ -308,19 +273,19 @@ export default function MemberDetailPage() {
                   ))}
               </select>
               {selectedGiftId && (
-                <div className="mt-2 text-sm text-zinc-500">
+                <div className="mt-2 text-sm text-rm-text-dark-secondary">
                   {(() => {
                     const gift = gifts.find((g) => g.id === selectedGiftId);
                     if (!gift) return null;
                     if (member.available_points < gift.point_cost) {
                       return (
-                        <span className="text-red-500">
+                        <span className="rm-badge rm-badge-danger">
                           积分不足！需要 {gift.point_cost.toLocaleString()} 分
                         </span>
                       );
                     }
                     return (
-                      <span className="text-green-600">
+                      <span className="rm-badge rm-badge-success">
                         兑换后剩余: {(member.available_points - gift.point_cost).toLocaleString()} 分
                       </span>
                     );
@@ -330,18 +295,15 @@ export default function MemberDetailPage() {
             </div>
             <div className="flex justify-end gap-3">
               <button
-                onClick={() => {
-                  setShowRedeem(false);
-                  setSelectedGiftId('');
-                }}
-                className="px-4 py-2.5 sm:py-2 text-sm border border-zinc-300 rounded hover:bg-zinc-50 min-h-[44px]"
+                onClick={() => { setShowRedeem(false); setSelectedGiftId(''); }}
+                className="rm-demo-secondary-button px-4 py-2.5 text-sm"
               >
                 取消
               </button>
               <button
                 onClick={handleRedeem}
                 disabled={!selectedGiftId}
-                className="px-4 py-2.5 sm:py-2 text-sm bg-purple-600 text-white rounded hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px]"
+                className="rm-demo-primary-button px-4 py-2.5 text-sm"
               >
                 确认兑换
               </button>
