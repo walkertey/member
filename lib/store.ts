@@ -25,6 +25,8 @@ import {
 } from './mockData';
 import * as engine from './pointsEngine';
 import type { Role } from './permissions';
+import type { Locale } from './i18n';
+import { DEFAULT_LOCALE } from './i18n';
 
 export interface LogEntry {
   id: string;
@@ -48,6 +50,9 @@ interface PointsStoreState {
   // ---- 角色 ----
   currentRole: Role;
 
+  // ---- 语言 ----
+  locale: Locale;
+
   // ---- Toast ----
   toasts: { id: string; type: 'success' | 'error' | 'info'; message: string }[];
 
@@ -56,6 +61,7 @@ interface PointsStoreState {
 
   // ---- Actions ----
   setRole: (role: Role) => void;
+  setLocale: (locale: Locale) => void;
 
   settleExpiredPoints: () => void;
   createOrder: (memberId: string, productId: string) => {
@@ -94,11 +100,15 @@ export const usePointsStore = create<PointsStoreState>()(
         { id: 'LOG002', time: '2026-07-01T09:05:00Z', operator_id: 'STAFF001', action: '数据加载', detail: '加载种子数据完成' },
       ],
       currentRole: '超级管理员',
+      locale: DEFAULT_LOCALE,
       toasts: [],
       _hasHydrated: false,
 
       // ---- 角色 ----
       setRole: (role) => set({ currentRole: role }),
+
+      // ---- 语言 ----
+      setLocale: (locale) => set({ locale }),
 
       // ---- 操作日志 ----
       _addLog: (operator_id, action, detail) => {

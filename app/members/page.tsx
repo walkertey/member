@@ -3,11 +3,13 @@
 import { useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { usePointsStore } from '@/lib/store';
+import { translate } from '@/lib/i18n';
 
 export default function MembersPage() {
   const members = usePointsStore((s) => s.members);
   const settleExpiredPoints = usePointsStore((s) => s.settleExpiredPoints);
   const currentRole = usePointsStore((s) => s.currentRole);
+  const locale = usePointsStore((s) => s.locale);
   const isIntern = currentRole === '实习生';
 
   useEffect(() => {
@@ -30,7 +32,7 @@ export default function MembersPage() {
     <div className="max-w-6xl mx-auto rm-demo-page">
       <div className="rm-demo-hero">
         <div>
-          <h2 className="rm-demo-title">会员管理</h2>
+          <h2 className="rm-demo-title">{translate(locale, 'members.title')}</h2>
           <p className="rm-demo-subtitle">
             共 {members.length} 名会员 · 活跃 {stats.active} 名
           </p>

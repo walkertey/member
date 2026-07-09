@@ -3,12 +3,14 @@
 import { useEffect, useState, useMemo } from 'react';
 import { usePointsStore } from '@/lib/store';
 import { getExpiringTransactions } from '@/lib/pointsEngine';
+import { translate } from '@/lib/i18n';
 
 export default function PointsPage() {
   const pointTransactions = usePointsStore((s) => s.pointTransactions);
   const members = usePointsStore((s) => s.members);
   const settleExpiredPoints = usePointsStore((s) => s.settleExpiredPoints);
   const currentRole = usePointsStore((s) => s.currentRole);
+  const locale = usePointsStore((s) => s.locale);
   const isIntern = currentRole === '实习生';
 
   const [activeTab, setActiveTab] = useState<'all' | 'expiring'>('all');
@@ -55,7 +57,7 @@ export default function PointsPage() {
     <div className="max-w-6xl mx-auto rm-demo-page">
       <div className="rm-demo-hero">
         <div>
-          <h2 className="rm-demo-title">积分中心</h2>
+          <h2 className="rm-demo-title">{translate(locale, 'points.title')}</h2>
           <p className="rm-demo-subtitle">积分流水总览 · 到期预警</p>
         </div>
         {isIntern && (

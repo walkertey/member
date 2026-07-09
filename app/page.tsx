@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { usePointsStore } from '@/lib/store';
 import { getExpiringTransactions } from '@/lib/pointsEngine';
 import { getVisibleMenu } from '@/lib/permissions';
+import { translate } from '@/lib/i18n';
 import Link from 'next/link';
 
 function RaymondFlowerMark() {
@@ -74,6 +75,9 @@ export default function DashboardPage() {
   const resetData = usePointsStore((s) => s.resetData);
   const addToast = usePointsStore((s) => s.addToast);
   const currentRole = usePointsStore((s) => s.currentRole);
+  const locale = usePointsStore((s) => s.locale);
+
+  const [balanceHidden, setBalanceHidden] = useState(false);
 
   const platform = usePlatformShell();
   const isIOS = platform === 'ios';
@@ -109,9 +113,9 @@ export default function DashboardPage() {
   );
 
   const handleReset = () => {
-    if (window.confirm('确定要重置所有 Demo 数据吗？此操作不可恢复。')) {
+    if (window.confirm(translate(locale, 'home.resetConfirmTitle'))) {
       resetData();
-      addToast('success', '数据已重置为初始状态');
+      addToast('success', translate(locale, 'home.resetDone'));
     }
   };
 
@@ -124,30 +128,30 @@ export default function DashboardPage() {
     const visibleMenu = getVisibleMenu(currentRole);
     const canSeePermissions = visibleMenu.some((m) => m.href === '/permissions');
     return [
-      { label: '积分发放', href: '/points', icon: 'grant' as const },
-      { label: '积分兑换', href: '/redemption', icon: 'exchange' as const },
-      { label: '兑换记录', href: '/redemption', icon: 'record' as const },
+      { label: translate(locale, 'home.pointsGrant'), href: '/points', icon: 'grant' as const },
+      { label: translate(locale, 'home.pointsRedeem'), href: '/redemption', icon: 'exchange' as const },
+      { label: translate(locale, 'home.redemptionRecords'), href: '/redemption', icon: 'record' as const },
       canSeePermissions
-        ? { label: '权限管理', href: '/permissions', icon: 'permission' as const }
-        : { label: '会员管理', href: '/members', icon: 'grant' as const },
+        ? { label: translate(locale, 'home.permissionMgmt'), href: '/permissions', icon: 'permission' as const }
+        : { label: translate(locale, 'home.memberMgmt'), href: '/members', icon: 'grant' as const },
     ];
-  }, [currentRole]);
+  }, [currentRole, locale]);
 
   const coreFeatures = useMemo(() => {
     const visibleMenu = getVisibleMenu(currentRole);
     const canSeePermissions = visibleMenu.some((m) => m.href === '/permissions');
     const all = [
-      { label: '会员管理', href: '/members', icon: 'member' as const },
-      { label: '积分商城', href: '/redemption', icon: 'shop' as const },
-      { label: '财务报表', href: '/reports', icon: 'report' as const },
-      { label: '营销工具', href: '/settings', icon: 'marketing' as const },
-      { label: '规则设置', href: '/settings', icon: 'rule' as const },
-      { label: '员工管理', href: '/permissions', icon: 'staff' as const },
-      { label: '审计日志', href: '/reports', icon: 'audit' as const },
-      { label: '更多', href: '/settings', icon: 'more' as const },
+      { label: translate(locale, 'home.memberMgmt'), href: '/members', icon: 'member' as const },
+      { label: translate(locale, 'home.pointsMall'), href: '/redemption', icon: 'shop' as const },
+      { label: translate(locale, 'home.financeReports'), href: '/reports', icon: 'report' as const },
+      { label: translate(locale, 'home.marketingTools'), href: '/settings', icon: 'marketing' as const },
+      { label: translate(locale, 'home.ruleSettings'), href: '/settings', icon: 'rule' as const },
+      { label: translate(locale, 'home.staffMgmt'), href: '/permissions', icon: 'staff' as const },
+      { label: translate(locale, 'home.auditLog'), href: '/reports', icon: 'audit' as const },
+      { label: translate(locale, 'home.more'), href: '/settings', icon: 'more' as const },
     ];
     return all.filter((item) => item.href !== '/permissions' || canSeePermissions);
-  }, [currentRole]);
+  }, [currentRole, locale]);
 
   const QuickIcon = ({ icon }: { icon: string }) => {
     if (icon === 'grant') {
@@ -278,9 +282,9 @@ export default function DashboardPage() {
           <header className="rm-home-topbar">
             <div className="rm-home-brand">
               <span className="rm-home-brand-main">Raymond</span>
-              <span className="rm-home-brand-sub">积分管理</span>
+              <span className="rm-home-brand-sub">{translate(locale, 'home.brandSub')}</span>
             </div>
-            <button onClick={handleReset} aria-label="通知" className="relative flex items-center justify-center w-8 h-8 rounded-full border border-white/15 text-white/70 hover:bg-white/5 transition-colors">
+            <button onClick={handleReset} aria-label={translate(locale, 'nav.notifications')} className="relative flex items-center justify-center w-8 h-8 rounded-full border border-white/15 text-white/70 hover:bg-white/5 transition-colors">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
                 <path d="M13.73 21a2 2 0 01-3.46 0" />
@@ -296,16 +300,18 @@ export default function DashboardPage() {
               <div className="flex items-start justify-between">
                 <div>
                   <h2 className="text-white text-lg font-bold tracking-wide">Raymond</h2>
-                  <p className="text-rm-text-secondary text-[11px] mt-0.5">积 赏 管 理</p>
-                </div>
+                  <p className="text-rm-text-secondary text-[11px] mt-0.5">{translate(locale, 'home.cardTagline')}</p>
+              </div>
                 <RaymondFlowerMark />
               </div>
               <div className="rm-balance-label">
-                <span>当前可用积分</span>
-                <EyeIcon />
+                <span>{translate(locale, 'home.balanceLabel')}</span>
+                <button onClick={() => setBalanceHidden((v) => !v)} className="cursor-pointer" aria-label={balanceHidden ? 'Show balance' : 'Hide balance'}>
+                  <EyeIcon />
+                </button>
               </div>
               <p className="rm-balance-number">
-                {totalAvailablePoints.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                {balanceHidden ? '••••••' : totalAvailablePoints.toLocaleString('en-US', { minimumFractionDigits: 2 })}
               </p>
             </div>
           </section>
@@ -325,8 +331,8 @@ export default function DashboardPage() {
           {/* Core features + Banner */}
           <section className="rm-core-panel">
             <div className="rm-core-head">
-              <h3 className="rm-core-title">核心功能</h3>
-              <Link href="/settings" className="rm-core-more">全部 ›</Link>
+              <h3 className="rm-core-title">{translate(locale, 'home.coreFeatures')}</h3>
+              <Link href="/settings" className="rm-core-more">{translate(locale, 'home.viewAll')} ›</Link>
             </div>
             <div className="rm-feature-grid">
               {coreFeatures.map((item) => (
@@ -341,8 +347,8 @@ export default function DashboardPage() {
 
             <div className="rm-raymond-banner">
               <div className="rm-banner-content">
-                <span className="rm-banner-title">Raymond<span className="rm-banner-sub">| 智能积分运营专家</span></span>
-                <span className="rm-banner-cta">了解更多</span>
+                <span className="rm-banner-title">Raymond<span className="rm-banner-sub">| {translate(locale, 'home.bannerSub')}</span></span>
+                <span className="rm-banner-cta">{translate(locale, 'home.learnMore')}</span>
               </div>
             </div>
           </section>
@@ -355,11 +361,11 @@ export default function DashboardPage() {
           {/* Desktop header */}
           <div className="rm-desktop-header">
             <div>
-              <h1 className="rm-desktop-title">Raymond 积分管理</h1>
-              <p className="rm-desktop-subtitle">智能积分运营专家 · Demo v1.0</p>
+              <h1 className="rm-desktop-title">Raymond {translate(locale, 'home.brandSub')}</h1>
+              <p className="rm-desktop-subtitle">{translate(locale, 'home.bannerSub')} · Demo v1.0</p>
             </div>
             <button onClick={handleReset} className="rounded-lg bg-white/5 border border-white/10 px-4 py-2 text-sm text-rm-text-secondary hover:bg-white/10 transition-colors min-h-[44px]">
-              重置 Demo 数据
+              {translate(locale, 'home.resetDemo')}
             </button>
           </div>
 
@@ -371,28 +377,30 @@ export default function DashboardPage() {
                 <div className="flex items-start justify-between">
                   <div>
                     <h2 className="text-white text-xl font-bold tracking-wide">Raymond</h2>
-                    <p className="text-rm-text-secondary text-xs mt-0.5">积 赏 管 理</p>
+                    <p className="text-rm-text-secondary text-xs mt-0.5">{translate(locale, 'home.cardTagline')}</p>
                   </div>
                   <RaymondFlowerMark />
                 </div>
                 <div className="rm-balance-label">
-                  <span>当前可用积分</span>
-                  <EyeIcon />
+                  <span>{translate(locale, 'home.balanceLabel')}</span>
+                  <button onClick={() => setBalanceHidden((v) => !v)} className="cursor-pointer" aria-label={balanceHidden ? 'Show balance' : 'Hide balance'}>
+                    <EyeIcon />
+                  </button>
                 </div>
                 <p className="rm-balance-number">
-                  {totalAvailablePoints.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                  {balanceHidden ? '••••••' : totalAvailablePoints.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </p>
               </div>
             </section>
 
             <section className="rm-desktop-stats">
-              <h3 className="text-white/60 text-xs font-semibold uppercase tracking-wider mb-3">系统概览</h3>
+              <h3 className="text-white/60 text-xs font-semibold uppercase tracking-wider mb-3">{translate(locale, 'home.systemOverview')}</h3>
               <div className="grid grid-cols-2 gap-2">
                 {[
-                  { label: '新增会员', value: todayNewMembers },
-                  { label: '今日订单', value: todayOrders },
-                  { label: '临期预警', value: expiringCount },
-                  { label: '待审核', value: pendingAuditCount },
+                  { label: translate(locale, 'home.newMembersToday'), value: todayNewMembers },
+                  { label: translate(locale, 'home.ordersToday'), value: todayOrders },
+                  { label: translate(locale, 'home.expiringWarning'), value: expiringCount },
+                  { label: translate(locale, 'home.pendingAudit'), value: pendingAuditCount },
                 ].map((card) => (
                   <div key={card.label} className="bg-rm-bg-card rounded-xl p-3 border border-white/8">
                     <p className="text-rm-text-secondary text-[11px] mb-1">{card.label}</p>
@@ -412,7 +420,7 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <p className="text-white text-sm font-semibold">{item.label}</p>
-                  <p className="text-rm-text-secondary text-[11px] mt-0.5">前往管理</p>
+                  <p className="text-rm-text-secondary text-[11px] mt-0.5">{translate(locale, 'home.goManage')}</p>
                 </div>
               </Link>
             ))}
@@ -421,9 +429,9 @@ export default function DashboardPage() {
           {/* Core features panel */}
           <section className="rm-desktop-panel">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-rm-text-dark text-lg font-bold">核心功能</h3>
+              <h3 className="text-rm-text-dark text-lg font-bold">{translate(locale, 'home.coreFeatures')}</h3>
               <Link href="/settings" className="text-rm-text-dark-secondary text-sm hover:text-rm-text-dark transition-colors">
-                全部 ›
+                {translate(locale, 'home.viewAll')} ›
               </Link>
             </div>
             <div className="grid grid-cols-4 gap-4">
@@ -442,8 +450,8 @@ export default function DashboardPage() {
           <div className="rm-desktop-bottom-row">
             <div className="rm-raymond-banner rm-desktop-banner">
               <div className="rm-banner-content">
-                <span className="rm-banner-title">Raymond<span className="rm-banner-sub">| 智能积分运营专家</span></span>
-                <span className="rm-banner-cta">了解更多</span>
+                <span className="rm-banner-title">Raymond<span className="rm-banner-sub">| {translate(locale, 'home.bannerSub')}</span></span>
+                <span className="rm-banner-cta">{translate(locale, 'home.learnMore')}</span>
               </div>
             </div>
           </div>

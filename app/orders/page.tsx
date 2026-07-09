@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { usePointsStore } from '@/lib/store';
+import { translate } from '@/lib/i18n';
 
 export default function OrdersPage() {
   const members = usePointsStore((s) => s.members);
@@ -9,6 +10,7 @@ export default function OrdersPage() {
   const orders = usePointsStore((s) => s.orders);
   const createOrder = usePointsStore((s) => s.createOrder);
   const addToast = usePointsStore((s) => s.addToast);
+  const locale = usePointsStore((s) => s.locale);
 
   const [selectedMemberId, setSelectedMemberId] = useState('');
   const [selectedProductId, setSelectedProductId] = useState('');
@@ -68,7 +70,7 @@ export default function OrdersPage() {
     <div className="max-w-6xl mx-auto rm-demo-page">
       <div className="rm-demo-hero">
         <div>
-          <h2 className="rm-demo-title">订单管理</h2>
+          <h2 className="rm-demo-title">{translate(locale, 'orders.title')}</h2>
           <p className="rm-demo-subtitle">订单录入 · 列表查询</p>
         </div>
       </div>

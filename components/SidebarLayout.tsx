@@ -6,16 +6,31 @@ import { usePathname } from 'next/navigation';
 import { usePointsStore } from '@/lib/store';
 import { getVisibleMenu, type MenuItem } from '@/lib/permissions';
 import RoleSwitcher from '@/components/RoleSwitcher';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import ToastContainer from '@/components/Toast';
 import IconTile from '@/components/IconTile';
 import type { IconTileColor } from '@/components/IconTile';
+import { translate } from '@/lib/i18n';
+import type { DictKey } from '@/lib/i18n';
 
-function NavLinks({ items, pathname }: { items: MenuItem[]; pathname: string }) {
+function NavLinks({ items, pathname, locale }: { items: MenuItem[]; pathname: string; locale: string }) {
+  const navKeyMap: Record<string, DictKey> = {
+    dashboard: 'nav.dashboard',
+    members: 'nav.members',
+    orders: 'nav.orders',
+    points: 'nav.points',
+    redemption: 'nav.redemption',
+    reports: 'nav.reports',
+    settings: 'nav.settings',
+    permissions: 'nav.permissions',
+  };
   return (
     <>
       {items.map((item) => {
         const isActive =
           item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+        const tKey = navKeyMap[item.key];
+        const label = tKey ? translate(locale as 'en' | 'zh' | 'ms', tKey) : item.label;
         return (
           <Link
             key={item.key}
@@ -26,7 +41,7 @@ function NavLinks({ items, pathname }: { items: MenuItem[]; pathname: string }) 
                 : 'text-rm-text-secondary hover:bg-white/5'
             }`}
           >
-            {item.label}
+            {label}
           </Link>
         );
       })}
@@ -37,6 +52,7 @@ function NavLinks({ items, pathname }: { items: MenuItem[]; pathname: string }) 
 export default function SidebarLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const currentRole = usePointsStore((s) => s.currentRole);
+  const locale = usePointsStore((s) => s.locale);
   const hasHydrated = usePointsStore((s) => s._hasHydrated);
   const visibleMenu = getVisibleMenu(currentRole);
   // Derive drawer state from pathname to auto-close on route change
@@ -69,16 +85,29 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
   if (!hasHydrated) {
     return (
       <div className="flex h-dvh bg-rm-bg-deep items-center justify-center">
-        <p className="text-rm-text-secondary text-sm">加载中...</p>
+        <p className="text-rm-text-secondary text-sm">{translate(locale, 'common.loading')}</p>
       </div>
     );
   }
 
-  const currentPageLabel =
-    visibleMenu.find((m) => {
+  const navKeyMap: Record<string, DictKey> = {
+    dashboard: 'nav.dashboard',
+    members: 'nav.members',
+    orders: 'nav.orders',
+    points: 'nav.points',
+    redemption: 'nav.redemption',
+    reports: 'nav.reports',
+    settings: 'nav.settings',
+    permissions: 'nav.permissions',
+  };
+
+  const currentPageLabel = translate(
+    locale,
+    navKeyMap[visibleMenu.find((m) => {
       if (m.href === '/') return pathname === '/';
       return pathname.startsWith(m.href);
-    })?.label ?? '工作台';
+    })?.key ?? 'dashboard']
+  );
 
   const isHome = pathname === '/';
   const isHomePage = isHome;
@@ -99,7 +128,7 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
         <button
           onClick={() => openDrawer()}
           className="md:hidden flex items-center justify-center min-w-[44px] min-h-[44px] -ml-1 rounded text-white/80 hover:bg-white/5 transition-colors"
-          aria-label="打开菜单"
+          aria-label={translate(locale, 'nav.openMenu')}
         >
           <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
             <path d="M3 5h16" />
@@ -121,6 +150,8 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
 
         {/* Role Switcher */}
         <RoleSwitcher />
+        {/* Language Switcher */}
+        <LanguageSwitcher />
       </header>
       )}
 
@@ -129,10 +160,10 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
         {/* Desktop sidebar — hidden on mobile */}
         <aside className="hidden md:flex w-56 bg-rm-bg-card border-r border-white/10 flex-col shrink-0">
           <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-            <NavLinks items={visibleMenu} pathname={pathname} />
+            <NavLinks items={visibleMenu} pathname={pathname} locale={locale} />
           </nav>
           <div className="px-3 py-3 border-t border-white/10 text-xs text-rm-text-secondary">
-            当前角色: {currentRole}
+            {translate(locale, 'nav.currentRole')}: {currentRole}
           </div>
         </aside>
 
@@ -144,12 +175,12 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
 
       {/* Mobile bottom Tab Bar — hidden on desktop */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-rm-bg-deep border-t border-white/10 flex items-center justify-around rm-tabbar-safe pt-2 px-1 gap-1 z-30">
-        {([
-          { key: 'home', label: '首页', href: '/', color: 'navy' as IconTileColor },
-          { key: 'points', label: '积分', href: '/points', color: 'blue' as IconTileColor },
-          { key: 'discover', label: '发现', href: '/redemption', color: 'cyan' as IconTileColor },
-          { key: 'manage', label: '管理', href: '/permissions', color: 'gold' as IconTileColor },
-          { key: 'profile', label: '我的', href: '/settings', color: 'emerald' as IconTileColor },
+          {([
+          { key: 'home', label: translate(locale, 'nav.home'), href: '/', color: 'navy' as IconTileColor },
+          { key: 'points', label: translate(locale, 'nav.points'), href: '/points', color: 'blue' as IconTileColor },
+          { key: 'discover', label: translate(locale, 'nav.discover'), href: '/redemption', color: 'cyan' as IconTileColor },
+          { key: 'manage', label: translate(locale, 'nav.manage'), href: '/permissions', color: 'gold' as IconTileColor },
+          { key: 'profile', label: translate(locale, 'nav.me'), href: '/settings', color: 'emerald' as IconTileColor },
         ]).map((tab) => {
           const isActive =
             tab.href === '/' ? pathname === '/' : pathname.startsWith(tab.href);
@@ -217,7 +248,7 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
               <button
                 onClick={() => closeDrawer()}
                 className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded text-white/60 hover:bg-white/5 transition-colors"
-                aria-label="关闭菜单"
+                aria-label={translate(locale, 'nav.closeMenu')}
               >
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <path d="M4 4l10 10M14 4l-10 10" />
@@ -225,7 +256,7 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
               </button>
             </div>
             <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-              <NavLinks items={visibleMenu} pathname={pathname} />
+              <NavLinks items={visibleMenu} pathname={pathname} locale={locale} />
             </nav>
             <div className="px-3 py-3 border-t border-white/10 text-xs text-rm-text-secondary">
               当前角色: {currentRole}

@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import { usePointsStore } from '@/lib/store';
 import { MENU_VISIBILITY } from '@/lib/permissions';
 import type { Role } from '@/lib/permissions';
+import { translate } from '@/lib/i18n';
 
 export default function RedemptionPage() {
   const members = usePointsStore((s) => s.members);
@@ -12,6 +13,7 @@ export default function RedemptionPage() {
   const auditRedemption = usePointsStore((s) => s.auditRedemption);
   const addToast = usePointsStore((s) => s.addToast);
   const currentRole = usePointsStore((s) => s.currentRole);
+  const locale = usePointsStore((s) => s.locale);
 
   const canAudit = MENU_VISIBILITY[currentRole as Role]?.includes('redemption') &&
     currentRole !== '实习生';
@@ -57,7 +59,7 @@ export default function RedemptionPage() {
     <div className="max-w-6xl mx-auto rm-demo-page">
       <div className="rm-demo-hero">
         <div>
-          <h2 className="rm-demo-title">兑换商城</h2>
+          <h2 className="rm-demo-title">{translate(locale, 'redemption.title')}</h2>
           <p className="rm-demo-subtitle">礼品兑换 · 审核管理</p>
         </div>
         {currentRole !== '超级管理员' && (

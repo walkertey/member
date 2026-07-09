@@ -339,6 +339,7 @@ a.px-4 {
   line-height: 1;
   font-weight: 900;
   letter-spacing: -0.045em;
+  font-variant-numeric: tabular-nums;
 }
 
 /* --- 4 宫格快捷入口 --- */

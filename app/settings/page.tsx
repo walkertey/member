@@ -1,16 +1,18 @@
 'use client';
 
 import { usePointsStore } from '@/lib/store';
+import { translate } from '@/lib/i18n';
 
 export default function SettingsPage() {
   const products = usePointsStore((s) => s.products);
   const currentRole = usePointsStore((s) => s.currentRole);
+  const locale = usePointsStore((s) => s.locale);
 
   return (
     <div className="max-w-4xl mx-auto rm-demo-page">
       <div className="rm-demo-hero">
         <div>
-          <h2 className="rm-demo-title">系统设置</h2>
+          <h2 className="rm-demo-title">{translate(locale, 'settings.title')}</h2>
           <p className="rm-demo-subtitle">配套配置 · 积分规则</p>
         </div>
       </div>

@@ -3,6 +3,7 @@
 import { usePointsStore } from '@/lib/store';
 import type { Role } from '@/lib/permissions';
 import { ALL_ROLES, MENU_VISIBILITY } from '@/lib/permissions';
+import { translate } from '@/lib/i18n';
 
 const FAKE_STAFF = [
   { id: 'STAFF001', name: '管理员', role: '超级管理员' as Role, status: '激活' },
@@ -24,12 +25,13 @@ const PERM_LABEL_MAP: Record<string, string> = {
 
 export default function PermissionsPage() {
   const operationLogs = usePointsStore((s) => s.operationLogs);
+  const locale = usePointsStore((s) => s.locale);
 
   return (
     <div className="max-w-6xl mx-auto rm-demo-page">
       <div className="rm-demo-hero">
         <div>
-          <h2 className="rm-demo-title">权限管理</h2>
+          <h2 className="rm-demo-title">{translate(locale, 'permissions.title')}</h2>
           <p className="rm-demo-subtitle">员工角色 · 权限配置 · 操作日志</p>
         </div>
       </div>

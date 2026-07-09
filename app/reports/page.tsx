@@ -2,12 +2,14 @@
 
 import { useMemo } from 'react';
 import { usePointsStore } from '@/lib/store';
+import { translate } from '@/lib/i18n';
 
 export default function ReportsPage() {
   const members = usePointsStore((s) => s.members);
   const orders = usePointsStore((s) => s.orders);
   const pointTransactions = usePointsStore((s) => s.pointTransactions);
   const products = usePointsStore((s) => s.products);
+  const locale = usePointsStore((s) => s.locale);
 
   const memberRegStats = useMemo(() => {
     const map: Record<string, number> = {};
@@ -54,7 +56,7 @@ export default function ReportsPage() {
     <div className="max-w-6xl mx-auto rm-demo-page">
       <div className="rm-demo-hero">
         <div>
-          <h2 className="rm-demo-title">报表中心</h2>
+          <h2 className="rm-demo-title">{translate(locale, 'reports.title')}</h2>
           <p className="rm-demo-subtitle">业务数据分析 · 关键指标一览</p>
         </div>
       </div>
