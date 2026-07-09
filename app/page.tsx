@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type ReactElement } from 'react';
 import { usePointsStore } from '@/lib/store';
 import { getExpiringTransactions } from '@/lib/pointsEngine';
 import { getVisibleMenu } from '@/lib/permissions';
@@ -65,7 +65,7 @@ function usePlatformShell() {
   return platform;
 }
 
-const QUICK_ICONS: Record<string, JSX.Element> = {
+const QUICK_ICONS: Record<string, ReactElement> = {
   grant: (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="rm-quick-icon-gold">
       <path d="M6 2L2 6l4 4" stroke="currentColor" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
@@ -94,7 +94,7 @@ const QUICK_ICONS: Record<string, JSX.Element> = {
   ),
 };
 
-const FEATURE_ICONS: Record<string, JSX.Element> = {
+const FEATURE_ICONS: Record<string, ReactElement> = {
   member: (
     <svg width="24" height="24" viewBox="0 0 28 28" fill="none" className="rm-feature-main-icon">
       <circle cx="14" cy="8" r="5" fill="currentColor" />
