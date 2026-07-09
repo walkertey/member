@@ -52,7 +52,7 @@ export default function ReportsPage() {
 
   return (
     <div className="max-w-6xl mx-auto rm-demo-page">
-      <div className="rm-demo-page-header">
+      <div className="rm-demo-hero">
         <div>
           <h2 className="rm-demo-title">报表中心</h2>
           <p className="rm-demo-subtitle">业务数据分析 · 关键指标一览</p>
@@ -69,7 +69,7 @@ export default function ReportsPage() {
         ].map((kpi) => (
           <div key={kpi.label} className="rm-demo-card-dark rounded-xl p-4 text-center">
             <div className="text-xs text-rm-text-secondary mb-1 font-bold uppercase tracking-wider">{kpi.label}</div>
-            <div className="text-2xl font-black text-white">{kpi.value}</div>
+            <div className="text-2xl font-black rm-demo-number text-white">{kpi.value}</div>
           </div>
         ))}
       </div>
@@ -119,7 +119,7 @@ export default function ReportsPage() {
                   <tr key={p.name}>
                     <td>{p.name}</td>
                     <td className="text-right">{p.count}</td>
-                    <td className="text-right font-bold">RM {p.amount.toLocaleString()}</td>
+                    <td className="text-right font-bold rm-demo-number">RM {p.amount.toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>

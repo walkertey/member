@@ -27,7 +27,7 @@ export default function PermissionsPage() {
 
   return (
     <div className="max-w-6xl mx-auto rm-demo-page">
-      <div className="rm-demo-page-header">
+      <div className="rm-demo-hero">
         <div>
           <h2 className="rm-demo-title">权限管理</h2>
           <p className="rm-demo-subtitle">员工角色 · 权限配置 · 操作日志</p>
