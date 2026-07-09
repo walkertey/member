@@ -8,7 +8,7 @@ export default function SettingsPage() {
 
   return (
     <div className="max-w-4xl mx-auto rm-demo-page">
-      <div className="rm-demo-page-header">
+      <div className="rm-demo-hero">
         <div>
           <h2 className="rm-demo-title">系统设置</h2>
           <p className="rm-demo-subtitle">配套配置 · 积分规则</p>
@@ -43,7 +43,7 @@ export default function SettingsPage() {
                   <td className="font-mono">{p.code}</td>
                   <td>{p.name}</td>
                   <td className="text-right font-bold">RM {p.price.toLocaleString()}</td>
-                  <td className="text-right">{p.point_value.toLocaleString()}</td>
+                  <td className="text-right rm-demo-number">{p.point_value.toLocaleString()}</td>
                   <td className="text-center">
                     <span className={`rm-badge ${p.status === '上架' ? 'rm-badge-success' : 'rm-badge-danger'}`}>
                       {p.status}

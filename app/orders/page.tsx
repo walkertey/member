@@ -66,7 +66,7 @@ export default function OrdersPage() {
 
   return (
     <div className="max-w-6xl mx-auto rm-demo-page">
-      <div className="rm-demo-page-header">
+      <div className="rm-demo-hero">
         <div>
           <h2 className="rm-demo-title">订单管理</h2>
           <p className="rm-demo-subtitle">订单录入 · 列表查询</p>
@@ -186,7 +186,7 @@ export default function OrdersPage() {
                     <td className="font-mono text-xs">{o.order_no}</td>
                     <td>{member?.name ?? o.member_id}</td>
                     <td>{product?.name ?? o.product_id}</td>
-                    <td className="text-right font-bold">RM {o.amount.toLocaleString()}</td>
+                    <td className="text-right font-bold rm-demo-number">RM {o.amount.toLocaleString()}</td>
                     <td className="text-xs text-rm-text-dark-secondary">{new Date(o.pay_time).toLocaleString('zh-CN')}</td>
                     <td className="text-center">
                       <span className={`rm-badge ${o.status === '已支付' ? 'rm-badge-success' : 'rm-badge-danger'}`}>
