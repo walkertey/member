@@ -51,57 +51,75 @@ export default function ReportsPage() {
   }, [orders]);
 
   return (
-    <div className="max-w-6xl mx-auto">
-      <h2 className="text-lg md:text-xl font-semibold text-zinc-800 mb-4 md:mb-6">报表中心</h2>
+    <div className="max-w-6xl mx-auto rm-demo-page">
+      <div className="rm-demo-page-header">
+        <div>
+          <h2 className="rm-demo-title">报表中心</h2>
+          <p className="rm-demo-subtitle">业务数据分析 · 关键指标一览</p>
+        </div>
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-        {/* 会员注册统计 */}
-        <div className="bg-white border border-zinc-200 rounded-lg p-4 md:p-5">
-          <h3 className="text-md font-semibold text-zinc-700 mb-3 md:mb-4">会员注册统计（按月）</h3>
-          <div className="table-responsive">
-            <table className="w-full text-sm min-w-[200px]">
+      {/* KPI overview — dark cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-5">
+        {[
+          { label: '总会员数', value: members.length },
+          { label: '总订单', value: orders.length },
+          { label: '积分发行', value: pointsIssuedVsConsumed.issued.toLocaleString() },
+          { label: '积分消耗', value: pointsIssuedVsConsumed.consumed.toLocaleString() },
+        ].map((kpi) => (
+          <div key={kpi.label} className="rm-demo-card-dark rounded-xl p-4 text-center">
+            <div className="text-xs text-rm-text-secondary mb-1 font-bold uppercase tracking-wider">{kpi.label}</div>
+            <div className="text-2xl font-black text-white">{kpi.value}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        {/* Member registration */}
+        <div className="rm-demo-card p-4 md:p-5">
+          <h3 className="text-md font-bold text-rm-text-dark mb-4">会员注册统计（按月）</h3>
+          <div className="rm-demo-table-wrap">
+            <table className="rm-demo-table min-w-[200px]">
               <thead>
-                <tr className="bg-zinc-50 border-b border-zinc-200">
-                  <th className="text-left px-3 py-2 font-medium text-zinc-600">月份</th>
-                  <th className="text-right px-3 py-2 font-medium text-zinc-600">新增会员</th>
+                <tr>
+                  <th>月份</th>
+                  <th className="text-right">新增会员</th>
                 </tr>
               </thead>
               <tbody>
                 {memberRegStats.map(([month, count]) => (
-                  <tr key={month} className="border-b border-zinc-100">
-                    <td className="px-3 py-2">{month}</td>
-                    <td className="px-3 py-2 text-right font-medium">{count}</td>
+                  <tr key={month}>
+                    <td>{month}</td>
+                    <td className="text-right font-medium">{count}</td>
                   </tr>
                 ))}
-                <tr className="bg-zinc-50 font-medium">
-                  <td className="px-3 py-2">合计</td>
-                  <td className="px-3 py-2 text-right">{members.length}</td>
+                <tr className="bg-zinc-50 font-bold">
+                  <td>合计</td>
+                  <td className="text-right">{members.length}</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        {/* 配套销售统计 */}
-        <div className="bg-white border border-zinc-200 rounded-lg p-4 md:p-5">
-          <h3 className="text-md font-semibold text-zinc-700 mb-3 md:mb-4">配套销售统计</h3>
-          <div className="table-responsive">
-            <table className="w-full text-sm min-w-[250px]">
+        {/* Product sales */}
+        <div className="rm-demo-card p-4 md:p-5">
+          <h3 className="text-md font-bold text-rm-text-dark mb-4">配套销售统计</h3>
+          <div className="rm-demo-table-wrap">
+            <table className="rm-demo-table min-w-[250px]">
               <thead>
-                <tr className="bg-zinc-50 border-b border-zinc-200">
-                  <th className="text-left px-3 py-2 font-medium text-zinc-600">配套</th>
-                  <th className="text-right px-3 py-2 font-medium text-zinc-600">订单数</th>
-                  <th className="text-right px-3 py-2 font-medium text-zinc-600">销售总额</th>
+                <tr>
+                  <th>配套</th>
+                  <th className="text-right">订单数</th>
+                  <th className="text-right">销售总额</th>
                 </tr>
               </thead>
               <tbody>
                 {productSalesStats.map((p) => (
-                  <tr key={p.name} className="border-b border-zinc-100">
-                    <td className="px-3 py-2">{p.name}</td>
-                    <td className="px-3 py-2 text-right">{p.count}</td>
-                    <td className="px-3 py-2 text-right font-medium">
-                      RM {p.amount.toLocaleString()}
-                    </td>
+                  <tr key={p.name}>
+                    <td>{p.name}</td>
+                    <td className="text-right">{p.count}</td>
+                    <td className="text-right font-bold">RM {p.amount.toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>
@@ -109,41 +127,41 @@ export default function ReportsPage() {
           </div>
         </div>
 
-        {/* 积分发行 vs 消耗 */}
-        <div className="bg-white border border-zinc-200 rounded-lg p-4 md:p-5">
-          <h3 className="text-md font-semibold text-zinc-700 mb-3 md:mb-4">积分发行 vs 消耗</h3>
+        {/* Points issued vs consumed */}
+        <div className="rm-demo-card p-4 md:p-5">
+          <h3 className="text-md font-bold text-rm-text-dark mb-4">积分发行 vs 消耗</h3>
           <div className="grid grid-cols-2 gap-3 md:gap-4">
-            <div className="p-3 md:p-4 bg-green-50 border border-green-200 rounded-lg text-center">
-              <div className="text-xs text-green-600 mb-1">正向发行</div>
-              <div className="text-xl md:text-2xl font-bold text-green-700">
+            <div className="rm-stat-card text-center">
+              <div className="rm-stat-label">正向发行</div>
+              <div className="rm-stat-value" style={{ color: 'var(--rm-gold-deep)' }}>
                 {pointsIssuedVsConsumed.issued.toLocaleString()}
               </div>
             </div>
-            <div className="p-3 md:p-4 bg-red-50 border border-red-200 rounded-lg text-center">
-              <div className="text-xs text-red-600 mb-1">已消耗</div>
-              <div className="text-xl md:text-2xl font-bold text-red-700">
+            <div className="rm-stat-card text-center">
+              <div className="rm-stat-label">已消耗</div>
+              <div className="rm-stat-value" style={{ color: 'var(--rm-icon-red)' }}>
                 {pointsIssuedVsConsumed.consumed.toLocaleString()}
               </div>
             </div>
           </div>
         </div>
 
-        {/* 员工业绩 */}
-        <div className="bg-white border border-zinc-200 rounded-lg p-4 md:p-5">
-          <h3 className="text-md font-semibold text-zinc-700 mb-3 md:mb-4">员工业绩（按操作员分组）</h3>
-          <div className="table-responsive">
-            <table className="w-full text-sm min-w-[200px]">
+        {/* Staff performance */}
+        <div className="rm-demo-card p-4 md:p-5">
+          <h3 className="text-md font-bold text-rm-text-dark mb-4">员工业绩（按操作员分组）</h3>
+          <div className="rm-demo-table-wrap">
+            <table className="rm-demo-table min-w-[200px]">
               <thead>
-                <tr className="bg-zinc-50 border-b border-zinc-200">
-                  <th className="text-left px-3 py-2 font-medium text-zinc-600">操作员</th>
-                  <th className="text-right px-3 py-2 font-medium text-zinc-600">订单数</th>
+                <tr>
+                  <th>操作员</th>
+                  <th className="text-right">订单数</th>
                 </tr>
               </thead>
               <tbody>
                 {staffPerformance.map(([op, count]) => (
-                  <tr key={op} className="border-b border-zinc-100">
-                    <td className="px-3 py-2">{op}</td>
-                    <td className="px-3 py-2 text-right font-medium">{count}</td>
+                  <tr key={op}>
+                    <td>{op}</td>
+                    <td className="text-right font-medium">{count}</td>
                   </tr>
                 ))}
               </tbody>
