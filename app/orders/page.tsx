@@ -2,8 +2,11 @@
 
 import { useState, useMemo } from 'react';
 import { usePointsStore } from '@/lib/store';
+import { useI18n } from '@/components/raymond-i18n/RaymondI18nProvider';
+import { t } from '@/components/raymond-i18n/raymondTranslations';
 
 export default function OrdersPage() {
+  const { lang } = useI18n();
   const members = usePointsStore((s) => s.members);
   const products = usePointsStore((s) => s.products);
   const orders = usePointsStore((s) => s.orders);
@@ -46,7 +49,7 @@ export default function OrdersPage() {
         banner.referralAmount = result.referralBonus.amount;
       }
       setResultBanner(banner);
-      addToast('success', `订单 ${result.order.order_no} 已生成`);
+      addToast('success', t('orders.orderGenerated', lang, { no: result.order.order_no }));
       setSelectedMemberId('');
       setSelectedProductId('');
     } catch (e) {
@@ -66,24 +69,24 @@ export default function OrdersPage() {
 
   return (
     <div className="max-w-6xl mx-auto rm-demo-page">
-      <div className="rm-demo-page-header">
+      <div className="rm-demo-page-header rm-section-hero">
         <div>
-          <h2 className="rm-demo-title">订单管理</h2>
-          <p className="rm-demo-subtitle">订单录入 · 列表查询</p>
+          <h2 className="rm-demo-title">{t('orders.title', lang)}</h2>
+          <p className="rm-demo-subtitle">{t('orders.subtitle', lang)}</p>
         </div>
       </div>
 
       {/* Result banner */}
       {resultBanner && (
-        <div className="mb-5 p-3 md:p-4 rm-demo-card border-emerald-200 bg-emerald-50/50">
+        <div className="mb-5 p-3 md:p-4 rm-demo-card rm-floating-panel border-emerald-200 bg-emerald-50/50">
           <div className="flex items-start justify-between gap-2">
             <div>
               <p className="text-sm font-bold text-emerald-800">
-                已生成订单 {resultBanner.orderNo}，会员 {resultBanner.memberName} 积分 +{resultBanner.amount.toLocaleString()}
+                {t('orders.orderMemberPoints', lang, { name: resultBanner.memberName, amount: resultBanner.amount.toLocaleString() })}
               </p>
               {resultBanner.referralName && (
                 <p className="text-sm text-emerald-700 mt-1">
-                  推荐人 {resultBanner.referralName} 积分 +{resultBanner.referralAmount?.toLocaleString()}
+                  {t('orders.orderReferral', lang, { name: resultBanner.referralName, amount: resultBanner.referralAmount?.toLocaleString() ?? '0' })}
                 </p>
               )}
             </div>
@@ -91,44 +94,44 @@ export default function OrdersPage() {
               onClick={() => setResultBanner(null)}
               className="text-emerald-700 hover:text-emerald-900 text-sm shrink-0 min-h-[44px] font-bold"
             >
-              关闭
+              {t('orders.closeBanner', lang)}
             </button>
           </div>
         </div>
       )}
 
       {/* Order form */}
-      <div className="rm-demo-card p-4 md:p-5 mb-5">
-        <h3 className="text-md font-bold text-rm-text-dark mb-4">录入订单</h3>
+      <div className="rm-demo-card rm-liquid-card p-4 md:p-5 mb-5">
+        <h3 className="text-md font-bold text-rm-text-dark mb-4">{t('orders.createOrder', lang)}</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 items-end">
           <div>
-            <label className="block text-sm text-rm-text-dark-secondary mb-1 font-medium">选择会员</label>
+            <label className="block text-sm text-rm-text-dark-secondary mb-1 font-medium">{t('orders.selectMemberLabel', lang)}</label>
             <select
               value={selectedMemberId}
               onChange={(e) => setSelectedMemberId(e.target.value)}
               className="rm-demo-filter w-full"
             >
-              <option value="">-- 选择会员 --</option>
+              <option value="">{t('orders.selectMember', lang)}</option>
               {members.filter((m) => m.status === '正常').map((m) => (
                 <option key={m.id} value={m.id}>{m.name} ({m.member_no})</option>
               ))}
             </select>
           </div>
           <div>
-            <label className="block text-sm text-rm-text-dark-secondary mb-1 font-medium">选择配套</label>
+            <label className="block text-sm text-rm-text-dark-secondary mb-1 font-medium">{t('orders.selectProductLabel', lang)}</label>
             <select
               value={selectedProductId}
               onChange={(e) => setSelectedProductId(e.target.value)}
               className="rm-demo-filter w-full"
             >
-              <option value="">-- 选择配套 --</option>
+              <option value="">{t('orders.selectProduct', lang)}</option>
               {products.filter((p) => p.status === '上架').map((p) => (
-                <option key={p.id} value={p.id}>{p.name} ({p.code}配套) — RM{p.price.toLocaleString()}</option>
+                <option key={p.id} value={p.id}>{p.name} ({p.code}{t('orders.product', lang)}) — RM{p.price.toLocaleString()}</option>
               ))}
             </select>
           </div>
           <div>
-            <div className="text-sm text-rm-text-dark-secondary mb-1 font-medium">价格</div>
+            <div className="text-sm text-rm-text-dark-secondary mb-1 font-medium">{t('orders.price', lang)}</div>
             <div className="px-3 py-2.5 text-sm font-bold text-rm-text-dark">
               {selectedProduct ? `RM ${selectedProduct.price.toLocaleString()}` : '-'}
             </div>
@@ -139,25 +142,25 @@ export default function OrdersPage() {
               disabled={!selectedMemberId || !selectedProductId || submitting}
               className="rm-demo-primary-button w-full px-4 py-2.5 text-sm"
             >
-              {submitting ? '处理中...' : '确认支付'}
+              {submitting ? t('orders.processing', lang) : t('orders.confirmPayment', lang)}
             </button>
           </div>
         </div>
       </div>
 
       {/* Order list */}
-      <div className="rm-demo-card p-4 md:p-5">
+      <div className="rm-demo-card rm-liquid-card p-4 md:p-5">
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
-          <h3 className="text-md font-bold text-rm-text-dark">订单列表</h3>
+          <h3 className="text-md font-bold text-rm-text-dark">{t('orders.orderList', lang)}</h3>
           <div className="flex gap-2 sm:ml-auto">
             <select value={filterProduct} onChange={(e) => setFilterProduct(e.target.value)} className="rm-demo-filter">
-              <option value="">全部配套</option>
+              <option value="">{t('orders.allProducts', lang)}</option>
               {products.map((p) => (
                 <option key={p.id} value={p.id}>{p.name}</option>
               ))}
             </select>
             <select value={filterOperator} onChange={(e) => setFilterOperator(e.target.value)} className="rm-demo-filter">
-              <option value="">全部操作人</option>
+              <option value="">{t('orders.allOperators', lang)}</option>
               <option value="STAFF001">STAFF001</option>
               <option value="SYSTEM">SYSTEM</option>
             </select>
@@ -168,13 +171,13 @@ export default function OrdersPage() {
           <table className="rm-demo-table min-w-[650px]">
             <thead>
               <tr>
-                <th>订单号</th>
-                <th>会员</th>
-                <th>配套</th>
-                <th className="text-right">金额</th>
-                <th>支付时间</th>
-                <th className="text-center">状态</th>
-                <th>操作人</th>
+                <th>{t('orders.orderNo', lang)}</th>
+                <th>{t('orders.member', lang)}</th>
+                <th>{t('orders.product', lang)}</th>
+                <th className="text-right">{t('orders.amount', lang)}</th>
+                <th>{t('orders.payTime', lang)}</th>
+                <th className="text-center">{t('orders.status', lang)}</th>
+                <th>{t('orders.operator', lang)}</th>
               </tr>
             </thead>
             <tbody>
@@ -190,7 +193,7 @@ export default function OrdersPage() {
                     <td className="text-xs text-rm-text-dark-secondary">{new Date(o.pay_time).toLocaleString('zh-CN')}</td>
                     <td className="text-center">
                       <span className={`rm-badge ${o.status === '已支付' ? 'rm-badge-success' : 'rm-badge-danger'}`}>
-                        {o.status}
+                        {o.status === '已支付' ? t('badge.paid', lang) : t('badge.refunded', lang)}
                       </span>
                     </td>
                     <td className="text-xs text-rm-text-dark-secondary">{o.operator_id}</td>
@@ -198,7 +201,7 @@ export default function OrdersPage() {
                 );
               })}
               {filteredOrders.length === 0 && (
-                <tr><td colSpan={7} className="text-center text-rm-text-dark-secondary py-6">暂无订单记录</td></tr>
+                <tr><td colSpan={7} className="text-center text-rm-text-dark-secondary py-6">{t('orders.noData', lang)}</td></tr>
               )}
             </tbody>
           </table>

@@ -277,7 +277,7 @@ export default function DashboardPage() {
           {/* Top brand bar */}
           <header className="rm-home-topbar">
             <div className="rm-home-brand">
-              <span className="rm-home-brand-main">Raymond</span>
+              <span className="rm-home-brand-main rm-brand-wordmark">Raymond</span>
               <span className="rm-home-brand-sub">积分管理</span>
             </div>
             <button onClick={handleReset} aria-label="通知" className="relative flex items-center justify-center w-8 h-8 rounded-full border border-white/15 text-white/70 hover:bg-white/5 transition-colors">
@@ -290,12 +290,12 @@ export default function DashboardPage() {
           </header>
 
           {/* Premium balance card */}
-          <section className="rm-premium-card">
+          <section className="rm-premium-card rm-premium-shadow">
             <div className="rm-card-watermark">R</div>
             <div className="rm-card-content">
               <div className="flex items-start justify-between">
                 <div>
-                  <h2 className="text-white text-lg font-bold tracking-wide">Raymond</h2>
+                  <h2 className="text-white text-lg font-bold tracking-wide rm-brand-serif-title">Raymond</h2>
                   <p className="text-rm-text-secondary text-[11px] mt-0.5">积 赏 管 理</p>
                 </div>
                 <RaymondFlowerMark />
@@ -314,7 +314,7 @@ export default function DashboardPage() {
           <nav className="rm-quick-grid">
             {quickActions.map((item) => (
               <Link key={item.label} href={item.href} className="rm-quick-link">
-                <div className="rm-quick-tile">
+                <div className="rm-quick-tile rm-icon-orb rm-gold-glow-strong">
                   <QuickIcon icon={item.icon} />
                 </div>
                 <span className="rm-quick-label">{item.label}</span>
@@ -323,7 +323,7 @@ export default function DashboardPage() {
           </nav>
 
           {/* Core features + Banner */}
-          <section className="rm-core-panel">
+          <section className="rm-core-panel rm-depth-card">
             <div className="rm-core-head">
               <h3 className="rm-core-title">核心功能</h3>
               <Link href="/settings" className="rm-core-more">全部 ›</Link>
@@ -355,7 +355,7 @@ export default function DashboardPage() {
           {/* Desktop header */}
           <div className="rm-desktop-header">
             <div>
-              <h1 className="rm-desktop-title">Raymond 积分管理</h1>
+              <h1 className="rm-desktop-title"><span className="rm-brand-wordmark">Raymond</span> 积分管理</h1>
               <p className="rm-desktop-subtitle">智能积分运营专家 · Demo v1.0</p>
             </div>
             <button onClick={handleReset} className="rounded-lg bg-white/5 border border-white/10 px-4 py-2 text-sm text-rm-text-secondary hover:bg-white/10 transition-colors min-h-[44px]">
@@ -385,7 +385,7 @@ export default function DashboardPage() {
               </div>
             </section>
 
-            <section className="rm-desktop-stats">
+            <section className="rm-desktop-stats rm-depth-card">
               <h3 className="text-white/60 text-xs font-semibold uppercase tracking-wider mb-3">系统概览</h3>
               <div className="grid grid-cols-2 gap-2">
                 {[
@@ -406,7 +406,7 @@ export default function DashboardPage() {
           {/* Quick actions row */}
           <nav className="rm-desktop-actions">
             {quickActions.map((item) => (
-              <Link key={item.label} href={item.href} className="rm-desktop-action-card">
+              <Link key={item.label} href={item.href} className="rm-desktop-action-card rm-depth-card rm-premium-shadow">
                 <div className="rm-quick-tile rm-desktop-quick-tile">
                   <QuickIcon icon={item.icon} />
                 </div>
@@ -419,7 +419,7 @@ export default function DashboardPage() {
           </nav>
 
           {/* Core features panel */}
-          <section className="rm-desktop-panel">
+          <section className="rm-desktop-panel rm-liquid-card">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-rm-text-dark text-lg font-bold">核心功能</h3>
               <Link href="/settings" className="text-rm-text-dark-secondary text-sm hover:text-rm-text-dark transition-colors">

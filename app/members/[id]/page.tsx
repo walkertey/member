@@ -4,6 +4,32 @@ import { useEffect, useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { usePointsStore } from '@/lib/store';
 import PointsPanel, { AdjustModal } from '@/components/PointsPanel';
+import { useI18n } from '@/components/raymond-i18n/RaymondI18nProvider';
+import { t } from '@/components/raymond-i18n/raymondTranslations';
+
+const WARN_SVG = (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path d="M12 2L2 22h20L12 2z" fill="var(--rm-gold)" stroke="var(--rm-gold-deep)" strokeWidth="1.5" strokeLinejoin="round"/>
+    <line x1="12" y1="9" x2="12" y2="14" stroke="#fff" strokeWidth="2.5" strokeLinecap="round"/>
+    <circle cx="12" cy="17.5" r="1.2" fill="#fff"/>
+  </svg>
+);
+
+const CHECK_SVG = (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <circle cx="12" cy="12" r="11" fill="var(--rm-icon-emerald)"/>
+    <path d="M7 12l3 3 7-7" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const HOURGLASS_SVG = (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <rect x="6" y="2" width="12" height="20" rx="2" fill="var(--rm-gold)" stroke="var(--rm-gold-deep)" strokeWidth="1.5"/>
+    <line x1="12" y1="6" x2="12" y2="10" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
+    <line x1="12" y1="14" x2="12" y2="18" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
+    <line x1="8" y1="12" x2="16" y2="12" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
+  </svg>
+);
 
 export default function MemberDetailPage() {
   const params = useParams();
@@ -22,6 +48,7 @@ export default function MemberDetailPage() {
   const currentRole = usePointsStore((s) => s.currentRole);
 
   const isIntern = currentRole === '实习生';
+  const { lang } = useI18n();
 
   const [showAdjust, setShowAdjust] = useState(false);
   const [showRedeem, setShowRedeem] = useState(false);
@@ -74,12 +101,12 @@ export default function MemberDetailPage() {
   if (!member) {
     return (
       <div className="max-w-4xl mx-auto text-center py-12 rm-demo-page">
-        <p className="text-rm-text-dark-secondary">会员不存在</p>
+        <p className="text-rm-text-dark-secondary">{t('members.notFound', lang)}</p>
         <button
           onClick={() => router.push('/members')}
           className="rm-demo-link mt-3 inline-block text-sm min-h-[44px]"
         >
-          返回会员列表
+          {t('members.backToList', lang)}
         </button>
       </div>
     );
@@ -98,7 +125,7 @@ export default function MemberDetailPage() {
     if (!selectedGiftId) return;
     try {
       redeemGift(memberId, selectedGiftId);
-      addToast('success', '兑换申请已提交，等待审核');
+      addToast('success', t('member.redeemSubmitted', lang));
       setShowRedeem(false);
       setSelectedGiftId('');
     } catch (e) {
@@ -112,16 +139,15 @@ export default function MemberDetailPage() {
         onClick={() => router.push('/members')}
         className="rm-demo-link text-sm mb-4 inline-flex items-center gap-1 min-h-[44px]"
       >
-        &larr; 返回会员列表
+        &larr; {t('members.backToList', lang)}
       </button>
 
       {isIntern && (
         <div className="mb-4 px-4 py-2 rm-badge rm-badge-warning text-xs inline-flex">
-          实习生 · 只读模式（编辑按钮已隐藏）
+          {t('member.internReadonly', lang)}
         </div>
       )}
 
-      {/* Points panel */}
       <PointsPanel
         member={member}
         onAdjust={isIntern ? () => {} : () => setShowAdjust(true)}
@@ -131,21 +157,20 @@ export default function MemberDetailPage() {
         }}
       />
 
-      {/* Referral tree */}
-      <div className="rm-demo-card p-4 md:p-6 mt-5">
-        <h3 className="text-md font-bold text-rm-text-dark mb-4">推荐关系树</h3>
+      <div className="rm-demo-card rm-liquid-card p-4 md:p-6 mt-5">
+        <h3 className="text-md font-bold text-rm-text-dark mb-4">{t('member.referralTree', lang)}</h3>
         {referrer ? (
           <div className="mb-4 p-3 rm-stat-card border-blue-200 bg-blue-50/50 text-sm">
-            推荐人：{referrer.name} (ID: {referrer.member_no})
+            {t('member.referrer', lang)}: {referrer.name} (ID: {referrer.member_no})
           </div>
         ) : (
           <div className="mb-4 p-3 bg-zinc-50 rounded-xl text-sm text-rm-text-dark-secondary">
-            无推荐人
+            {t('member.noReferrer', lang)}
           </div>
         )}
 
         <p className="mb-2 text-sm font-bold text-rm-text-dark">
-          下线列表 ({downlineList.length})
+          {t('member.downline', lang)} ({downlineList.length})
         </p>
         {downlineList.length > 0 ? (
           <div className="space-y-2 mb-4">
@@ -160,14 +185,14 @@ export default function MemberDetailPage() {
                     (ID: {item.referral.invitee_id})
                   </span>
                   <span className={`rm-badge ${item.hasOrder ? 'rm-badge-success' : 'rm-badge-neutral'}`}>
-                    {item.hasOrder ? '已购' : '未购'}
+                    {item.hasOrder ? t('member.purchased', lang) : t('member.notPurchased', lang)}
                   </span>
                 </div>
                 <div className="text-rm-text-dark-secondary text-xs">
-                  推荐奖励: {item.referral.reward_point} 分
+                  {t('member.referralReward', lang)}: {item.referral.reward_point} 分
                   {item.referral.batch_reward_point && (
                     <span className="ml-2">
-                      | 批量: {item.referral.batch_reward_point} 分 ({item.referral.batch_status === '已发放' ? '已发放' : '待发放'})
+                      | {t('member.batchStatus', lang)}: {item.referral.batch_reward_point} 分 ({item.referral.batch_status === '已发放' ? t('member.issued', lang) : t('member.pending', lang)})
                     </span>
                   )}
                 </div>
@@ -175,42 +200,40 @@ export default function MemberDetailPage() {
             ))}
           </div>
         ) : (
-          <p className="text-sm text-rm-text-dark-secondary mb-4">暂无下线</p>
+          <p className="text-sm text-rm-text-dark-secondary mb-4">{t('member.noReferrer', lang)}</p>
         )}
 
-        {/* Batch reward status */}
         {referralLogs
           .filter((r) => r.invitee_id === memberId && r.batch_reward_point)
           .map((r) => (
             <div key={r.id} className="p-3 rm-stat-card border-amber-200 bg-amber-50/50 text-sm">
-              批量奖励状态：
+              {t('member.batchStatus', lang)}:
               {r.batch_status === '已发放' ? (
                 <span className="text-emerald-700 font-bold">
-                  ✅ 已发放 (X+Y={r.batch_reward_point}分)
+                  {' '}{CHECK_SVG} {t('member.issued', lang)} (X+Y={r.batch_reward_point}分)
                 </span>
               ) : (
                 <span className="text-amber-700 font-bold">
-                  ⏳ 待发放 (X+Y={r.batch_reward_point}分)
+                  {' '}{HOURGLASS_SVG} {t('member.pending', lang)} (X+Y={r.batch_reward_point}分)
                 </span>
               )}
             </div>
           ))}
       </div>
 
-      {/* Transaction history */}
-      <div id="tx-history" className="rm-demo-card p-4 md:p-6 mt-5">
-        <h3 className="text-md font-bold text-rm-text-dark mb-4">积分流水记录</h3>
+      <div id="tx-history" className="rm-demo-card rm-liquid-card p-4 md:p-6 mt-5">
+        <h3 className="text-md font-bold text-rm-text-dark mb-4">{t('member.txHistory', lang)}</h3>
         <div className="rm-demo-table-wrap">
           <table className="rm-demo-table min-w-[700px]">
             <thead>
               <tr>
-                <th>时间</th>
-                <th>类型</th>
-                <th className="text-right">变动</th>
-                <th className="text-right">变动前</th>
-                <th className="text-right">变动后</th>
-                <th>到期日</th>
-                <th>备注</th>
+                <th>{t('points.time', lang)}</th>
+                <th>{t('points.type', lang)}</th>
+                <th className="text-right">{t('points.change', lang)}</th>
+                <th className="text-right">{t('points.before', lang)}</th>
+                <th className="text-right">{t('points.after', lang)}</th>
+                <th>{t('points.expiryDate', lang)}</th>
+                <th>{t('points.remark', lang)}</th>
               </tr>
             </thead>
             <tbody>
@@ -222,7 +245,7 @@ export default function MemberDetailPage() {
                     <td><span className={`rm-badge ${txTypeBadge(tx.trans_type)}`}>{tx.trans_type}</span></td>
                     <td className={`text-right font-bold ${tx.amount > 0 ? 'text-emerald-700' : 'text-red-600'}`}>
                       {tx.amount > 0 ? '+' : ''}{tx.amount.toLocaleString()}
-                      {isExpired && <span className="ml-1 text-xs">⚠️</span>}
+                      {isExpired && <span className="ml-1">{WARN_SVG}</span>}
                     </td>
                     <td className="text-right text-rm-text-dark-secondary">{tx.balance_before.toLocaleString()}</td>
                     <td className="text-right">{tx.balance_after.toLocaleString()}</td>
@@ -234,36 +257,34 @@ export default function MemberDetailPage() {
                 );
               })}
               {memberTxs.length === 0 && (
-                <tr><td colSpan={7} className="text-center text-rm-text-dark-secondary py-6">暂无流水记录</td></tr>
+                <tr><td colSpan={7} className="text-center text-rm-text-dark-secondary py-6">{t('member.noTx', lang)}</td></tr>
               )}
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Adjust modal */}
       <AdjustModal
         open={showAdjust}
         onClose={() => setShowAdjust(false)}
         onSubmit={handleAdjust}
       />
 
-      {/* Redeem modal */}
       {showRedeem && (
         <div className="fixed inset-0 bg-black/40 flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
           <div className="bg-white rounded-t-2xl sm:rounded-2xl p-5 md:p-6 w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto border border-[var(--rm-border-light)]">
-            <h3 className="text-lg font-black text-rm-text-dark mb-4">兑换礼品</h3>
+            <h3 className="text-lg font-black text-rm-text-dark mb-4">{t('member.redeemTitle', lang)}</h3>
             <p className="text-sm text-rm-text-dark-secondary mb-4">
-              当前可用积分: <span className="font-black text-emerald-700">{member.available_points.toLocaleString()}</span>
+              {t('member.redeemAvailable', lang)}: <span className="font-black text-emerald-700">{member.available_points.toLocaleString()}</span>
             </p>
             <div className="mb-4">
-              <label className="block text-sm text-rm-text-dark-secondary mb-1 font-medium">选择礼品</label>
+              <label className="block text-sm text-rm-text-dark-secondary mb-1 font-medium">{t('member.redeemSelect', lang)}</label>
               <select
                 value={selectedGiftId}
                 onChange={(e) => setSelectedGiftId(e.target.value)}
                 className="rm-demo-filter w-full"
               >
-                <option value="">-- 请选择礼品 --</option>
+                <option value="">{t('member.redeemSelectPlaceholder', lang)}</option>
                 {gifts
                   .filter((g) => g.status === '上架')
                   .map((g) => (
@@ -280,13 +301,13 @@ export default function MemberDetailPage() {
                     if (member.available_points < gift.point_cost) {
                       return (
                         <span className="rm-badge rm-badge-danger">
-                          积分不足！需要 {gift.point_cost.toLocaleString()} 分
+                          {t('member.redeemInsufficient', lang, { cost: gift.point_cost })}
                         </span>
                       );
                     }
                     return (
                       <span className="rm-badge rm-badge-success">
-                        兑换后剩余: {(member.available_points - gift.point_cost).toLocaleString()} 分
+                        {t('member.redeemRemaining', lang, { remaining: (member.available_points - gift.point_cost).toLocaleString() })}
                       </span>
                     );
                   })()}
@@ -298,14 +319,14 @@ export default function MemberDetailPage() {
                 onClick={() => { setShowRedeem(false); setSelectedGiftId(''); }}
                 className="rm-demo-secondary-button px-4 py-2.5 text-sm"
               >
-                取消
+                {t('member.cancel', lang)}
               </button>
               <button
                 onClick={handleRedeem}
                 disabled={!selectedGiftId}
                 className="rm-demo-primary-button px-4 py-2.5 text-sm"
               >
-                确认兑换
+                {t('member.redeemConfirm', lang)}
               </button>
             </div>
           </div>

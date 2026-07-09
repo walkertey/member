@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SidebarLayout from "@/components/SidebarLayout";
+import RaymondI18nProvider from "@/components/raymond-i18n/RaymondI18nProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,11 +26,13 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="zh-CN"
+      lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full">
-        <SidebarLayout>{children}</SidebarLayout>
+        <RaymondI18nProvider>
+          <SidebarLayout>{children}</SidebarLayout>
+        </RaymondI18nProvider>
       </body>
     </html>
   );

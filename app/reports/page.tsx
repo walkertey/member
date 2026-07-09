@@ -2,8 +2,11 @@
 
 import { useMemo } from 'react';
 import { usePointsStore } from '@/lib/store';
+import { useI18n } from '@/components/raymond-i18n/RaymondI18nProvider';
+import { t } from '@/components/raymond-i18n/raymondTranslations';
 
 export default function ReportsPage() {
+  const { lang } = useI18n();
   const members = usePointsStore((s) => s.members);
   const orders = usePointsStore((s) => s.orders);
   const pointTransactions = usePointsStore((s) => s.pointTransactions);
@@ -52,20 +55,20 @@ export default function ReportsPage() {
 
   return (
     <div className="max-w-6xl mx-auto rm-demo-page">
-      <div className="rm-demo-page-header">
+      <div className="rm-demo-page-header rm-section-hero">
         <div>
-          <h2 className="rm-demo-title">报表中心</h2>
-          <p className="rm-demo-subtitle">业务数据分析 · 关键指标一览</p>
+          <h2 className="rm-demo-title">{t('reports.title', lang)}</h2>
+          <p className="rm-demo-subtitle">{t('reports.subtitle', lang)}</p>
         </div>
       </div>
 
       {/* KPI overview — dark cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-5">
         {[
-          { label: '总会员数', value: members.length },
-          { label: '总订单', value: orders.length },
-          { label: '积分发行', value: pointsIssuedVsConsumed.issued.toLocaleString() },
-          { label: '积分消耗', value: pointsIssuedVsConsumed.consumed.toLocaleString() },
+          { label: t('reports.totalMembers', lang), value: members.length },
+          { label: t('reports.totalOrders', lang), value: orders.length },
+          { label: t('reports.pointsIssued', lang), value: pointsIssuedVsConsumed.issued.toLocaleString() },
+          { label: t('reports.pointsConsumed', lang), value: pointsIssuedVsConsumed.consumed.toLocaleString() },
         ].map((kpi) => (
           <div key={kpi.label} className="rm-demo-card-dark rounded-xl p-4 text-center">
             <div className="text-xs text-rm-text-secondary mb-1 font-bold uppercase tracking-wider">{kpi.label}</div>
@@ -76,14 +79,14 @@ export default function ReportsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* Member registration */}
-        <div className="rm-demo-card p-4 md:p-5">
-          <h3 className="text-md font-bold text-rm-text-dark mb-4">会员注册统计（按月）</h3>
+        <div className="rm-demo-card rm-liquid-card p-4 md:p-5">
+          <h3 className="text-md font-bold text-rm-text-dark mb-4">{t('reports.memberRegStats', lang)}</h3>
           <div className="rm-demo-table-wrap">
             <table className="rm-demo-table min-w-[200px]">
               <thead>
                 <tr>
-                  <th>月份</th>
-                  <th className="text-right">新增会员</th>
+                  <th>{t('reports.month', lang)}</th>
+                  <th className="text-right">{t('reports.newMembers', lang)}</th>
                 </tr>
               </thead>
               <tbody>
@@ -94,7 +97,7 @@ export default function ReportsPage() {
                   </tr>
                 ))}
                 <tr className="bg-zinc-50 font-bold">
-                  <td>合计</td>
+                  <td>{t('reports.total', lang)}</td>
                   <td className="text-right">{members.length}</td>
                 </tr>
               </tbody>
@@ -103,15 +106,15 @@ export default function ReportsPage() {
         </div>
 
         {/* Product sales */}
-        <div className="rm-demo-card p-4 md:p-5">
-          <h3 className="text-md font-bold text-rm-text-dark mb-4">配套销售统计</h3>
+        <div className="rm-demo-card rm-liquid-card p-4 md:p-5">
+          <h3 className="text-md font-bold text-rm-text-dark mb-4">{t('reports.productSalesStats', lang)}</h3>
           <div className="rm-demo-table-wrap">
             <table className="rm-demo-table min-w-[250px]">
               <thead>
                 <tr>
-                  <th>配套</th>
-                  <th className="text-right">订单数</th>
-                  <th className="text-right">销售总额</th>
+                  <th>{t('reports.product', lang)}</th>
+                  <th className="text-right">{t('reports.orderCount', lang)}</th>
+                  <th className="text-right">{t('reports.salesTotal', lang)}</th>
                 </tr>
               </thead>
               <tbody>
@@ -128,17 +131,17 @@ export default function ReportsPage() {
         </div>
 
         {/* Points issued vs consumed */}
-        <div className="rm-demo-card p-4 md:p-5">
-          <h3 className="text-md font-bold text-rm-text-dark mb-4">积分发行 vs 消耗</h3>
+        <div className="rm-demo-card rm-liquid-card p-4 md:p-5">
+          <h3 className="text-md font-bold text-rm-text-dark mb-4">{t('reports.pointsIssuedVsConsumed', lang)}</h3>
           <div className="grid grid-cols-2 gap-3 md:gap-4">
             <div className="rm-stat-card text-center">
-              <div className="rm-stat-label">正向发行</div>
+              <div className="rm-stat-label">{t('reports.positiveIssued', lang)}</div>
               <div className="rm-stat-value" style={{ color: 'var(--rm-gold-deep)' }}>
                 {pointsIssuedVsConsumed.issued.toLocaleString()}
               </div>
             </div>
             <div className="rm-stat-card text-center">
-              <div className="rm-stat-label">已消耗</div>
+              <div className="rm-stat-label">{t('reports.consumed', lang)}</div>
               <div className="rm-stat-value" style={{ color: 'var(--rm-icon-red)' }}>
                 {pointsIssuedVsConsumed.consumed.toLocaleString()}
               </div>
@@ -147,14 +150,14 @@ export default function ReportsPage() {
         </div>
 
         {/* Staff performance */}
-        <div className="rm-demo-card p-4 md:p-5">
-          <h3 className="text-md font-bold text-rm-text-dark mb-4">员工业绩（按操作员分组）</h3>
+        <div className="rm-demo-card rm-liquid-card p-4 md:p-5">
+          <h3 className="text-md font-bold text-rm-text-dark mb-4">{t('reports.staffPerformance', lang)}</h3>
           <div className="rm-demo-table-wrap">
             <table className="rm-demo-table min-w-[200px]">
               <thead>
                 <tr>
-                  <th>操作员</th>
-                  <th className="text-right">订单数</th>
+                  <th>{t('reports.operator', lang)}</th>
+                  <th className="text-right">{t('reports.orderCount', lang)}</th>
                 </tr>
               </thead>
               <tbody>

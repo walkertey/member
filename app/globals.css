@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Cormorant+Garamond:ital,wght@0,400..700;1,400..700&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -15,6 +16,12 @@
   --rm-gold: #f0b429;
   --rm-gold-deep: #d4a017;
   --rm-gold-soft: rgba(240, 180, 41, 0.15);
+  --rm-gold-champagne: #e8c559;
+  /* 液体玻璃 token */
+  --rm-glass-bg: rgba(255, 255, 255, 0.06);
+  --rm-glass-border: rgba(255, 255, 255, 0.10);
+  --rm-glass-highlight: rgba(255, 255, 255, 0.12);
+  --rm-glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
   /* icon 色板 */
   --rm-icon-navy: #0b2454;
   --rm-icon-blue: #3b82f6;
@@ -33,7 +40,13 @@
   --rm-text-dark-secondary: #6b7280;
   /* 阴影 / glow */
   --rm-glow-gold: 0 0 20px rgba(240, 180, 41, 0.25);
+  --rm-glow-gold-strong: 0 0 30px rgba(240, 180, 41, 0.35);
+  --rm-glow-navy: 0 0 20px rgba(34, 86, 160, 0.25);
   --rm-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.25);
+  --rm-shadow-premium: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  /* 品牌字体 token */
+  --font-raymond-brand: "Playfair Display", "Cormorant Garamond", "Bodoni 72", "Didot", Georgia, serif;
+  --font-raymond-ui: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 @theme inline {
@@ -1038,4 +1051,405 @@ a.px-4 {
   font-weight: 900;
   color: var(--rm-text-dark);
   letter-spacing: -0.03em;
+}
+
+/* ===================================================================
+   #003 液体玻璃 + 立体视觉系统
+   增强全站高级质感
+   =================================================================== */
+
+/* --- 品牌字体 utilities --- */
+.rm-brand-wordmark {
+  font-family: var(--font-raymond-brand);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.rm-brand-serif-title {
+  font-family: var(--font-raymond-brand);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.rm-brand-kicker {
+  font-family: var(--font-raymond-brand);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+.rm-ui-body {
+  font-family: var(--font-raymond-ui);
+}
+
+.rm-ui-number {
+  font-family: var(--font-raymond-ui);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+}
+
+/* --- 液体玻璃卡片（暗色背景用） --- */
+.rm-liquid-glass {
+  position: relative;
+  border-radius: 20px;
+  background: var(--rm-glass-bg);
+  border: 1px solid var(--rm-glass-border);
+  box-shadow: var(--rm-glass-shadow), inset 0 1px 0 var(--rm-glass-highlight);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  overflow: hidden;
+}
+
+.rm-liquid-glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(255, 255, 255, 0.04) 50%,
+    transparent 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* --- 液体玻璃卡片（亮色背景用） --- */
+.rm-liquid-card {
+  position: relative;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.94) 0%, rgba(248,250,252,0.94) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 8px 32px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* --- 深度立体卡片 --- */
+.rm-depth-card {
+  position: relative;
+  border-radius: 20px;
+  background: linear-gradient(135deg, var(--rm-bg-card) 0%, var(--rm-bg-card-2) 100%);
+  border: 1px solid rgba(240, 180, 41, 0.18);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* --- 高级阴影 --- */
+.rm-premium-shadow {
+  box-shadow: var(--rm-shadow-premium);
+}
+
+/* --- 金色发光 --- */
+.rm-gold-glow {
+  box-shadow: var(--rm-glow-gold);
+}
+
+.rm-gold-glow-strong {
+  box-shadow: var(--rm-glow-gold-strong);
+}
+
+/* --- 深蓝色发光 --- */
+.rm-navy-glow {
+  box-shadow: var(--rm-glow-navy);
+}
+
+/* --- 页面壳（深色全屏） --- */
+.rm-page-shell {
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(34, 86, 160, 0.28), transparent 30%),
+    radial-gradient(circle at 82% 18%, rgba(240, 180, 41, 0.06), transparent 22%),
+    linear-gradient(180deg, var(--rm-bg-deep) 0%, #07132f 48%, #040817 100%);
+  color: var(--rm-text-primary);
+}
+
+/* --- Section hero（页面顶部标题区） --- */
+.rm-section-hero {
+  position: relative;
+  padding: 32px 24px 28px;
+  border-radius: 24px;
+  margin-bottom: 24px;
+  background:
+    radial-gradient(circle at 88% 12%, rgba(240, 180, 41, 0.10), transparent 18%),
+    linear-gradient(135deg, var(--rm-bg-card) 0%, var(--rm-bg-deep) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--rm-shadow-premium);
+  overflow: hidden;
+}
+
+.rm-section-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    transparent 55%,
+    rgba(255, 255, 255, 0.05) 60%,
+    transparent 65%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.rm-section-hero-title {
+  font-family: var(--font-raymond-brand);
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.rm-section-hero-sub {
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--rm-text-secondary);
+}
+
+/* --- 浮动面板（移动端用） --- */
+.rm-floating-panel {
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.97) 0%, rgba(248,250,252,0.97) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 8px 30px rgba(15, 23, 42, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  color: var(--rm-text-dark);
+}
+
+/* --- Icon orb 容器（圆形图标背板） --- */
+.rm-icon-orb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 54px;
+  height: 54px;
+  background: linear-gradient(145deg, rgba(27, 43, 88, 0.96), rgba(12, 22, 52, 0.96));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 8px 16px rgba(0, 0, 0, 0.22);
+}
+
+.rm-icon-orb-gold {
+  background: linear-gradient(145deg, rgba(240, 180, 41, 0.25), rgba(180, 130, 20, 0.35));
+  border: 1px solid rgba(240, 180, 41, 0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 0 16px rgba(240, 180, 41, 0.25);
+}
+
+.rm-icon-orb-navy {
+  background: linear-gradient(145deg, rgba(27, 43, 88, 0.96), rgba(12, 22, 52, 0.96));
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 12px rgba(59, 130, 246, 0.15);
+}
+
+.rm-icon-orb-white {
+  background: linear-gradient(145deg, #ffffff 0%, #f5f6fa 100%);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  box-shadow:
+    0 6px 14px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.94);
+}
+
+/* --- 现代化表格 --- */
+.rm-modern-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 13px;
+}
+
+.rm-modern-table th {
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  color: var(--rm-text-dark-secondary);
+  font-weight: 800;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: left;
+  padding: 14px 16px;
+  border-bottom: 2px solid rgba(15, 23, 42, 0.06);
+}
+
+.rm-modern-table th:first-child {
+  border-radius: 14px 0 0 0;
+}
+
+.rm-modern-table th:last-child {
+  border-radius: 0 14px 0 0;
+}
+
+.rm-modern-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.04);
+  color: var(--rm-text-dark);
+}
+
+.rm-modern-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.rm-modern-table tbody tr:hover {
+  background: rgba(240, 180, 41, 0.03);
+}
+
+.rm-modern-table-wrap {
+  overflow-x: auto;
+  border-radius: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+}
+
+/* --- 移动端卡片列表 --- */
+.rm-mobile-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rm-mobile-card-item {
+  border-radius: 16px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+  padding: 16px;
+}
+
+.rm-mobile-card-item:hover {
+  border-color: var(--rm-gold);
+  box-shadow: 0 6px 20px rgba(240, 180, 41, 0.10);
+}
+
+/* --- 金/黑玻璃按钮 --- */
+.rm-glass-btn {
+  min-height: 44px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 10px 20px;
+  transition: all 0.15s ease;
+}
+
+.rm-glass-btn-gold {
+  background: linear-gradient(135deg, var(--rm-gold) 0%, var(--rm-gold-deep) 100%);
+  color: #10203e;
+  box-shadow: 0 8px 20px rgba(240, 180, 41, 0.22);
+  border: none;
+}
+
+.rm-glass-btn-gold:hover {
+  box-shadow: 0 10px 24px rgba(240, 180, 41, 0.32);
+  transform: translateY(-1px);
+}
+
+.rm-glass-btn-outline {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.rm-glass-btn-outline:hover {
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(255, 255, 255, 0.20);
+}
+
+/* --- Toast 液体玻璃升级 --- */
+.rm-toast-glass {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* --- Page KPI grid --- */
+.rm-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+  .rm-kpi-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+}
+
+.rm-kpi-card {
+  position: relative;
+  border-radius: 18px;
+  background: var(--rm-glass-bg);
+  border: 1px solid var(--rm-glass-border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  padding: 20px 18px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.rm-kpi-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.03) 55%,
+    transparent 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.rm-kpi-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--rm-text-secondary);
+  margin-bottom: 6px;
+}
+
+.rm-kpi-value {
+  font-family: var(--font-raymond-ui);
+  font-size: 28px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Desktop dashboard 网格 --- */
+.rm-dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 1024px) {
+  .rm-dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.rm-dashboard-grid-full {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
 }

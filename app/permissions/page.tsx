@@ -1,6 +1,8 @@
 'use client';
 
 import { usePointsStore } from '@/lib/store';
+import { useI18n } from '@/components/raymond-i18n/RaymondI18nProvider';
+import { t, type TranslationKey } from '@/components/raymond-i18n/raymondTranslations';
 import type { Role } from '@/lib/permissions';
 import { ALL_ROLES, MENU_VISIBILITY } from '@/lib/permissions';
 
@@ -22,30 +24,42 @@ const PERM_LABEL_MAP: Record<string, string> = {
   permissions: '权限管理',
 };
 
+const NAV_KEY_MAP: Record<string, TranslationKey> = {
+  dashboard: 'nav.home',
+  members: 'nav.members',
+  orders: 'nav.orders',
+  points: 'nav.points',
+  redemption: 'nav.redemption',
+  reports: 'nav.reports',
+  settings: 'nav.settings',
+  permissions: 'nav.permissions',
+};
+
 export default function PermissionsPage() {
+  const { lang } = useI18n();
   const operationLogs = usePointsStore((s) => s.operationLogs);
 
   return (
     <div className="max-w-6xl mx-auto rm-demo-page">
-      <div className="rm-demo-page-header">
+      <div className="rm-demo-page-header rm-section-hero">
         <div>
-          <h2 className="rm-demo-title">权限管理</h2>
-          <p className="rm-demo-subtitle">员工角色 · 权限配置 · 操作日志</p>
+          <h2 className="rm-demo-title">{t('permissions.title', lang)}</h2>
+          <p className="rm-demo-subtitle">{t('permissions.subtitle', lang)}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* Staff list */}
-        <div className="rm-demo-card p-4 md:p-5">
-          <h3 className="text-md font-bold text-rm-text-dark mb-4">员工列表</h3>
+        <div className="rm-demo-card rm-liquid-card p-4 md:p-5">
+          <h3 className="text-md font-bold text-rm-text-dark mb-4">{t('permissions.staffList', lang)}</h3>
           <div className="rm-demo-table-wrap">
             <table className="rm-demo-table min-w-[320px]">
               <thead>
                 <tr>
-                  <th>员工ID</th>
-                  <th>姓名</th>
-                  <th>角色</th>
-                  <th className="text-center">状态</th>
+                  <th>{t('permissions.staffId', lang)}</th>
+                  <th>{t('permissions.name', lang)}</th>
+                  <th>{t('permissions.role', lang)}</th>
+                  <th className="text-center">{t('permissions.status', lang)}</th>
                 </tr>
               </thead>
               <tbody>
@@ -57,7 +71,7 @@ export default function PermissionsPage() {
                       <span className="rm-badge rm-badge-gold">{s.role}</span>
                     </td>
                     <td className="text-center">
-                      <span className="rm-badge rm-badge-success">{s.status}</span>
+                      <span className="rm-badge rm-badge-success">{t('badge.active', lang)}</span>
                     </td>
                   </tr>
                 ))}
@@ -67,8 +81,8 @@ export default function PermissionsPage() {
         </div>
 
         {/* Role permissions */}
-        <div className="rm-demo-card p-4 md:p-5">
-          <h3 className="text-md font-bold text-rm-text-dark mb-4">角色权限一览</h3>
+        <div className="rm-demo-card rm-liquid-card p-4 md:p-5">
+          <h3 className="text-md font-bold text-rm-text-dark mb-4">{t('permissions.roleOverview', lang)}</h3>
           <div className="space-y-2 md:space-y-3">
             {ALL_ROLES.map((role) => {
               const menus = MENU_VISIBILITY[role];
@@ -76,14 +90,17 @@ export default function PermissionsPage() {
                 <div key={role} className="p-3 rounded-xl border border-[var(--rm-border-light)] hover:border-[var(--rm-gold)] transition-colors">
                   <div className="font-bold text-sm text-rm-text-dark mb-2">{role}</div>
                   <div className="flex flex-wrap gap-1">
-                    {menus.map((m) => (
-                      <span
-                        key={m}
-                        className="rm-badge rm-badge-info"
-                      >
-                        {PERM_LABEL_MAP[m] ?? m}
-                      </span>
-                    ))}
+                    {menus.map((m) => {
+                      const navKey = NAV_KEY_MAP[m];
+                      return (
+                        <span
+                          key={m}
+                          className="rm-badge rm-badge-info"
+                        >
+                          {navKey ? t(navKey, lang) : (PERM_LABEL_MAP[m] ?? m)}
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
               );
@@ -93,16 +110,16 @@ export default function PermissionsPage() {
       </div>
 
       {/* Operation log */}
-      <div className="rm-demo-card p-4 md:p-5 mt-5">
-        <h3 className="text-md font-bold text-rm-text-dark mb-4">操作日志</h3>
+      <div className="rm-demo-card rm-liquid-card p-4 md:p-5 mt-5">
+        <h3 className="text-md font-bold text-rm-text-dark mb-4">{t('permissions.auditLog', lang)}</h3>
         <div className="rm-demo-table-wrap">
           <table className="rm-demo-table min-w-[450px]">
             <thead>
               <tr>
-                <th>时间</th>
-                <th>操作人</th>
-                <th>操作</th>
-                <th>详情</th>
+                <th>{t('permissions.time', lang)}</th>
+                <th>{t('permissions.operator', lang)}</th>
+                <th>{t('permissions.action', lang)}</th>
+                <th>{t('permissions.detail', lang)}</th>
               </tr>
             </thead>
             <tbody>
