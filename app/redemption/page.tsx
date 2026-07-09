@@ -68,7 +68,7 @@ export default function RedemptionPage() {
 
   return (
     <div className="max-w-6xl mx-auto rm-demo-page">
-      <div className="rm-demo-page-header rm-section-hero">
+      <div className="rm-demo-hero">
         <div>
           <h2 className="rm-demo-title">{t('redemption.title', lang)}</h2>
           <p className="rm-demo-subtitle">{t('redemption.subtitle', lang)}</p>
@@ -92,7 +92,7 @@ export default function RedemptionPage() {
               }`}
             >
               <div className="text-base font-bold text-rm-text-dark mb-1">{gift.name}</div>
-              <div className="text-2xl font-black text-[var(--rm-gold-deep)] mb-1">
+              <div className="text-2xl font-black rm-demo-number text-[var(--rm-gold-deep)] mb-1">
                 {gift.point_cost.toLocaleString()}
               </div>
               <div className="text-xs text-rm-text-dark-secondary">{t('redemption.pts', lang)}</div>
@@ -138,7 +138,7 @@ export default function RedemptionPage() {
                         <td className="font-mono text-xs">{r.order_no}</td>
                         <td>{member?.name ?? r.member_id}</td>
                         <td>{r.gift_name}</td>
-                        <td className="text-right font-bold text-red-600">-{r.point_cost.toLocaleString()}</td>
+                        <td className="text-right font-bold rm-demo-number text-red-600">-{r.point_cost.toLocaleString()}</td>
                         <td className="text-right text-rm-text-dark-secondary">{r.balance_at_apply.toLocaleString()}</td>
                         <td className="text-xs text-rm-text-dark-secondary">{new Date(r.apply_time).toLocaleString(getLangLocale(lang))}</td>
                         <td className="text-center">
@@ -205,7 +205,7 @@ export default function RedemptionPage() {
                     <td className="font-mono text-xs">{r.order_no}</td>
                     <td>{member?.name ?? r.member_id}</td>
                     <td>{r.gift_name}</td>
-                    <td className="text-right font-bold text-red-600">-{r.point_cost.toLocaleString()}</td>
+                    <td className="text-right font-bold rm-demo-number text-red-600">-{r.point_cost.toLocaleString()}</td>
                     <td className="text-xs text-rm-text-dark-secondary">{new Date(r.apply_time).toLocaleString(getLangLocale(lang))}</td>
                     <td className="text-center">
                       <span className={`rm-badge ${statusBadge(r.status)}`}>{statusLabel(r.status)}</span>

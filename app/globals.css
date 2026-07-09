@@ -866,6 +866,55 @@ a.px-4 {
   margin-bottom: 18px;
 }
 
+/* --- Demo page hero header (premium card treatment for sub-page headers) --- */
+.rm-demo-hero {
+  position: relative;
+  padding: 18px 24px;
+  margin-bottom: 18px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--rm-border-gold);
+  background:
+    radial-gradient(circle at 84% 14%, rgba(240, 180, 41, 0.10), transparent 24%),
+    radial-gradient(ellipse at 60% 42%, rgba(255, 255, 255, 0.06), transparent 40%),
+    linear-gradient(135deg, var(--rm-bg-card) 0%, var(--rm-bg-deep) 100%);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.20),
+    0 0 18px rgba(240, 180, 41, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--rm-text-primary);
+}
+
+/* Subtle shimmer pseudo-element */
+.rm-demo-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      118deg,
+      transparent 0%,
+      transparent 36%,
+      rgba(255, 255, 255, 0.04) 48%,
+      transparent 62%,
+      transparent 100%
+    );
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Hero header text overrides (white-on-dark) */
+.rm-demo-hero .rm-demo-title {
+  color: var(--rm-text-primary);
+}
+.rm-demo-hero .rm-demo-subtitle {
+  color: var(--rm-text-secondary);
+}
+
 .rm-demo-title {
   font-size: 22px;
   line-height: 1.2;
@@ -1486,4 +1535,11 @@ a.px-4 {
   display: grid;
   grid-template-columns: 1fr;
   gap: 20px;
+}
+
+/* --- Unified number typography (aligns with home page .rm-balance-number) --- */
+.rm-demo-number {
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
 }

@@ -42,7 +42,7 @@ export default function PermissionsPage() {
 
   return (
     <div className="max-w-6xl mx-auto rm-demo-page">
-      <div className="rm-demo-page-header rm-section-hero">
+      <div className="rm-demo-hero">
         <div>
           <h2 className="rm-demo-title">{t('permissions.title', lang)}</h2>
           <p className="rm-demo-subtitle">{t('permissions.subtitle', lang)}</p>

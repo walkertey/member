@@ -46,7 +46,7 @@ export default function MembersPage() {
 
   return (
     <div className="max-w-6xl mx-auto rm-demo-page">
-      <div className="rm-demo-page-header rm-section-hero">
+      <div className="rm-demo-hero">
         <div>
           <h2 className="rm-demo-title">{t('members.title', lang)}</h2>
           <p className="rm-demo-subtitle">
@@ -92,10 +92,10 @@ export default function MembersPage() {
                 <td className="font-mono text-xs">{m.member_no}</td>
                 <td>{m.name}</td>
                 <td className="text-rm-text-dark-secondary">{m.phone}</td>
-                <td className="text-right font-medium">
+                <td className="text-right font-medium rm-demo-number">
                   {m.total_points.toLocaleString()}
                 </td>
-                <td className="text-right font-medium text-rm-icon-emerald">
+                <td className="text-right font-medium rm-demo-number text-rm-icon-emerald">
                   {m.available_points.toLocaleString()}
                 </td>
                 <td className="text-right text-rm-text-dark-secondary">

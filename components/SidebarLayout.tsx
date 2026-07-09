@@ -11,6 +11,8 @@ import LanguageSwitcher from '@/components/raymond-i18n/LanguageSwitcher';
 import { useI18n } from '@/components/raymond-i18n/RaymondI18nProvider';
 import { t, transRole } from '@/components/raymond-i18n/raymondTranslations';
 import type { TranslationKey, SupportedLang } from '@/components/raymond-i18n/raymondTranslations';
+import IconTile from '@/components/IconTile';
+import type { IconTileColor } from '@/components/IconTile';
 
 // Map menu item keys to i18n navigation keys
 const MENU_LABEL_MAP: Record<string, string> = {
@@ -152,54 +154,55 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
         </main>
       </div>
 
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-rm-bg-deep border-t border-white/10 flex items-center justify-around rm-tabbar-safe pt-2 z-30">
-        {[
-          { key: 'home', label: t('nav.home', lang), href: '/' },
-          { key: 'points', label: t('nav.points', lang), href: '/points' },
-          { key: 'discover', label: t('nav.discover', lang), href: '/redemption' },
-          { key: 'manage', label: t('nav.manage', lang), href: '/permissions' },
-          { key: 'profile', label: t('nav.profile', lang), href: '/settings' },
-        ].map((tab) => {
+      {/* Mobile bottom Tab Bar — hidden on desktop */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-rm-bg-deep border-t border-white/10 flex items-center justify-around rm-tabbar-safe pt-2 px-1 gap-1 z-30">
+        {([
+          { key: 'home', label: t('nav.home', lang), href: '/', color: 'navy' as IconTileColor },
+          { key: 'points', label: t('nav.points', lang), href: '/points', color: 'blue' as IconTileColor },
+          { key: 'discover', label: t('nav.discover', lang), href: '/redemption', color: 'cyan' as IconTileColor },
+          { key: 'manage', label: t('nav.manage', lang), href: '/permissions', color: 'gold' as IconTileColor },
+          { key: 'profile', label: t('nav.profile', lang), href: '/settings', color: 'emerald' as IconTileColor },
+        ]).map((tab) => {
           const isActive =
             tab.href === '/' ? pathname === '/' : pathname.startsWith(tab.href);
           return (
             <Link
               key={tab.key}
               href={tab.href}
-              className={`flex flex-col items-center gap-1 min-w-[44px] min-h-[44px] justify-center ${
+              className={`flex flex-col items-center gap-0.5 min-w-[44px] py-1 ${
                 isActive ? 'text-rm-gold' : 'text-white/50'
               }`}
             >
-              <span className="inline-flex items-center justify-center w-6 h-6">
+              <IconTile color={tab.color} size="sm" active={isActive}>
                 {tab.key === 'home' && (
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                     <polyline points="9,22 9,12 15,12 15,22" />
                   </svg>
                 )}
                 {tab.key === 'points' && (
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M3 18l3-9 3 5 3-8 3 8 3-5 3 9v2a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                   </svg>
                 )}
                 {tab.key === 'discover' && (
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10" />
                     <polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88 16.24,7.76" />
                   </svg>
                 )}
                 {tab.key === 'manage' && (
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 2L3 6v5c0 5.5 4 9 9 11 5-2 9-5.5 9-11V6L12 2z" />
                   </svg>
                 )}
                 {tab.key === 'profile' && (
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
                     <circle cx="12" cy="7" r="4" />
                   </svg>
                 )}
-              </span>
+              </IconTile>
               <span className="text-[10px]">{tab.label}</span>
             </Link>
           );

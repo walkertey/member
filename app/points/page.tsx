@@ -64,7 +64,7 @@ export default function PointsPage() {
 
   return (
     <div className="max-w-6xl mx-auto rm-demo-page">
-      <div className="rm-demo-page-header rm-section-hero">
+      <div className="rm-demo-hero">
         <div>
           <h2 className="rm-demo-title">{t('points.title', lang)}</h2>
           <p className="rm-demo-subtitle">{t('points.subtitle', lang)}</p>
@@ -152,7 +152,7 @@ export default function PointsPage() {
                       <td className="text-xs">{new Date(tx.create_time).toLocaleString(getLangLocale(lang))}</td>
                       <td>{member?.name ?? tx.member_id}</td>
                       <td><span className={`rm-badge ${transTypeBadge(tx.trans_type)}`}>{transType(tx.trans_type, lang)}</span></td>
-                      <td className={`text-right font-bold ${tx.amount > 0 ? 'text-emerald-700' : 'text-red-600'}`}>
+                      <td className={`text-right font-bold rm-demo-number ${tx.amount > 0 ? 'text-emerald-700' : 'text-red-600'}`}>
                         {tx.amount > 0 ? '+' : ''}{tx.amount.toLocaleString()}
                         {isExpired && <span className="ml-1">{WARN_SVG}</span>}
                       </td>
@@ -198,7 +198,7 @@ export default function PointsPage() {
                     <tr key={tx.id} className={urgent ? 'bg-red-50/50' : ''}>
                       <td>{tx.member_name}</td>
                       <td><span className="rm-badge rm-badge-info">{transType(tx.trans_type, lang)}</span></td>
-                      <td className="text-right font-bold text-emerald-700">+{tx.amount.toLocaleString()}</td>
+                      <td className="text-right font-bold rm-demo-number text-emerald-700">+{tx.amount.toLocaleString()}</td>
                       <td className="text-xs">{new Date(tx.expiry_date!).toLocaleDateString(getLangLocale(lang))}</td>
                       <td className={`text-right font-bold ${urgent ? 'text-red-600' : 'text-amber-700'}`}>
                         {tx.days_left} {t('points.daysUnit', lang)}
