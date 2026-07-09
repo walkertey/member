@@ -4,6 +4,9 @@ import { useState, useMemo } from 'react';
 import { usePointsStore } from '@/lib/store';
 import { translate } from '@/lib/i18n';
 
+// VISUAL-07 audit: 检查通过，无需修改。已使用 rm-demo-hero / rm-demo-card / rm-demo-table /
+// rm-demo-number / rm-badge-* / rm-demo-primary-button / mb-5 间距。
+// ============================================================
 export default function OrdersPage() {
   const members = usePointsStore((s) => s.members);
   const products = usePointsStore((s) => s.products);

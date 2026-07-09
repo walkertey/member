@@ -5,6 +5,8 @@ import { usePointsStore } from '@/lib/store';
 import { getExpiringTransactions } from '@/lib/pointsEngine';
 import { translate } from '@/lib/i18n';
 
+// VISUAL-07 audit: mb-4 → mb-5 on filter row for consistency.
+// ============================================================
 export default function PointsPage() {
   const pointTransactions = usePointsStore((s) => s.pointTransactions);
   const members = usePointsStore((s) => s.members);
@@ -97,7 +99,7 @@ export default function PointsPage() {
       {activeTab === 'all' && (
         <div>
           {/* Filters */}
-          <div className="flex gap-2 md:gap-3 mb-4 flex-wrap">
+          <div className="flex gap-2 md:gap-3 mb-5 flex-wrap">
             <select value={filterMember} onChange={(e) => setFilterMember(e.target.value)} className="rm-demo-filter">
               <option value="">全部会员</option>
               {members.map((m) => (

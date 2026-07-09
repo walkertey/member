@@ -855,6 +855,29 @@ a.px-4 {
 }
 
 /* --- Demo page hero header (premium card treatment for sub-page headers) --- */
+
+/* TODO: 玻璃质感效果目前仅用 Chrome DevTools 模拟验收，未在 iOS Safari 真机测试。
+   真机上 backdrop-filter 渲染可能与模拟器有差异，待有 iPhone 测试设备后需要重新验收。 */
+.rm-glass {
+  background: rgba(19, 27, 61, 0.62);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+}
+.rm-glass-light {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow:
+    0 4px 24px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
 .rm-demo-hero {
   position: relative;
   padding: 18px 24px;
@@ -863,11 +886,12 @@ a.px-4 {
   overflow: hidden;
   border: 1px solid var(--rm-border-gold);
   background:
-    radial-gradient(circle at 84% 14%, rgba(240, 180, 41, 0.10), transparent 24%),
-    radial-gradient(ellipse at 60% 42%, rgba(255, 255, 255, 0.06), transparent 40%),
-    linear-gradient(135deg, var(--rm-bg-card) 0%, var(--rm-bg-deep) 100%);
+    radial-gradient(circle at 84% 14%, rgba(240, 180, 41, 0.08), transparent 24%),
+    rgba(19, 27, 61, 0.62);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.20),
+    0 8px 32px rgba(0, 0, 0, 0.28),
     0 0 18px rgba(240, 180, 41, 0.10),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
   display: flex;

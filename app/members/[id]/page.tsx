@@ -4,7 +4,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { usePointsStore } from '@/lib/store';
 import PointsPanel, { AdjustModal } from '@/components/PointsPanel';
+import { translate } from '@/lib/i18n';
 
+// VISUAL-07 audit: max-w-4xl → max-w-6xl; added hero header with translated title;
+// added rm-demo-number to transaction table numeric columns; unified section spacing to mb-5.
+// ============================================================
 export default function MemberDetailPage() {
   const params = useParams();
   const router = useRouter();
@@ -20,6 +24,7 @@ export default function MemberDetailPage() {
   const redeemGift = usePointsStore((s) => s.redeemGift);
   const addToast = usePointsStore((s) => s.addToast);
   const currentRole = usePointsStore((s) => s.currentRole);
+  const locale = usePointsStore((s) => s.locale);
 
   const isIntern = currentRole === '实习生';
 
@@ -73,13 +78,13 @@ export default function MemberDetailPage() {
 
   if (!member) {
     return (
-      <div className="max-w-4xl mx-auto text-center py-12 rm-demo-page">
-        <p className="text-rm-text-dark-secondary">会员不存在</p>
+      <div className="max-w-6xl mx-auto text-center py-12 rm-demo-page">
+        <p className="text-rm-text-dark-secondary">{translate(locale, 'members.notFound')}</p>
         <button
           onClick={() => router.push('/members')}
           className="rm-demo-link mt-3 inline-block text-sm min-h-[44px]"
         >
-          返回会员列表
+          {translate(locale, 'members.backToList')}
         </button>
       </div>
     );
@@ -107,16 +112,23 @@ export default function MemberDetailPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto rm-demo-page">
-      <button
-        onClick={() => router.push('/members')}
-        className="rm-demo-link text-sm mb-4 inline-flex items-center gap-1 min-h-[44px]"
-      >
-        &larr; 返回会员列表
-      </button>
+    <div className="max-w-6xl mx-auto rm-demo-page">
+      {/* Hero header */}
+      <div className="rm-demo-hero">
+        <div>
+          <h2 className="rm-demo-title">{member.name}</h2>
+          <p className="rm-demo-subtitle">ID: {member.member_no} · {member.phone}</p>
+        </div>
+        <button
+          onClick={() => router.push('/members')}
+          className="rm-demo-secondary-button px-3 py-1.5 text-xs min-h-[36px]"
+        >
+          &larr; {translate(locale, 'members.backToList')}
+        </button>
+      </div>
 
       {isIntern && (
-        <div className="mb-4 px-4 py-2 rm-badge rm-badge-warning text-xs inline-flex">
+        <div className="mb-5 px-4 py-2 rm-badge rm-badge-warning text-xs inline-flex">
           实习生 · 只读模式（编辑按钮已隐藏）
         </div>
       )}
@@ -132,7 +144,7 @@ export default function MemberDetailPage() {
       />
 
       {/* Referral tree */}
-      <div className="rm-demo-card p-4 md:p-6 mt-5">
+      <div className="rm-demo-card p-4 md:p-6 mb-5">
         <h3 className="text-md font-bold text-rm-text-dark mb-4">推荐关系树</h3>
         {referrer ? (
           <div className="mb-4 p-3 rm-stat-card border-blue-200 bg-blue-50/50 text-sm">
@@ -198,7 +210,7 @@ export default function MemberDetailPage() {
       </div>
 
       {/* Transaction history */}
-      <div id="tx-history" className="rm-demo-card p-4 md:p-6 mt-5">
+      <div id="tx-history" className="rm-demo-card p-4 md:p-6 mb-5">
         <h3 className="text-md font-bold text-rm-text-dark mb-4">积分流水记录</h3>
         <div className="rm-demo-table-wrap">
           <table className="rm-demo-table min-w-[700px]">
@@ -220,12 +232,12 @@ export default function MemberDetailPage() {
                   <tr key={tx.id} className={isExpired ? 'bg-red-50/50' : ''}>
                     <td className="text-xs">{new Date(tx.create_time).toLocaleString('zh-CN')}</td>
                     <td><span className={`rm-badge ${txTypeBadge(tx.trans_type)}`}>{tx.trans_type}</span></td>
-                    <td className={`text-right font-bold ${tx.amount > 0 ? 'text-emerald-700' : 'text-red-600'}`}>
+                    <td className={`text-right font-bold rm-demo-number ${tx.amount > 0 ? 'text-emerald-700' : 'text-red-600'}`}>
                       {tx.amount > 0 ? '+' : ''}{tx.amount.toLocaleString()}
                       {isExpired && <span className="ml-1 text-xs">⚠️</span>}
                     </td>
                     <td className="text-right text-rm-text-dark-secondary">{tx.balance_before.toLocaleString()}</td>
-                    <td className="text-right">{tx.balance_after.toLocaleString()}</td>
+                    <td className="text-right rm-demo-number">{tx.balance_after.toLocaleString()}</td>
                     <td className="text-xs text-rm-text-dark-secondary">
                       {tx.expiry_date ? new Date(tx.expiry_date).toLocaleDateString('zh-CN') : '-'}
                     </td>
@@ -251,7 +263,7 @@ export default function MemberDetailPage() {
       {/* Redeem modal */}
       {showRedeem && (
         <div className="fixed inset-0 bg-black/40 flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
-          <div className="bg-white rounded-t-2xl sm:rounded-2xl p-5 md:p-6 w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto border border-[var(--rm-border-light)]">
+          <div className="rm-glass-light rounded-t-2xl sm:rounded-2xl p-5 md:p-6 w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto">
             <h3 className="text-lg font-black text-rm-text-dark mb-4">兑换礼品</h3>
             <p className="text-sm text-rm-text-dark-secondary mb-4">
               当前可用积分: <span className="font-black text-emerald-700">{member.available_points.toLocaleString()}</span>

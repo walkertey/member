@@ -4,6 +4,9 @@ import { useMemo } from 'react';
 import { usePointsStore } from '@/lib/store';
 import { translate } from '@/lib/i18n';
 
+// VISUAL-07 audit: 检查通过，无需修改。已使用 rm-demo-hero / rm-demo-card-dark / rm-demo-card /
+// rm-demo-table / rm-demo-number / rm-stat-card / mb-5 间距。
+// ============================================================
 export default function ReportsPage() {
   const members = usePointsStore((s) => s.members);
   const orders = usePointsStore((s) => s.orders);

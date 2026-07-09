@@ -3,13 +3,15 @@
 import { usePointsStore } from '@/lib/store';
 import { translate } from '@/lib/i18n';
 
+// VISUAL-07 audit: max-w-4xl → max-w-6xl for consistency; added rm-demo-number to RM price column.
+// ============================================================
 export default function SettingsPage() {
   const products = usePointsStore((s) => s.products);
   const currentRole = usePointsStore((s) => s.currentRole);
   const locale = usePointsStore((s) => s.locale);
 
   return (
-    <div className="max-w-4xl mx-auto rm-demo-page">
+    <div className="max-w-6xl mx-auto rm-demo-page">
       <div className="rm-demo-hero">
         <div>
           <h2 className="rm-demo-title">{translate(locale, 'settings.title')}</h2>
@@ -44,7 +46,7 @@ export default function SettingsPage() {
                 <tr key={p.id}>
                   <td className="font-mono">{p.code}</td>
                   <td>{p.name}</td>
-                  <td className="text-right font-bold">RM {p.price.toLocaleString()}</td>
+                  <td className="text-right font-bold rm-demo-number">RM {p.price.toLocaleString()}</td>
                   <td className="text-right rm-demo-number">{p.point_value.toLocaleString()}</td>
                   <td className="text-center">
                     <span className={`rm-badge ${p.status === '上架' ? 'rm-badge-success' : 'rm-badge-danger'}`}>

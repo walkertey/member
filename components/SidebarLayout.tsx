@@ -174,7 +174,7 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
       </div>
 
       {/* Mobile bottom Tab Bar — hidden on desktop */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-rm-bg-deep border-t border-white/10 flex items-center justify-around rm-tabbar-safe pt-2 px-1 gap-1 z-30">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 rm-glass border-t border-white/10 flex items-center justify-around rm-tabbar-safe pt-2 px-1 gap-1 z-30">
           {([
           { key: 'home', label: translate(locale, 'nav.home'), href: '/', color: 'navy' as IconTileColor },
           { key: 'points', label: translate(locale, 'nav.points'), href: '/points', color: 'blue' as IconTileColor },
@@ -239,7 +239,7 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
           />
 
           {/* Drawer panel */}
-          <div className="relative w-64 max-w-[80vw] bg-rm-bg-card h-full flex flex-col shadow-xl animate-slide-in">
+          <div className="relative w-64 max-w-[80vw] rm-glass h-full flex flex-col shadow-xl animate-slide-in">
             <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between">
               <div>
                 <h2 className="text-base font-bold text-white">Raymond 积分管理</h2>

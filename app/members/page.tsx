@@ -5,6 +5,9 @@ import Link from 'next/link';
 import { usePointsStore } from '@/lib/store';
 import { translate } from '@/lib/i18n';
 
+// VISUAL-07 audit: 检查通过，无需修改。已使用 rm-demo-hero / rm-stat-card (grid-cols-2 md:grid-cols-4) /
+// rm-demo-table / rm-demo-number / rm-badge-* / mb-5 间距。
+// ============================================================
 export default function MembersPage() {
   const members = usePointsStore((s) => s.members);
   const settleExpiredPoints = usePointsStore((s) => s.settleExpiredPoints);

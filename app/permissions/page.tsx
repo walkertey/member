@@ -23,6 +23,9 @@ const PERM_LABEL_MAP: Record<string, string> = {
   permissions: '权限管理',
 };
 
+// VISUAL-07 audit: 检查通过，无需修改。已使用 rm-demo-hero / rm-demo-card / rm-demo-table /
+// rm-demo-number / rm-badge-* / rm-demo-primary-button / mb-5 间距。
+// ============================================================
 export default function PermissionsPage() {
   const operationLogs = usePointsStore((s) => s.operationLogs);
   const locale = usePointsStore((s) => s.locale);

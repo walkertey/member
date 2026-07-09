@@ -94,7 +94,7 @@ export function AdjustModal({ open, onClose, onSubmit }: AdjustModalProps) {
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
-      <div className="bg-white rounded-t-2xl sm:rounded-2xl p-5 md:p-6 w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto border border-[var(--rm-border-light)]">
+      <div className="rm-glass-light rounded-t-2xl sm:rounded-2xl p-5 md:p-6 w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto">
         <h3 className="text-lg font-black text-rm-text-dark mb-4">手动调整积分</h3>
         <div className="mb-3">
           <label className="block text-sm text-rm-text-dark-secondary mb-1 font-medium">调整数额（正数为加，负数为扣）</label>
