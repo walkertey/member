@@ -16,7 +16,7 @@ import {
   X,
 } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
-import { useLocation } from 'wouter';
+import { Link } from 'wouter';
 
 interface ActionItem {
   title: string;
@@ -25,26 +25,27 @@ interface ActionItem {
   route: string;
 }
 
-function ActionCard({ item, onClick }: { item: ActionItem; onClick: () => void }) {
+function ActionCard({ item }: { item: ActionItem }) {
   return (
-    <RaymondCard
-      variant="action"
-      className="flex cursor-pointer items-center gap-3 p-4 hover:opacity-90 active:scale-95"
-      onClick={onClick}
-    >
-      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center text-[#EBCB83]">
-        {item.icon}
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-[15px] font-semibold leading-[21px] tracking-[0.1px] text-[#F2F3F7]">
-          {item.title}
-        </p>
-        <p className="mt-0.5 text-[12px] font-normal leading-[17px] tracking-[0.1px] text-[#7F8FA8]">
-          {item.subtitle}
-        </p>
-      </div>
-      <ChevronRight className="h-5 w-5 flex-shrink-0 text-[#8FA0B7]" />
-    </RaymondCard>
+    <Link href={item.route} className="block rounded-[13px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#EBCB83]">
+      <RaymondCard
+        variant="action"
+        className="flex cursor-pointer items-center gap-3 p-4 hover:opacity-90 active:scale-95"
+      >
+        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center text-[#EBCB83]">
+          {item.icon}
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-[15px] font-semibold leading-[21px] tracking-[0.1px] text-[#F2F3F7]">
+            {item.title}
+          </p>
+          <p className="mt-0.5 text-[12px] font-normal leading-[17px] tracking-[0.1px] text-[#7F8FA8]">
+            {item.subtitle}
+          </p>
+        </div>
+        <ChevronRight className="h-5 w-5 flex-shrink-0 text-[#8FA0B7]" />
+      </RaymondCard>
+    </Link>
   );
 }
 
@@ -122,7 +123,6 @@ function PremiumCard() {
 export default function Home() {
   const { language } = useLanguage();
   const t = translations[language];
-  const [, navigate] = useLocation();
   const [notificationsOpen, setNotificationsOpen] = useState(false);
 
   const actions: ActionItem[] = [
@@ -190,7 +190,7 @@ export default function Home() {
 
         <div className="grid grid-cols-2 gap-3">
           {actions.map((item) => (
-            <ActionCard key={item.route} item={item} onClick={() => navigate(item.route)} />
+            <ActionCard key={item.route} item={item} />
           ))}
         </div>
       </div>
