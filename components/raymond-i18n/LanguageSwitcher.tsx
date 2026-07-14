@@ -2,7 +2,7 @@
 
 import type { ReactElement } from 'react';
 import { useI18n } from './RaymondI18nProvider';
-import { LANG_LABELS } from './raymondTranslations';
+import { LANG_LABELS, t } from './raymondTranslations';
 import type { SupportedLang } from './raymondTranslations';
 
 const FLAG_ICONS: Record<SupportedLang, ReactElement> = {
@@ -44,14 +44,13 @@ export default function LanguageSwitcher() {
 
   return (
     <div className="flex items-center gap-1.5">
-      {/* Desktop dropdown */}
-      <div className="hidden sm:flex items-center gap-1.5">
+      <div className="hidden min-w-[154px] items-center justify-end gap-1.5 sm:flex">
         {FLAG_ICONS[lang]}
         <select
           value={lang}
-          onChange={(e) => setLang(e.target.value as SupportedLang)}
-          className="bg-transparent border border-white/10 rounded-lg px-2 py-1.5 text-xs text-white/80 focus:outline-none focus:border-rm-gold/40 min-h-[36px] cursor-pointer appearance-none"
-          aria-label="Switch language"
+          onChange={(event) => setLang(event.target.value as SupportedLang)}
+          className="min-h-[36px] w-[126px] cursor-pointer appearance-none rounded-lg border border-white/10 bg-transparent px-2 py-1.5 text-xs text-white/80 focus:border-rm-gold/40 focus:outline-none"
+          aria-label={t('lang.label', lang)}
         >
           {(Object.keys(LANG_LABELS) as SupportedLang[]).map((code) => (
             <option key={code} value={code} className="bg-rm-bg-card text-white">
@@ -61,11 +60,11 @@ export default function LanguageSwitcher() {
         </select>
       </div>
 
-      {/* Mobile button: tap to cycle */}
       <button
+        type="button"
         onClick={toggleLang}
-        className="sm:hidden flex items-center gap-1.5 px-2 py-1.5 rounded-lg border border-white/10 text-xs text-white/80 hover:bg-white/5 min-h-[36px] min-w-[44px] justify-center transition-colors"
-        aria-label={`Switch language (current: ${LANG_LABELS[lang]})`}
+        className="flex min-h-[36px] min-w-[44px] items-center justify-center gap-1.5 rounded-lg border border-white/10 px-2 py-1.5 text-xs text-white/80 transition-colors hover:bg-white/5 sm:hidden"
+        aria-label={`${t('lang.label', lang)}: ${LANG_LABELS[lang]}`}
       >
         {FLAG_ICONS[lang]}
         <span className="text-[10px] font-medium uppercase">{lang}</span>
