@@ -17,6 +17,12 @@ export const translations = {
     viewPointsRecord: "View points record",
     pointsRedemption: "Points Redemption",
     redeemRewards: "Redeem rewards",
+    showPoints: "Show points",
+    hidePoints: "Hide points",
+    notifications: "Notifications",
+    noNotifications: "No new notifications",
+    close: "Close",
+    pointsUnit: "points",
 
     memberSubtitle: "Member profile",
     memberId: "Member ID",
@@ -48,8 +54,7 @@ export const translations = {
     priorityServicePass: "Priority Service Pass",
 
     pageNotFound: "Page Not Found",
-    notFoundMessage:
-      "Sorry, the page you are looking for does not exist.",
+    notFoundMessage: "Sorry, the page you are looking for does not exist.",
     goHome: "Go Home",
   },
 
@@ -69,6 +74,12 @@ export const translations = {
     viewPointsRecord: "查看积分记录",
     pointsRedemption: "积分兑换",
     redeemRewards: "兑换会员奖励",
+    showPoints: "显示积分",
+    hidePoints: "隐藏积分",
+    notifications: "通知",
+    noNotifications: "暂无新通知",
+    close: "关闭",
+    pointsUnit: "积分",
 
     memberSubtitle: "会员资料",
     memberId: "会员编号",
@@ -120,6 +131,12 @@ export const translations = {
     viewPointsRecord: "Lihat rekod poin",
     pointsRedemption: "Penebusan Poin",
     redeemRewards: "Tebus ganjaran ahli",
+    showPoints: "Tunjukkan poin",
+    hidePoints: "Sembunyikan poin",
+    notifications: "Pemberitahuan",
+    noNotifications: "Tiada pemberitahuan baharu",
+    close: "Tutup",
+    pointsUnit: "poin",
 
     memberSubtitle: "Profil ahli",
     memberId: "ID Ahli",
