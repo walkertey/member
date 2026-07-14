@@ -1,0 +1,14 @@
+/* Runtime-safe multilingual typography; no external font dependency. */
+:root {
+  --font-raymond-brand-local: "Noto Serif SC", "Songti SC", "STSong", "Times New Roman", Georgia, serif;
+  --font-raymond-ui-local: Inter, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", "Segoe UI", Arial, system-ui, sans-serif;
+}
+body { font-family: var(--font-raymond-ui-local); }
+.rm-brand-wordmark, .rm-home-brand-main { font-family: var(--font-raymond-brand-local); }
+.rm-demo-title { min-height: 2.5em; display: flex; align-items: center; line-height: 1.25; }
+.rm-demo-subtitle { min-height: 3em; line-height: 1.5; }
+.rm-sidebar-link { min-height: 44px; display: flex; align-items: center; }
+button, select, input, textarea, a { touch-action: manipulation; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
