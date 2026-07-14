@@ -1,15 +1,19 @@
-import { useState } from "react";
+import { useLanguage } from "@/i18n/LanguageContext";
+import { translations } from "@/i18n/translations";
 import { Gift } from "lucide-react";
+import { useState } from "react";
 import { PageShell, Panel } from "./PageShell";
 
-const rewards = [
-  { name: "Premium Gift Box", points: 12000 },
-  { name: "RM50 Member Voucher", points: 8000 },
-  { name: "Priority Service Pass", points: 5000 },
-];
-
 export default function Benefits() {
+  const { language } = useLanguage();
+  const t = translations[language];
   const [redeemed, setRedeemed] = useState<string[]>([]);
+
+  const rewards = [
+    { name: t.premiumGiftBox, points: 12000 },
+    { name: t.memberVoucher, points: 8000 },
+    { name: t.priorityServicePass, points: 5000 },
+  ];
 
   const redeem = (name: string) => {
     if (!redeemed.includes(name)) {
@@ -18,7 +22,7 @@ export default function Benefits() {
   };
 
   return (
-    <PageShell title="Points Redemption" subtitle="积分兑换 · Penebusan Poin">
+    <PageShell title={t.pointsRedemption} subtitle={t.benefitsSubtitle}>
       <div className="space-y-4">
         {rewards.map((reward) => {
           const isRedeemed = redeemed.includes(reward.name);
@@ -29,6 +33,7 @@ export default function Benefits() {
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[rgba(235,203,131,0.14)] text-[#EBCB83]">
                   <Gift className="h-7 w-7" />
                 </div>
+
                 <div className="flex-1">
                   <h2 className="font-semibold">{reward.name}</h2>
                   <p className="mt-1 text-sm font-bold text-[#F2D188]">
@@ -43,7 +48,7 @@ export default function Benefits() {
                 onClick={() => redeem(reward.name)}
                 className="w-full rounded-xl bg-gradient-to-r from-[#C89448] to-[#F2D188] px-4 py-3 font-bold text-[#001733] disabled:cursor-not-allowed disabled:opacity-55"
               >
-                {isRedeemed ? "Redeemed" : "Redeem reward"}
+                {isRedeemed ? t.redeemed : t.redeemReward}
               </button>
             </Panel>
           );

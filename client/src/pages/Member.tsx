@@ -1,25 +1,31 @@
+import { useLanguage } from "@/i18n/LanguageContext";
+import { translations } from "@/i18n/translations";
 import { PageShell, Panel, StatusBadge } from "./PageShell";
 
 export default function Member() {
+  const { language } = useLanguage();
+  const t = translations[language];
+
   const details = [
-    ["Member ID", "RM-2026-000888"],
-    ["Member Level", "Premium Member"],
-    ["Join Date", "14 July 2026"],
-    ["Mobile", "+60 12-*** 8888"],
-    ["Email", "raymond@example.com"],
+    [t.memberId, "RM-2026-000888"],
+    [t.memberLevel, t.premiumMember],
+    [t.joinDate, "14 July 2026"],
+    [t.mobile, "+60 12-*** 8888"],
+    [t.email, "raymond@example.com"],
   ];
 
   return (
-    <PageShell title="Member Center" subtitle="会员中心 · Pusat Ahli">
+    <PageShell title={t.memberCenter} subtitle={t.memberSubtitle}>
       <Panel className="mb-4">
         <div className="mb-5 flex items-center gap-4">
           <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#EBCB83] bg-[#001733] font-serif text-3xl font-bold text-[#F2D188]">
             R
           </div>
+
           <div>
             <h2 className="font-serif text-2xl font-semibold">Raymond</h2>
             <div className="mt-2">
-              <StatusBadge>Active</StatusBadge>
+              <StatusBadge>{t.active}</StatusBadge>
             </div>
           </div>
         </div>
@@ -36,7 +42,7 @@ export default function Member() {
 
       <Panel>
         <p className="text-xs uppercase tracking-wider text-[#A9B6CB]">
-          Available Points
+          {t.availablePoints}
         </p>
         <p className="mt-2 text-4xl font-black tracking-tight text-[#F2D188]">
           888,888.00
