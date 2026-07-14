@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useLocation } from 'wouter';
 import { Eye, EyeOff, Bell, ChevronRight, Diamond, ShoppingBag, Database, Gift } from 'lucide-react';
 import { RaymondCard, RaymondCardBody } from '@/components/RaymondCard';
 
@@ -85,14 +84,7 @@ function PremiumCard({ language }: { language: Language }) {
     <div className="relative w-full aspect-[1.258] rounded-[16px] p-1.5 bg-gradient-to-br from-[#FFF0B7] via-[#D9A85A] to-[#B77A35] shadow-[0_2px_10px_rgba(244,198,110,0.42)]">
       <div className="relative w-full h-full rounded-[14.5px] border border-[rgba(255,247,211,0.8)] bg-[#001733] overflow-hidden">
         {/* 背景纹理 */}
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: 'url(/manus-storage/navy-silk-card_5b69b69f.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#12395F] via-[#001733] to-[#000B19]" />
 
         {/* 渐变叠加 */}
         <div className="absolute inset-0 bg-gradient-to-br from-[rgba(37,80,126,0.28)] via-[rgba(0,19,43,0.08)] to-[rgba(0,8,22,0.48)]" />
@@ -114,11 +106,9 @@ function PremiumCard({ language }: { language: Language }) {
             </div>
             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FFEAB0] to-[#C88F3F] p-0.5 flex-shrink-0 flex items-center justify-center">
               <div className="w-full h-full rounded-full bg-[rgba(1,28,58,0.96)] flex items-center justify-center overflow-hidden">
-                <img
-                  src="/manus-storage/gold-flower-badge_8f5d5df5.png"
-                  alt="badge"
-                  className="w-11 h-11"
-                />
+                <span className="font-serif text-xl font-bold italic text-[#F2D188]">
+                  R
+                </span>
               </div>
             </div>
           </div>
@@ -161,7 +151,6 @@ function PremiumCard({ language }: { language: Language }) {
 
 export default function Home() {
   const [language, setLanguage] = useState<Language>('en');
-  const [, navigate] = useLocation();
   const t = TRANSLATIONS[language];
 
   const cycleLanguage = () => {
@@ -177,9 +166,9 @@ export default function Home() {
     { title: t.pointsRedemption, subtitle: t.redeemRewards, icon: <Gift className="w-8 h-8" /> },
   ];
 
-  const handleNavigation = (index: number) => {
-    const routes = ['/member', '/orders', '/points', '/benefits'];
-    navigate(routes[index]);
+  const handleNavigation = (_index: number) => {
+    // Visual demo only: keep action cards interactive without navigating
+    // to unfinished routes.
   };
 
   return (
