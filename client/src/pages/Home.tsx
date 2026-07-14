@@ -106,9 +106,11 @@ function PremiumCard({ language }: { language: Language }) {
             </div>
             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FFEAB0] to-[#C88F3F] p-0.5 flex-shrink-0 flex items-center justify-center">
               <div className="w-full h-full rounded-full bg-[rgba(1,28,58,0.96)] flex items-center justify-center overflow-hidden">
-                <span className="font-serif text-xl font-bold italic text-[#F2D188]">
-                  R
-                </span>
+                <img
+                  src="/raymond/gold-flower-badge.png"
+                  alt="Raymond gold flower badge"
+                  className="h-11 w-11 object-contain"
+                />
               </div>
             </div>
           </div>
