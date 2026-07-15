@@ -12,6 +12,7 @@ import {
   Eye,
   EyeOff,
   Gift,
+  Settings,
   ShoppingBag,
   X,
 } from 'lucide-react';
@@ -128,6 +129,12 @@ export default function Home() {
   const t = translations[language];
   const [notificationsOpen, setNotificationsOpen] = useState(false);
 
+  const manageCopy = {
+    en: { title: 'Management Center', subtitle: 'Members, orders, points, rewards and reports' },
+    zh: { title: '管理中心', subtitle: '会员、订单、积分、兑换与报表' },
+    ms: { title: 'Pusat Pengurusan', subtitle: 'Ahli, pesanan, mata, ganjaran dan laporan' },
+  }[language];
+
   const actions: ActionItem[] = [
     { title: t.memberCenter, subtitle: t.viewMemberInfo, icon: <Diamond className="h-8 w-8" />, route: '/member' },
     { title: t.myOrders, subtitle: t.viewOrderDetails, icon: <ShoppingBag className="h-8 w-8" />, route: '/orders' },
@@ -136,7 +143,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#00162E] via-[#032344] to-[#00172F] px-4 pb-16 pt-4 sm:px-6">
+    <div className="min-h-screen bg-gradient-to-b from-[#00162E] via-[#032344] to-[#00172F] px-4 pb-20 pt-4 sm:px-6">
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute left-1/3 top-0 h-96 w-96 rounded-full bg-gradient-to-br from-[#EBCB83] to-transparent opacity-5 blur-3xl" />
       </div>
@@ -172,6 +179,20 @@ export default function Home() {
         <div className="grid grid-cols-2 items-stretch gap-3">
           {actions.map((item) => <ActionCard key={item.route} item={item} />)}
         </div>
+
+        <Link
+          href="/manage"
+          className="flex min-h-[72px] w-full items-center gap-4 rounded-2xl border border-[rgba(235,203,131,0.45)] bg-[linear-gradient(135deg,rgba(235,203,131,0.16),rgba(24,54,82,0.82))] px-5 py-4 shadow-[0_12px_28px_rgba(0,0,0,0.24)] transition hover:border-[#EBCB83] active:scale-[0.98]"
+        >
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#EBCB83] text-[#001733]">
+            <Settings className="h-6 w-6" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-base font-bold text-[#F6F3EC]">{manageCopy.title}</p>
+            <p className="mt-1 text-xs leading-5 text-[#A9B6CB]">{manageCopy.subtitle}</p>
+          </div>
+          <ChevronRight className="h-5 w-5 shrink-0 text-[#EBCB83]" />
+        </Link>
       </div>
 
       {notificationsOpen && (
